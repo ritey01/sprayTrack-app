@@ -1,0 +1,65 @@
+.title {
+  color: "black";
+  text-align: center;
+  font-size: 1.4rem;
+  margin-top: 0;
+  margin-bottom: 1.7rem;
+}
+
+.addingButton {
+  background-color: rgb(6, 214, 160);
+  color: #ffff;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.addButtonDisplay {
+  text-align: center;
+  margin: 0 auto;
+  width: 55%;
+}
+
+.logoFont {
+  font-family: "Pathway Gothic One", sans-serif;
+  color: green;
+  font-size: 1.5rem;
+  margin-left: -1rem;
+}
+
+.styledNext {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  margin: 2rem auto;
+}
+.next {
+  text-decoration: none;
+  background-color: rgb(6, 214, 160);
+  color: #ffff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.addDataButton {
+  background-color: rgb(6, 214, 160);
+  margin: 0 auto;
+  padding: 0.5rem 2rem;
+  border: None;
+  color: #ffff;
+  border-radius: 0.5rem;
+  text-decoration: none;
+}
+
+@media screen and (min-width: 500px) {
+  .cardBackground {
+    max-width: 475px;
+  }
+
+  .styledNext {
+    max-width: 500px;
+  }
+}

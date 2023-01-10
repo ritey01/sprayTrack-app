@@ -1,0 +1,9 @@
+.headerLayout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.logo {
+  margin: 0 auto;
+}
