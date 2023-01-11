@@ -42,6 +42,16 @@
   color: #ffff;
   padding: 1rem;
   border-radius: 0.5rem;
+  font-size: 0.8rem;
+}
+.disabledNext {
+  text-decoration: none;
+  background-color: rgb(6, 214, 160);
+  color: #ffff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 0.8rem;
 }
 
 .addDataButton {
