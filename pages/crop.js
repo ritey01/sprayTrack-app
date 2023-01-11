@@ -22,15 +22,17 @@ export async function getServerSideProps() {
 export default function Crops(props) {
   const [cropType, setCropType] = useState("");
   const { sprayEvent, setSprayEvent } = useContext(SprayContext);
-  console.log("✅", sprayEvent);
 
   return (
     <div>
       <h1 className={standard.title}>Select a crop</h1>
       <AddButton name={"Add Crop"} link={`/create-crop`} />
-      <ItemList props={props.crops} name={"crops"} setCropType={setCropType} />
+      <ItemList props={props.crops} name={"crops"} setProp={setCropType} />
 
       <div className={standard.styledNext}>
+        <Link href={`/paddock`} className={standard.next}>
+          Back
+        </Link>
         <Link
           onClick={() => {
             setSprayEvent({ ...sprayEvent, crop: cropType });
