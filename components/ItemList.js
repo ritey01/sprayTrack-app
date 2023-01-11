@@ -3,19 +3,20 @@ import Item from "../components/Item";
 
 import styles from "../styles/ItemList.module.css";
 
-const ItemList = ({ props, name, setLocation }) => {
+const ItemList = ({ props, name, setProp }) => {
   const [isActive, setIsActive] = useState();
+
   return (
     <ul className={`${styles.card} ${styles.cardBackground}`}>
-      {props.paddocks.length == 0 && <p>No {name} created</p>}
-      {props.paddocks.map((paddock, index) => (
+      {props.length == 0 && <p>No {name} created</p>}
+      {props.map((prop, index) => (
         <Item
-          paddock={paddock}
+          prop={prop}
           index={index}
-          setLocation={setLocation}
+          setProp={setProp}
           setIsActive={setIsActive}
           isActive={isActive}
-          key={paddock.id}
+          key={prop.id}
         />
       ))}
     </ul>

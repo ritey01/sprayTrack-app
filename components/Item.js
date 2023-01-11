@@ -3,15 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/List.module.css";
 
-const Item = ({ paddock, index, setLocation, setIsActive, isActive }) => {
+const Item = ({ prop, index, setProp, setIsActive, isActive }) => {
   const handleItemClick = () => {
-    setLocation(paddock.name);
+    setProp(prop.name);
   };
 
   return (
     <li
       className={styles.itemCard}
-      value={paddock.name}
+      value={prop.name}
       style={{
         backgroundColor:
           isActive == index ? "rgb(30, 173, 113, 0.18)" : "#ffff",
@@ -27,7 +27,7 @@ const Item = ({ paddock, index, setLocation, setIsActive, isActive }) => {
           <FontAwesomeIcon className={styles.tick} icon={faCheck} border />
         </span>
       )}
-      {paddock.name}
+      {prop.name}
     </li>
   );
 };
