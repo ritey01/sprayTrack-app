@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import React, { useState, useContext } from "react";
 import Link from "next/link";
+// import prisma from "../lib/prisma";
 import standard from "../styles/Standard.module.css";
 import AddButton from "../components/AddButton";
 import ItemList from "../components/ItemList";
@@ -8,37 +9,33 @@ import SprayContext from "../context/sprayEvent";
 
 export async function getServerSideProps() {
   const prisma = new PrismaClient();
-  const paddocks = await prisma.paddock.findMany();
+  const crops = await prisma.crops.findMany();
 
   return {
     props: {
-      paddocks,
+      crops,
       //   paddock: JSON.parse(JSON.stringify(paddocks)),
     },
   };
 }
 
-export default function Paddock(props) {
-  const [location, setLocation] = useState("");
+export default function Crops(props) {
+  const [cropType, setCropType] = useState("");
   const { sprayEvent, setSprayEvent } = useContext(SprayContext);
+  console.log("✅", sprayEvent);
 
   return (
     <div>
-      <h1 className={standard.title}>Select a paddock</h1>
-      <AddButton name={"Add Paddock"} link={`/create-paddock`} />
-
-      <ItemList
-        props={props.paddocks}
-        name={"paddocks"}
-        setProp={setLocation}
-      />
+      <h1 className={standard.title}>Select a crop</h1>
+      <AddButton name={"Add Crop"} link={`/create-crop`} />
+      <ItemList props={props.crops} name={"crops"} setCropType={setCropType} />
 
       <div className={standard.styledNext}>
         <Link
           onClick={() => {
-            setSprayEvent({ ...sprayEvent, paddock: location });
+            setSprayEvent({ ...sprayEvent, crop: cropType });
           }}
-          href={`/crop`}
+          href={`/date`}
           className={standard.next}
         >
           Next
