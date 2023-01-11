@@ -9,12 +9,14 @@ import SprayContext from "../context/sprayEvent";
 export async function getServerSideProps() {
   const prisma = new PrismaClient();
   const paddocks = await prisma.paddock.findMany();
+  const errorCode = paddocks.ok ? false : paddocks.statusCode;
 
+  if (errorCode) {
+    res.statusCode = errorCode;
+  }
+  console.log(errorCode);
   return {
-    props: {
-      paddocks,
-      //   paddock: JSON.parse(JSON.stringify(paddocks)),
-    },
+    props: { paddocks },
   };
 }
 
@@ -26,7 +28,7 @@ export default function Paddock(props) {
     <div>
       <h1 className={standard.title}>Select a paddock</h1>
       <AddButton name={"Add Paddock"} link={`/create-paddock`} />
-
+      {/* {props.errorCode && <p>Failed to load paddocks</p>} */}
       <ItemList
         props={props.paddocks}
         name={"paddocks"}
