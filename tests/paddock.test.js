@@ -1,5 +1,7 @@
+import React from "react";
 import Paddock from "../pages/paddock";
-import { render, screen, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { SprayProvider } from "../context/sprayEvent";
 
@@ -45,7 +47,7 @@ describe("paddock", () => {
     expect(linkEl).toHaveAttribute("href", "/create-paddock");
   });
 
-  test("WHEN the next button is clicked it navigates to Crop", async () => {
+  test("WHEN there are no paddocks selected the next button is not active", async () => {
     const paddocks = [];
     render(
       <SprayProvider>
@@ -53,10 +55,12 @@ describe("paddock", () => {
       </SprayProvider>
     );
 
-    const linkEl = screen.getByRole("link", { name: "Next" });
+    const linkEl = screen.getByRole("button", { name: "Next" });
 
-    expect(linkEl).toHaveAttribute("href", "/crop");
+    expect(linkEl).toHaveAttribute("href", "");
   });
+
+  test.todo("WHEN a paddock is selected THEN the user can navigate to '/crops");
 
   test("WHEN there is a 500 status returned THEN the page renders an error message", () => {
     const paddocks = [];
@@ -65,7 +69,9 @@ describe("paddock", () => {
         <Paddock paddocks={paddocks} errorCode={500} />
       </SprayProvider>
     );
-    expect(screen.getByText("Failed to load paddocks")).toBeInTheDocument();
+    expect(
+      screen.getByText("An error 500 occurred on server")
+    ).toBeInTheDocument();
   });
 
   test.todo(
