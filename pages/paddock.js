@@ -3,7 +3,7 @@ import React, { useState, useContext } from "react";
 import Error from "./_error";
 import Link from "next/link";
 import standard from "../styles/Standard.module.css";
-import AddButton from "../components/AddButton";
+import AddItemButton from "../components/AddItemButton";
 import ItemList from "../components/ItemList";
 import SprayContext from "../context/sprayEvent";
 
@@ -27,7 +27,7 @@ export default function Paddock({ paddocks, errorCode }) {
   return (
     <div>
       <h1 className={standard.title}>Select a paddock</h1>
-      <AddButton name={"Add Paddock"} link={`/create-paddock`} />
+      <AddItemButton name={"Add Paddock"} link={`/addPaddock`} />
 
       <ItemList props={paddocks} name={"paddocks"} setProp={setLocation} />
 
