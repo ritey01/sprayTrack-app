@@ -1,16 +1,31 @@
 import React from "react";
-import styles from "../styles/Standard.module.css";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import styles from "../styles/AddButton.module.css";
 
-const AddButton = ({ name, link }) => {
+const AddButton = ({ propName, href }) => {
+  const handleSubmit = async () => {
+    if (propName) {
+      // send request to the server
+      try {
+        const body = { name: propName };
+
+        await fetch(`/api/postName`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      setError("Please enter a name");
+      return;
+    }
+  };
   return (
-    <div className={styles.addButtonDisplay}>
-      <Link href={link} className={styles.addingButton}>
-        {" "}
-        <FontAwesomeIcon icon={faPlus} />
-        {name}
+    <div className={styles.buttonDisplay}>
+      <Link href={href} className={styles.addItemButton} onClick={handleSubmit}>
+        Add
       </Link>
     </div>
   );
