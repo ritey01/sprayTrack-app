@@ -1,0 +1,27 @@
+.styledCard {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+
+  background-color: rgba(17, 138, 178, 0.3);
+  border-radius: 0.5rem;
+  width: 95%;
+}
+
+.input {
+  height: 2rem;
+  border-radius: 0.5rem;
+  border: none;
+}
+
+.name {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* .cropName {
+    display: flex;
+    flex-direction: column;
+  } */

@@ -4,7 +4,7 @@ import Error from "./_error";
 import Link from "next/link";
 // import prisma from "../lib/prisma";
 import standard from "../styles/Standard.module.css";
-import AddButton from "../components/AddButton";
+import AddItemButton from "../components/AddItemButton";
 import ItemList from "../components/ItemList";
 import SprayContext from "../context/sprayEvent";
 
@@ -30,7 +30,7 @@ export default function Crops({ crops, errorCode }) {
   return (
     <div>
       <h1 className={standard.title}>Select a crop</h1>
-      <AddButton name={"Add Crop"} link={`/create-crop`} />
+      <AddItemButton name={"Add Crop"} link={`/create-crop`} />
       <ItemList props={crops} name={"crops"} setProp={setCropType} />
 
       <div className={standard.styledNext}>
