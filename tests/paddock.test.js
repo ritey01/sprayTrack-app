@@ -21,6 +21,7 @@ describe("paddock", () => {
     expect(screen.getByRole("heading")).toHaveTextContent("Select a paddock");
     expect(screen.getByText("Add Paddock")).toBeInTheDocument();
     expect(screen.getByText("Next")).toBeInTheDocument();
+    expect(screen.getAllByRole("listitem").length).toBe(2);
   });
 
   test("WHEN there are no paddocks THEN the paddock list is empty and page still renders", () => {
@@ -44,7 +45,7 @@ describe("paddock", () => {
 
     const linkEl = screen.getByRole("link", { name: "Add Paddock" });
 
-    expect(linkEl).toHaveAttribute("href", "/create-paddock");
+    expect(linkEl).toHaveAttribute("href", "/addPaddock");
   });
 
   test("WHEN there are no paddocks selected the next button is not active", async () => {
