@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styles from "../styles/AddButton.module.css";
+import { router } from "next/router";
 
 const AddButton = ({ propName, href, endpoint }) => {
   const handleSubmit = async () => {
@@ -14,6 +15,7 @@ const AddButton = ({ propName, href, endpoint }) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         });
+        await router.replace(router.asPath);
       } catch (error) {
         console.error(error);
       }
