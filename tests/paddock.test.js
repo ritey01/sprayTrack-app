@@ -1,9 +1,9 @@
-import React from "react";
 import Paddock from "../pages/paddock";
 import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { SprayProvider } from "../context/sprayEvent";
+import { getServerSideProps } from "../pages/paddock";
 
 describe("paddock", () => {
   test("renders paddock page", () => {
@@ -77,5 +77,15 @@ describe("paddock", () => {
 
   test.todo(
     "WHEN a paddock is selected THEN the paddock is added to the sprayEvent context and the next button is enabled"
+  );
+});
+
+describe("getServerSideProps", () => {
+  test.todo(
+    "WHEN the page is loaded THEN the paddocks are retrieved from the database with a 200 status code"
+  );
+
+  test.todo(
+    "WHEN the page is loaded and there is an error THEN the paddocks are retrieved from the database with a 500 status code"
   );
 });
