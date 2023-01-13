@@ -25,15 +25,17 @@ export default function Paddock({ paddocks, errorCode }) {
     return <Error statusCode={errorCode} />;
   }
 
-  const deletePost = async (id) => {
+  const deletePost = async id => {
     try {
       await fetch(`/api/paddock/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
-
-      await router.replace(router.asPath);
+      
+       await router.replace(router.asPath);
+      
     } catch (error) {
+     
       console.log("error", error);
     }
   };

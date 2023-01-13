@@ -1,9 +1,12 @@
-import prisma from "../../../lib/prisma";
+import prisma from "../../../lib/prisma"
+import { useRouter } from 'next/router'
 
 export default async function handle(req, res) {
-  console.log("😈");
-  const paddockId = req.query.id;
-  console.log(paddockId);
+  
+  
+  const paddockId = parseInt(req.query.id)
+
+  
   if (req.method === "DELETE") {
     const result = await prisma.paddock.delete({
       where: { id: paddockId },
