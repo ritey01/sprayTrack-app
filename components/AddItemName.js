@@ -1,15 +1,15 @@
 import React from "react";
 import styles from "../styles/AddItemName.module.css";
 
-const AddItemName = ({ labelName, propName, setProp }) => {
+const AddItemName = ({ labelName, propName, setProp, idName }) => {
   return (
     <form>
       <div className={styles.styledCard}>
         <div className={styles.name}>
-          <label htmlFor={propName}>{labelName}</label>
+          <label htmlFor={idName}>{labelName} </label>
           <input
             className={styles.input}
-            id={propName}
+            id={idName}
             type="string"
             required
             value={propName}

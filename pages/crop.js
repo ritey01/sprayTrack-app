@@ -30,7 +30,7 @@ export default function Crops({ crops, errorCode }) {
   return (
     <div>
       <h1 className={standard.title}>Select a crop</h1>
-      <AddItemButton name={"Add Crop"} link={`/create-crop`} />
+      <AddItemButton name={"Add Crop"} link={`/addCrop`} />
       <ItemList props={crops} name={"crops"} setProp={setCropType} />
 
       <div className={standard.styledNext}>
