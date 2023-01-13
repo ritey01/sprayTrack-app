@@ -21,7 +21,7 @@ const AddPaddock = () => {
         propName={paddockName}
         setProp={setPaddockName}
         href={`/paddock`}
-        endpoint={`postPaddock`}
+        endpoint={`paddock/postPaddock`}
       />
     </div>
   );

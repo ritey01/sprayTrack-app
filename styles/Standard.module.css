@@ -64,6 +64,16 @@
   text-decoration: none;
 }
 
+.deleteButton {
+  text-decoration: none;
+  background-color: rgb(239, 71, 111);
+  color: #ffff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 0.8rem;
+}
+
 @media screen and (min-width: 500px) {
   .cardBackground {
     max-width: 475px;

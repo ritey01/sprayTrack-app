@@ -3,7 +3,7 @@ import Item from "../components/Item";
 
 import styles from "../styles/ItemList.module.css";
 
-const ItemList = ({ props, name, setProp }) => {
+const ItemList = ({ props, name, setProp, setId }) => {
   const [isActive, setIsActive] = useState();
 
   return (
@@ -17,6 +17,7 @@ const ItemList = ({ props, name, setProp }) => {
           setIsActive={setIsActive}
           isActive={isActive}
           key={prop.id}
+          setId={setId}
         />
       ))}
     </ul>
