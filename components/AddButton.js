@@ -2,14 +2,14 @@ import React from "react";
 import Link from "next/link";
 import styles from "../styles/AddButton.module.css";
 
-const AddButton = ({ propName, href }) => {
+const AddButton = ({ propName, href, endpoint }) => {
   const handleSubmit = async () => {
     if (propName) {
       // send request to the server
       try {
         const body = { name: propName };
 
-        await fetch(`/api/postName`, {
+        await fetch(`/api/${endpoint}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),

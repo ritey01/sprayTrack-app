@@ -4,8 +4,7 @@ import "@testing-library/jest-dom/extend-expect";
 import AddPaddock from "../pages/AddPaddock";
 
 describe("addPaddock", () => {
-  test("Page renders a form with paddock fields", () => {
-    screen.debug();
+  test("Page renders a form with a paddock field", () => {
     render(
       <SprayProvider>
         <AddPaddock />
