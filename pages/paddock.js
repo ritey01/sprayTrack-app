@@ -6,9 +6,10 @@ import standard from "../styles/Standard.module.css";
 import AddItemButton from "../components/AddItemButton";
 import ItemList from "../components/ItemList";
 import SprayContext from "../context/sprayEvent";
+import prisma from "../lib/prisma";
 
 export async function getServerSideProps() {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   const paddocks = await prisma.paddock.findMany();
   const errorCode = paddocks.status > 200 ? paddocks.status : false;
 
