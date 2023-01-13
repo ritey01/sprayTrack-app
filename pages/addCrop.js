@@ -21,7 +21,7 @@ const AddCrop = () => {
         propName={cropName}
         setProp={setCropName}
         href={`/crop`}
-        endpoint={`postCrop`}
+        endpoint={`crop/postCrop`}
       />
     </div>
   );

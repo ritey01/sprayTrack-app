@@ -1,5 +1,5 @@
 import prisma from "../../../lib/prisma"
-import { useRouter } from 'next/router'
+
 
 export default async function handle(req, res) {
   
