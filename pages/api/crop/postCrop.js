@@ -1,4 +1,4 @@
-import prisma from "../../../lib/prisma"
+import prisma from "../../../lib/prisma";
 
 export default async function handler(req, res) {
   const { name } = req.body;
@@ -7,5 +7,5 @@ export default async function handler(req, res) {
       name: name,
     },
   });
-  res.json(result);
+  res.status(201).json(result);
 }
