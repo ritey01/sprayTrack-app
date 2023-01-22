@@ -1,5 +1,6 @@
 import Paddock from "../pages/paddock";
 import userEvent from "@testing-library/user-event";
+import prisma from "../lib/prisma";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { SprayProvider } from "../context/sprayEvent";
@@ -81,11 +82,38 @@ describe("paddock", () => {
 });
 
 describe("getServerSideProps", () => {
-  test.todo(
-    "WHEN the page is loaded THEN the paddocks are retrieved from the database with a 200 status code"
-  );
+  test("WHEN the page is loaded THEN the paddocks are retrieved from the database with a 200 status code", async () => {
+    // console.log(Object.getOwnPropertyNames(prisma.Paddock));
+
+    prisma.paddock.findMany = jest.fn().mockResolvedValue([
+      { paddockName: "Paddock A", id: 1 },
+      { paddockName: "Paddock B", id: 2 },
+    ]);
+    const req = {};
+    const res = {
+      statusCode: 200,
+    };
+
+    const paddocksTest = await getServerSideProps({ req, res });
+
+    expect(paddocksTest).toEqual({
+      props: {
+        paddocks: [
+          { paddockName: "Paddock A", id: 1 },
+          { paddockName: "Paddock B", id: 2 },
+        ],
+        errorCode: false,
+      },
+    });
+    expect(prisma.paddock.findMany).toHaveBeenCalledTimes(1);
+    expect(res.statusCode).toBe(200);
+  });
 
   test.todo(
-    "WHEN the page is loaded and there is an error THEN the paddocks are retrieved from the database with a 500 status code"
+    "WHEN the page is loaded and the database isnt found THEN the status code 500 is returned"
   );
+});
+
+describe("Delete function", () => {
+  test.todo("WHEN a list item is clicked the delete button is displayed");
 });
