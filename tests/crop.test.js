@@ -1,5 +1,6 @@
 import Crop from "../pages/crop";
 import userEvent from "@testing-library/user-event";
+import prisma from "../lib/prisma";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { SprayProvider } from "../context/sprayEvent";
@@ -81,9 +82,30 @@ describe("crop", () => {
 });
 
 describe("getServerSideProps", () => {
-  test.todo(
-    "WHEN the page is loaded THEN the crops are retrieved from the database with a 200 status code"
-  );
+  test("WHEN the page is loaded THEN the crops are retrieved from the database with a 200 status code", async () => {
+    prisma.crops.findMany = jest.fn().mockResolvedValue([
+      { name: "Wheat", id: 1 },
+      { name: "Barley", id: 2 },
+    ]);
+    const req = {};
+    const res = {
+      statusCode: 200,
+    };
+
+    const crops = await getServerSideProps({ req, res });
+
+    expect(crops).toEqual({
+      props: {
+        crops: [
+          { name: "Wheat", id: 1 },
+          { name: "Barley", id: 2 },
+        ],
+        errorCode: false,
+      },
+    });
+    expect(prisma.crops.findMany).toHaveBeenCalledTimes(1);
+    expect(res.statusCode).toBe(200);
+  });
 
   test.todo(
     "WHEN the page is loaded and there is an error THEN the database returns an error and a 500 status code"
