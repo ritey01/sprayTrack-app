@@ -8,9 +8,19 @@ import SprayContext from "../context/sprayEvent";
 import prisma from "../lib/prisma";
 import { router } from "next/router";
 
-export async function getServerSideProps() {
+//Allows a added paddock to be displayed on the paddock page
+const refreshData = () => {
+  router.replace(router.asPath);
+};
+
+export async function getServerSideProps({ req, res }) {
   const paddocks = await prisma.paddock.findMany();
-  const errorCode = paddocks.status > 200 ? paddocks.status : false;
+
+  const errorCode = res.statusCode > 200 ? res.statusCode : false;
+
+  if (res.status < 300) {
+    refreshData();
+  }
 
   return {
     props: { paddocks, errorCode },
@@ -21,21 +31,21 @@ export default function Paddock({ paddocks, errorCode }) {
   const [location, setLocation] = useState("");
   const [id, setId] = useState("");
   const { sprayEvent, setSprayEvent } = useContext(SprayContext);
+  const [message, setMessage] = useState(false);
+
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
 
-  const deletePost = async id => {
+  const deletePost = async (id) => {
     try {
       await fetch(`/api/paddock/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
-      
-       await router.replace(router.asPath);
-      
+
+      refreshData();
     } catch (error) {
-     
       console.log("error", error);
     }
   };
@@ -73,9 +83,21 @@ export default function Paddock({ paddocks, errorCode }) {
             </Link>
           </>
         ) : (
-          <button href={``} className={standard.disabledNext}>
-            Next
-          </button>
+          <div className={standard.messageDisplay}>
+            {message && (
+              <p className={standard.error}>Please select a paddock</p>
+            )}
+            <button
+              href={``}
+              className={standard.disabledNext}
+              onClick={() => {
+                console.log("Please select a paddock");
+                setMessage(true);
+              }}
+            >
+              Next
+            </button>
+          </div>
         )}
       </div>
     </div>
