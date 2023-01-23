@@ -17,3 +17,34 @@ model Crops {
   id   Int    @id @default(autoincrement()) @db.UnsignedInt
   name String @db.VarChar(50)
 }
+
+
+model SprayList {
+  id         Int                 @id @default(autoincrement())
+  title      String
+  sprays SpraysOnSprayList[]
+}
+
+model Sprays{
+  id    Int                 @id @default(autoincrement())
+  name  String
+  SprayList SpraysOnSprayList[]
+}
+
+model Rates {
+  id         Int                 @id @default(autoincrement())
+  rate      Int
+  metric    String @db.VarChar(50)
+  sprays SpraysOnSprayList[]
+}
+
+model SpraysOnSprayList {
+  spraylist       SprayList    @relation(fields: [sprayListId], references: [id])
+  sprayListId     Int // relation scalar field (used in the `@relation` attribute above)
+  sprays   Sprays @relation(fields: [sprayId], references: [id])
+  sprayId Int // relation scalar field (used in the `@relation` attribute above)
+  rates      Rates    @relation(fields: [rateId], references: [id])
+  rateId     Int // relation scalar field (used in the `@relation` attribute above)
+
+  @@id([sprayListId, sprayId,rateId])
+}
