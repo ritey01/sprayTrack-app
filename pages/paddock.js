@@ -8,7 +8,7 @@ import SprayContext from "../context/sprayEvent";
 import prisma from "../lib/prisma";
 import { router } from "next/router";
 
-//Allows a added paddock to be displayed on the paddock page
+//Allows an added paddock to be displayed on the paddock page
 const refreshData = () => {
   router.replace(router.asPath);
 };

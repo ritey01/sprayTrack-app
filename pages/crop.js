@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import React, { useState, useContext } from "react";
 import Error from "./_error";
 import Link from "next/link";
@@ -10,7 +9,6 @@ import ItemList from "../components/ItemList";
 import SprayContext from "../context/sprayEvent";
 
 export async function getServerSideProps({ req, res }) {
-  // const prisma = new PrismaClient();
   const crops = await prisma.crops.findMany();
   const errorCode = res.statusCode > 200 ? res.statusCode : false;
   return {
