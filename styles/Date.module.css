@@ -1,0 +1,44 @@
+.nowDate {
+  padding: 1.5rem;
+  font-size: 1.5rem;
+  background-color: #ffff;
+  width: 80%;
+  margin: 0 auto 1rem auto;
+  border-radius: 0.5rem;
+}
+
+.dateInput {
+  height: 2rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.sprayCard {
+  text-align: center;
+}
+
+.chooseDate {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+}
+
+.datePick {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.dateCard {
+  padding: 2rem 0.5rem;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.tick {
+  float: left;
+  background-color: rgb(17, 138, 178);
+  border-radius: 50%;
+  border: none;
+}
