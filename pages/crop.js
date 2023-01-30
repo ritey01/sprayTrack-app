@@ -52,6 +52,8 @@ export default function Crops({ crops, errorCode }) {
   const [cropType, setCropType] = useState("");
   const [id, setId] = useState("");
   const { sprayEvent, setSprayEvent } = useContext(SprayContext);
+  const [message, setMessage] = useState(false);
+
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
@@ -105,9 +107,22 @@ export default function Crops({ crops, errorCode }) {
             </Link>
           </>
         ) : (
-          <button href={``} className={standard.disabledNext}>
-            Next
-          </button>
+          <>
+            <div className={standard.messageDisplay}>
+              {message && (
+                <p className={standard.error}>Please select a crop</p>
+              )}
+            </div>
+            <button
+              href={``}
+              className={standard.disabledNext}
+              onClick={() => {
+                setMessage(true);
+              }}
+            >
+              Next
+            </button>
+          </>
         )}
       </div>
     </div>

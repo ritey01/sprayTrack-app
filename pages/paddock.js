@@ -36,15 +36,6 @@ export async function getServerSideProps({ req, res }) {
     paddocks = [];
   }
 
-  // if (errorCode === false && paddocks.length === 0) {
-  //   return {
-  //     props: {
-  //       paddocks: [],
-  //       errorCode,
-  //     },
-  //   };
-  // }
-
   return {
     props: { paddocks, errorCode },
   };
@@ -114,7 +105,6 @@ export default function Paddock({ paddocks, errorCode }) {
               href={``}
               className={standard.disabledNext}
               onClick={() => {
-                console.log("Please select a paddock");
                 setMessage(true);
               }}
             >
