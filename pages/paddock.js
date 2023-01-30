@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import Error from "./_error";
 import Link from "next/link";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import standard from "../styles/Standard.module.css";
 import AddItemButton from "../components/AddItemButton";
 import ItemList from "../components/ItemList";
@@ -14,13 +15,35 @@ const refreshData = () => {
 };
 
 export async function getServerSideProps({ req, res }) {
-  const paddocks = await prisma.paddock.findMany();
+  let paddocks;
+  let errorCode = false;
 
-  const errorCode = res.statusCode > 200 ? res.statusCode : false;
+  try {
+    paddocks = await prisma.paddock.findMany();
+    errorCode = res.statusCode > 200 ? res.statusCode : false;
 
-  if (res.status < 300) {
-    refreshData();
+    if (res.status < 300) {
+      refreshData();
+    }
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      console.error(error.code);
+    } else {
+      console.error(error);
+    }
+    res.statusCode = 500;
+    errorCode = res.statusCode;
+    paddocks = [];
   }
+
+  // if (errorCode === false && paddocks.length === 0) {
+  //   return {
+  //     props: {
+  //       paddocks: [],
+  //       errorCode,
+  //     },
+  //   };
+  // }
 
   return {
     props: { paddocks, errorCode },

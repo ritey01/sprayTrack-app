@@ -1,4 +1,12 @@
 function Error({ statusCode }) {
+  if (statusCode === 500) {
+    return (
+      <div className="error">
+        <h1>500 - Internal Server Error</h1>
+        <p>Something went wrong on our end. Please try again later.</p>
+      </div>
+    );
+  }
   return (
     <p>
       {statusCode

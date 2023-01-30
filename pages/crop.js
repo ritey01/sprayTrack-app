@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import Error from "./_error";
 import Link from "next/link";
 import { router } from "next/router";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import prisma from "../lib/prisma";
 import standard from "../styles/Standard.module.css";
 import AddItemButton from "../components/AddItemButton";
@@ -9,8 +10,36 @@ import ItemList from "../components/ItemList";
 import SprayContext from "../context/sprayEvent";
 
 export async function getServerSideProps({ req, res }) {
-  const crops = await prisma.crops.findMany();
-  const errorCode = res.statusCode > 200 ? res.statusCode : false;
+  let crops;
+  let errorCode = false;
+
+  try {
+    crops = await prisma.crops.findMany();
+    errorCode = res.statusCode > 200 ? res.statusCode : false;
+
+    if (res.status < 300) {
+      refreshData();
+    }
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      console.error(error.code);
+    } else {
+      console.error(error);
+    }
+    res.statusCode = 500;
+    errorCode = res.statusCode;
+    crops = [];
+  }
+
+  // if (errorCode === false && crops.length === 0) {
+  //   return {
+  //     props: {
+  //       crops: [],
+  //       errorCode,
+  //     },
+  //   };
+  // }
+
   return {
     props: {
       crops,

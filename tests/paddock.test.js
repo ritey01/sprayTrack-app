@@ -71,9 +71,7 @@ describe("paddock", () => {
         <Paddock paddocks={paddocks} errorCode={500} />
       </SprayProvider>
     );
-    expect(
-      screen.getByText("An error 500 occurred on server")
-    ).toBeInTheDocument();
+    expect(screen.getByText("500 - Internal Server Error")).toBeInTheDocument();
   });
 
   test.todo(
@@ -109,9 +107,29 @@ describe("getServerSideProps", () => {
     expect(res.statusCode).toBe(200);
   });
 
-  test.todo(
-    "WHEN the page is loaded and the database isnt found THEN the status code 500 is returned"
-  );
+  test("WHEN the page is loaded and the database isnt found THEN the status code 500 is returned", async () => {
+    prisma.paddock.findMany = jest.fn().mockRejectedValue({
+      code: "P1001",
+      clientVersion: "4.8.1",
+      meta: { database_host: "127.0.0.1", database_port: 3309 },
+      batchRequestIdx: undefined,
+    });
+
+    const req = {};
+    //this needs to be 200 as this is what Prisma returns even when error
+    const res = { statusCode: 200 };
+
+    const paddocksTest = await getServerSideProps({ req, res });
+
+    expect(paddocksTest).toEqual({
+      props: {
+        paddocks: [],
+        errorCode: 500,
+      },
+    });
+    expect(prisma.paddock.findMany).toHaveBeenCalledTimes(1);
+    expect(res.statusCode).toBe(500);
+  });
 });
 
 describe("Delete function", () => {

@@ -71,9 +71,7 @@ describe("crop", () => {
         <Crop crops={crops} errorCode={500} />
       </SprayProvider>
     );
-    expect(
-      screen.getByText("An error 500 occurred on server")
-    ).toBeInTheDocument();
+    expect(screen.getByText("500 - Internal Server Error")).toBeInTheDocument();
   });
 
   test.todo(
@@ -107,7 +105,27 @@ describe("getServerSideProps", () => {
     expect(res.statusCode).toBe(200);
   });
 
-  test.todo(
-    "WHEN the page is loaded and there is an error THEN the database returns an error and a 500 status code"
-  );
+  test("WHEN the page is loaded and there is an error THEN the database returns an error and a 500 status code", async () => {
+    prisma.crops.findMany = jest.fn().mockRejectedValue({
+      code: "P1001",
+      clientVersion: "4.8.1",
+      meta: { database_host: "127.0.0.1", database_port: 3309 },
+      batchRequestIdx: undefined,
+    });
+
+    const req = {};
+    //this needs to be 200 as this is what Prisma returns even when error
+    const res = { statusCode: 200 };
+
+    const cropsTest = await getServerSideProps({ req, res });
+
+    expect(cropsTest).toEqual({
+      props: {
+        crops: [],
+        errorCode: 500,
+      },
+    });
+    expect(prisma.crops.findMany).toHaveBeenCalledTimes(1);
+    expect(res.statusCode).toBe(500);
+  });
 });
