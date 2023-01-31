@@ -19,7 +19,7 @@ export default async function handler(req, res) {
         name: name,
       },
     });
-    console.log(" 😈", res);
+
     res.status(201).json(result);
   } else {
     throw new Error(

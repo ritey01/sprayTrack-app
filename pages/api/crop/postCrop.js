@@ -9,8 +9,9 @@ export default async function handler(req, res) {
 
   if (cropExists) {
     res.status(400).json({ message: "Crop already exists" });
+    return;
   }
-  if (req.method === "POST" && !cropExists) {
+  if (!cropExists && req.method === "POST") {
     const result = await prisma.crops.create({
       data: {
         name: name,
