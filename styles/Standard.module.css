@@ -91,6 +91,13 @@
   width: 95%;
 }
 
+.addPageButtonDisplay {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
 @media screen and (min-width: 500px) {
   .cardBackground {
     max-width: 475px;
