@@ -67,4 +67,36 @@ describe("addCrop", () => {
     });
     expect(push).toHaveBeenCalledWith("/crop");
   });
+
+  test("WHEN the crop name is entered and the crop already exists THEN an error message is displayed", async () => {
+    const fetch = jest.fn();
+    global.fetch = fetch;
+    const result = fetch.mockResolvedValue({
+      ok: false,
+      status: 400,
+    });
+
+    const push = jest.fn();
+    useRouter.mockImplementation(() => ({
+      push,
+    }));
+
+    const user = userEvent.setup();
+
+    render(
+      <SprayProvider>
+        <AddCrop />
+      </SprayProvider>
+    );
+    const input = screen.getByLabelText("Crop Name");
+    await user.type(input, "testCrop");
+    const linkEl = screen.getByRole("button", { name: "Add" });
+    await user.click(linkEl);
+    expect(fetch).toHaveBeenCalledWith("/api/crop/postCrop", {
+      body: JSON.stringify({ name: "testCrop" }),
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+    });
+    expect(screen.getByText("testCrop already exists")).toBeInTheDocument();
+  });
 });
