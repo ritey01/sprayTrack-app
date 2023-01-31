@@ -22,6 +22,7 @@ const AddPaddock = () => {
         setProp={setPaddockName}
         href={`/paddock`}
         endpoint={`paddock/postPaddock`}
+        redirect={`/addPaddock`}
       />
     </div>
   );

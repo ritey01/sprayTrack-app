@@ -1,7 +1,13 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { useRouter } from "next/router";
 import { SprayProvider } from "../context/sprayEvent";
 import "@testing-library/jest-dom/extend-expect";
 import AddCrop from "../pages/addCrop";
+
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}));
 
 describe("addCrop", () => {
   test("Page renders a form with a crop field", () => {
@@ -16,20 +22,49 @@ describe("addCrop", () => {
     expect(screen.getByLabelText("Crop Name"));
   });
 
-  test("WHEN the add button is clicked it navigates to Crop", async () => {
+  test("WHEN the add button is clicked without field data entered a button and message is displayed", async () => {
+    const user = userEvent.setup();
     render(
       <SprayProvider>
         <AddCrop />
       </SprayProvider>
     );
 
-    const linkEl = screen.getByRole("link", { name: "Add" });
-
-    expect(linkEl).toHaveAttribute("href", "/crop");
+    const linkEl = screen.getByRole("button", { name: "Add" });
+    await user.click(linkEl);
+    expect(screen.getByText("Please enter a name")).toBeInTheDocument();
   });
 
-  test.todo(
-    "WHEN the crop name is entered THEN the crop is added to the database"
-  );
-  test.todo("WHEN no crop name is entered THEN an error message is displayed");
+  test("WHEN the crop name is entered THEN the crop is added to the database", async () => {
+    //mocks the fetch function
+    const fetch = jest.fn();
+    global.fetch = fetch;
+    const result = fetch.mockResolvedValue({
+      ok: true,
+    });
+
+    //mocks the router.push function
+    const push = jest.fn();
+    useRouter.mockImplementation(() => ({
+      push,
+    }));
+
+    const user = userEvent.setup();
+
+    render(
+      <SprayProvider>
+        <AddCrop />
+      </SprayProvider>
+    );
+    const input = screen.getByLabelText("Crop Name");
+    await user.type(input, "testCrop");
+    const linkEl = screen.getByRole("button", { name: "Add" });
+    await user.click(linkEl);
+    expect(fetch).toHaveBeenCalledWith("/api/crop/postCrop", {
+      body: JSON.stringify({ name: "testCrop" }),
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+    });
+    expect(push).toHaveBeenCalledWith("/crop");
+  });
 });
