@@ -11,14 +11,15 @@ export default async function handler(req, res) {
 
   if (paddockExists) {
     res.status(400).json({ message: "Paddock already exists" });
+    return;
   }
-  if (req.method === "POST" && !paddockExists) {
+  if (!paddockExists && req.method === "POST") {
     const result = await prisma.paddock.create({
       data: {
         name: name,
       },
     });
-
+    console.log(" 😈", res);
     res.status(201).json(result);
   } else {
     throw new Error(

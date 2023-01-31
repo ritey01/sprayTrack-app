@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import AddButton from "../components/AddButton";
 import standard from "../styles/Standard.module.css";
+import styles from "../styles/AddButton.module.css";
 import AddItemName from "../components/AddItemName";
 
 const AddPaddock = () => {
@@ -17,13 +19,19 @@ const AddPaddock = () => {
         setProp={setPaddockName}
         idName={idName}
       />
-      <AddButton
-        propName={paddockName}
-        setProp={setPaddockName}
-        href={`/paddock`}
-        endpoint={`paddock/postPaddock`}
-        redirect={`/addPaddock`}
-      />
+      <div className={standard.addPageButtonDisplay}>
+        <div>
+          <Link href={`/paddock`} className={styles.addItemButton}>
+            Back
+          </Link>
+        </div>
+        <AddButton
+          propName={paddockName}
+          setProp={setPaddockName}
+          href={`/paddock`}
+          endpoint={`paddock/postPaddock`}
+        />
+      </div>
     </div>
   );
 };
