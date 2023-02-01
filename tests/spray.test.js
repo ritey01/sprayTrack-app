@@ -58,7 +58,7 @@ describe("'Spray', GIVEN the user is on the spray choice page", () => {
         <Spray sprayList={sprays} errorCode={false} />
       </SprayProvider>
     );
-    screen.debug();
+
     expect(screen.getByText("No sprays found")).toBeInTheDocument();
   });
 
