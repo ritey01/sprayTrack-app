@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "cypress": "cypress open"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
@@ -20,7 +21,8 @@
     "next": "13.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-spinners": "^0.13.7"
+    "react-spinners": "^0.13.7",
+    "supertest": "^6.3.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
