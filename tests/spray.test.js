@@ -73,7 +73,7 @@ describe("'Spray', GIVEN the user is on the spray choice page", () => {
 
     const linkEl = screen.getByRole("link", { name: "Add Spray" });
 
-    expect(linkEl).toHaveAttribute("href", "/make-spray");
+    expect(linkEl).toHaveAttribute("href", "/makeSpray");
   });
 
   test("WHEN a spray is not selected the Link to SprayDetails is not visible", async () => {
