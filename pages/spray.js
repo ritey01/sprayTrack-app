@@ -92,6 +92,19 @@ const Spray = ({ sprayList, errorCode }) => {
     return <Error statusCode={errorCode} />;
   }
 
+  const deletePost = async (id) => {
+    try {
+      await fetch(`/api/spray/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      refreshData();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const handlePaddockClick = (index) => {
     setSpray(sprayList[index]);
     setError(false);
@@ -103,7 +116,7 @@ const Spray = ({ sprayList, errorCode }) => {
       <h1 className={standard.title}>Select a spray</h1>
       <div className={styles.button}>
         <Link
-          href={`/make-spray`}
+          href={`/makeSpray`}
           className={standard.addingButton}
           //resets sprayEvent to null
           onClick={() => (sprayEvent.sprayMix.mixs.length = 0)}
@@ -167,6 +180,14 @@ const Spray = ({ sprayList, errorCode }) => {
         <Link href={`/date`} className={standard.next}>
           Back
         </Link>
+        {/* {spray && (
+          <button
+            className={standard.deleteButton}
+            onClick={() => deletePost(id)}
+          >
+            Delete
+          </button>
+        )} */}
         {isActive >= 0 ? (
           <Link
             onClick={() => {
