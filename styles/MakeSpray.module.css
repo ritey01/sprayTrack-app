@@ -1,0 +1,30 @@
+.button {
+  text-align: center;
+  margin-bottom: 1rem;
+  margin-top: 0rem;
+}
+
+.card {
+  -webkit-padding-start: 0;
+  list-style: none;
+  text-align: center;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  margin: 2rem auto 0 auto;
+}
+
+.spray {
+  padding: 1.5rem;
+  font-size: 1.5rem;
+  background-color: #ffff;
+  width: 80%;
+  margin: 0 auto 1rem auto;
+  border-radius: 0.5rem;
+}
+
+.tick {
+  float: left;
+  background-color: rgb(17, 138, 178);
+  border-radius: 50%;
+  border: none;
+}
