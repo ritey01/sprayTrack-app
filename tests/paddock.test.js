@@ -1,10 +1,13 @@
+import React from "react";
 import Paddock from "../pages/paddock";
+import { testClient } from "../lib/test-utils";
 import userEvent from "@testing-library/user-event";
 import prisma from "../lib/prisma";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { SprayProvider } from "../context/sprayEvent";
 import { getServerSideProps } from "../pages/paddock";
+import { handle } from "../pages/api/paddock/[id]";
 
 describe("paddock", () => {
   test("renders paddock page", () => {
@@ -132,6 +135,37 @@ describe("getServerSideProps", () => {
   });
 });
 
-describe("Delete function", () => {
-  test.todo("WHEN a list item is clicked the delete button is displayed");
+describe("api/paddock/[id], Delete function", () => {
+  test("WHEN a paddock is deleted THEN the paddock is removed from the database", async () => {
+    // .query({id: 1})
+    // .expect(200)
+    // .expect((res) => {
+    //   expect(res.body).toEqual({ message:  // const request = testClient(handle);
+    // const res = await request.delete("/api/paddock/1");"Paddock deleted" });
+    // });
+  });
 });
+
+// prisma.paddock.delete = jest.fn().mockResolvedValue({
+//   id: 1,
+//   paddockName: "Paddock A",
+// });
+
+// const req = {
+//   method: "DELETE",
+//   query: { id: 1 },
+// };
+// const res = {
+//   statusCode: 200,
+// };
+// console.log("😇", await handle(req, res));
+// const paddocksTest = await handle({ req, res });
+
+// expect(paddocksTest).toEqual({
+//   props: {
+//     paddocks: [{ paddockName: "Paddock A", id: 1 }],
+//     errorCode: false,
+//   },
+// });
+// expect(prisma.paddock.findMany).toHaveBeenCalledTimes(1);
+// expect(res.statusCode).toBe(200);
