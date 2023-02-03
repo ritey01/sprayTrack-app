@@ -6,7 +6,7 @@ import standard from "../styles/Standard.module.css";
 import AddItemName from "../components/AddItemName";
 
 const AddSpray = () => {
-  const [spray, setSpray] = useState();
+  const [spray, setSpray] = useState("");
   const labelName = "Spray Name";
   const idName = "sprayName";
 
