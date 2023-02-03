@@ -5,11 +5,12 @@ import styles from "../styles/SprayRate.module.css";
 import standard from "../styles/Standard.module.css";
 
 const SprayRate = () => {
-  const [sprayAmount, setSprayAmount] = useState("");
+  const [sprayAmount, setSprayAmount] = useState(0);
   const [unit, setUnit] = useState("");
   const [isActive, setIsActive] = useState();
-  const { sprayEvent, setSprayEvent } = useContext(SprayContext);
-
+  const { event, mix } = useContext(SprayContext);
+  const [sprayMix, setSprayMix] = mix;
+  const [sprayEvent, setSprayEvent] = event;
   // console.log(sprayEvent);
   const unitList = ["litres", "kg", "mls", "grams"];
   const handleSubmit = () => {

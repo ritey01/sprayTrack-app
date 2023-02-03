@@ -51,7 +51,8 @@ export async function getServerSideProps({ req, res }) {
 export default function Crops({ crops, errorCode }) {
   const [cropType, setCropType] = useState("");
   const [id, setId] = useState("");
-  const { sprayEvent, setSprayEvent } = useContext(SprayContext);
+  const { event } = useContext(SprayContext);
+  const [sprayEvent, setSprayEvent] = event;
   const [message, setMessage] = useState(false);
 
   if (errorCode) {

@@ -42,9 +42,11 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function Paddock({ paddocks, errorCode }) {
+  const { event } = useContext(SprayContext);
+  const [sprayEvent, setSprayEvent] = event;
   const [location, setLocation] = useState("");
   const [id, setId] = useState("");
-  const { sprayEvent, setSprayEvent } = useContext(SprayContext);
+
   const [message, setMessage] = useState(false);
 
   if (errorCode) {

@@ -11,12 +11,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export async function getServerSideProps({ req, res }) {
-  let sprayList;
+  let sprays;
   let errorCode = false;
 
   try {
-    sprayList = await prisma.sprays.findMany();
-    console.log("😡", sprayList);
+    sprays = await prisma.sprays.findMany();
+    console.log("😡", sprays);
     errorCode = res.statusCode > 200 ? res.statusCode : false;
 
     if (res.status < 300) {
@@ -30,19 +30,21 @@ export async function getServerSideProps({ req, res }) {
     }
     res.statusCode = 500;
     errorCode = res.statusCode;
-    sprayList = [];
+    sprays = [];
   }
 
   return {
-    props: { sprayList, errorCode },
+    props: { sprays, errorCode },
   };
 }
 
-export default function MakeSpray({ sprayList, errorCode }) {
+export default function MakeSpray({ sprays, errorCode }) {
   const [sprayType, setSprayType] = useState("");
   const [isActive, setIsActive] = useState();
   const [id, setId] = useState("");
-  const { sprayEvent, setSprayEvent } = useContext(SprayContext);
+  const { event, mix } = useContext(SprayContext);
+  const [sprayEvent, setSprayEvent] = event;
+  const [sprayMix, setSprayMix] = mix;
   const [message, setMessage] = useState(false);
 
   //console.log(sprayEvent);
@@ -52,7 +54,7 @@ export default function MakeSpray({ sprayList, errorCode }) {
   }
 
   const handlePaddockClick = (index) => {
-    setSprayType(sprayList[index]);
+    setSprayType(sprays[index]);
   };
 
   const dataSetter = () => {
@@ -74,7 +76,8 @@ export default function MakeSpray({ sprayList, errorCode }) {
       </div>
 
       <ul className={`${styles.card} ${standard.cardBackground}`}>
-        {sprayList.map((spray, index) => (
+        {sprays.length == 0 && <p>No sprays created yet</p>}
+        {sprays.map((spray, index) => (
           <li
             className={styles.spray}
             key={index}

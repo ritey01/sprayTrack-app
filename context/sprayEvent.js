@@ -9,9 +9,20 @@ export function SprayProvider({ children }) {
     date: "",
     sprayMix: { name: "", mixs: [] },
   };
+
+  const mixInitial = {
+    name: "",
+    sprays: [{ spray: "", rate: "", unit: "" }],
+  };
   const [sprayEvent, setSprayEvent] = useState(initialState);
+  const [sprayMix, setSprayMix] = useState(mixInitial);
   return (
-    <SprayContext.Provider value={{ sprayEvent, setSprayEvent }}>
+    <SprayContext.Provider
+      value={{
+        event: [sprayEvent, setSprayEvent],
+        mix: [sprayMix, setSprayMix],
+      }}
+    >
       {children}
     </SprayContext.Provider>
   );

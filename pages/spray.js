@@ -14,10 +14,10 @@ export async function getServerSideProps({ req, res }) {
   let errorCode = false;
   try {
     //uses joining table to combine spray, rates and units with title
-    const sprayMixes = await prisma.SprayList.findMany({
-      include: { sprays: { include: { sprays: true, rates: true } } },
-    });
-
+    const sprayMixes = await prisma.SprayList.findMany();
+    // {
+    //   include: { sprays: { include: { sprays: true, rates: true } } },
+    // }
     errorCode = res.statusCode > 200 ? res.statusCode : false;
 
     //checks if there are any sprays to map over
@@ -83,10 +83,11 @@ export async function getServerSideProps({ req, res }) {
 
 const Spray = ({ sprayList, errorCode }) => {
   console.log(sprayList);
+  const { event } = useContext(SprayContext);
+  const [sprayEvent, setSprayEvent] = event;
   const [spray, setSpray] = useState();
   const [isActive, setIsActive] = useState();
   const [error, setError] = useState(false);
-  const { sprayEvent, setSprayEvent } = useContext(SprayContext);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;

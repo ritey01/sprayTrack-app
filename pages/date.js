@@ -10,7 +10,8 @@ import SprayContext from "../context/sprayEvent";
 export default function DateTime() {
   const [isActive, setIsActive] = useState();
   const [time, setTime] = useState(dateCreate());
-  const { sprayEvent, setSprayEvent } = useContext(SprayContext);
+  const { event } = useContext(SprayContext);
+  const [sprayEvent, setSprayEvent] = event;
 
   const handleDateClick = () => {
     setTime(dateCreate());
