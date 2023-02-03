@@ -1,8 +1,9 @@
 import prisma from "../../../lib/prisma";
 
 export default async function handler(req, res) {
+  console.log("imade it");
   const { name } = req.body;
-
+  console.log("🥵", name);
   //Checks if paddock exists
   const sprayExists = !!(await prisma.sprays.findFirst({
     where: { name: name },
