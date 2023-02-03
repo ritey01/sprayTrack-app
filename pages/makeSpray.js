@@ -47,21 +47,24 @@ export default function MakeSpray({ sprays, errorCode }) {
   const [sprayMix, setSprayMix] = mix;
   const [message, setMessage] = useState(false);
 
-  //console.log(sprayEvent);
-
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
 
   const handlePaddockClick = (index) => {
-    setSprayType(sprays[index]);
+    setSprayType(sprays[index].name);
   };
 
   const dataSetter = () => {
-    const newSprayEvent = { ...sprayEvent };
-    const index = newSprayEvent.sprayMix.mixs.length;
-    newSprayEvent.sprayMix.mixs[index] = { spray: sprayType };
-    setSprayEvent(newSprayEvent);
+    //not sure if this is needed here as creating the sprayMix as state can then add the whole list to sprayEvent?
+    // const newSprayEvent = { ...sprayEvent };
+    // const index = newSprayEvent.sprayMix.mixs.length;
+    // newSprayEvent.sprayMix.mixs[index] = { spray: sprayType };
+    // setSprayEvent(newSprayEvent);
+    const newSprayMix = { ...sprayMix };
+    const index = newSprayMix.sprays.length;
+    newSprayMix.sprays[index] = { spray: sprayType };
+    setSprayMix(newSprayMix);
   };
 
   return (

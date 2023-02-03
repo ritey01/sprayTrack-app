@@ -83,8 +83,9 @@ export async function getServerSideProps({ req, res }) {
 
 const Spray = ({ sprayList, errorCode }) => {
   console.log(sprayList);
-  const { event } = useContext(SprayContext);
+  const { event, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
+  const [sprayMix, setSprayMix] = mix;
   const [spray, setSpray] = useState();
   const [isActive, setIsActive] = useState();
   const [error, setError] = useState(false);
@@ -119,8 +120,8 @@ const Spray = ({ sprayList, errorCode }) => {
         <Link
           href={`/makeSpray`}
           className={standard.addingButton}
-          //resets sprayEvent to null
-          onClick={() => (sprayEvent.sprayMix.mixs.length = 0)}
+          //resets sprayMix initial state to null so dont get empty fields in array
+          onClick={() => (sprayMix.sprays.length = 0)}
         >
           {" "}
           <FontAwesomeIcon icon={faPlus} />
