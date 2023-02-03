@@ -1,0 +1,52 @@
+.sprayDetails {
+  background-color: #ffff;
+  width: 90%;
+  margin: 2rem auto;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.sprayMixDisplay {
+  margin: 0 auto 2rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+.editBtn {
+  background-color: rgb(6, 214, 160);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  color: #ffff;
+  font-size: 0.8rem;
+  width: 30%;
+  padding: 0.5rem;
+  margin: 0 auto;
+  font-size: 1.1rem;
+}
+
+.noSprayMessage {
+  background-color: #ffff;
+  width: 90%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+.formName {
+  border-radius: 0.3rem;
+  border: none;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  width: 90%;
+  font-size: 1.5rem;
+}
+
+.formLabel {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.formName:focus {
+  outline: none;
+}
