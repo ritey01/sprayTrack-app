@@ -14,57 +14,23 @@ export async function getServerSideProps({ req, res }) {
   let errorCode = false;
   try {
     //uses joining table to combine spray, rates and units with title
-    const sprayMixes = await prisma.SprayList.findMany();
-    // {
-    //   include: { sprays: { include: { sprays: true, rates: true } } },
-    // }
+    const sprayMixes = await prisma.SprayList.findMany({
+      include: {
+        sprayMix: true,
+      }, //sprayMix is the joining table
+    });
+
+    console.log(sprayMixes);
     errorCode = res.statusCode > 200 ? res.statusCode : false;
-
-    //checks if there are any sprays to map over
-
-    if (errorCode === false && sprayMixes.length === 0) {
-      return {
-        props: {
-          sprayList: [],
-          errorCode,
-        },
-      };
-    } else {
-      //structures the data returned from database via prisma
-      sprayList = sprayMixes.map((sprayMix) => {
-        return {
-          id: sprayMix.id,
-          name: sprayMix.title,
-          //checks if there are any sprays to map over
-          sprays:
-            sprayMix.sprays.length === 0
-              ? []
-              : sprayMix.sprays.map((spray) => {
-                  //checks for a list of sprays else returns null
-                  if (spray) {
-                    return {
-                      id: spray.sprayId,
-                      name: spray.sprays.name,
-                      rate: spray.rates.rate,
-                      unit: spray.rates.metric,
-                    };
-                  } else {
-                    return {
-                      id: null,
-                      name: null,
-                      rate: null,
-                      unit: null,
-                    };
-                  }
-                }),
-        };
-      });
-    }
 
     //Allows the new item added to be seen without pyhsically refreshing the page
     if (res.status < 300) {
       refreshData();
     }
+
+    return {
+      props: { sprayList: JSON.parse(JSON.stringify(sprayMixes)), errorCode },
+    };
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       console.error(error.code);
@@ -75,10 +41,6 @@ export async function getServerSideProps({ req, res }) {
     errorCode = res.statusCode;
     sprayList = [];
   }
-
-  return {
-    props: { sprayList, errorCode },
-  };
 }
 
 const Spray = ({ sprayList, errorCode }) => {
@@ -147,12 +109,12 @@ const Spray = ({ sprayList, errorCode }) => {
               handlePaddockClick(index);
             }}
           >
-            {spray.name}
-            {spray.sprays.length === 0 ? (
+            {spray.title}
+            {spray.sprayMix.length === 0 ? (
               <p>No sprays found</p>
             ) : (
               <ul className={styles.sprays}>
-                {spray.sprays.map((mix) => {
+                {spray.sprayMix.map((mix) => {
                   return (
                     <>
                       <li
@@ -164,7 +126,7 @@ const Spray = ({ sprayList, errorCode }) => {
                           }
                         }
                       >
-                        <p>{mix.name}</p>
+                        <p>{mix.spray}</p>
                         <p>
                           {mix.rate} {mix.unit} / hectare
                         </p>
