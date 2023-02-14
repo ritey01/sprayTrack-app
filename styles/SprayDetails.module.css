@@ -1,0 +1,60 @@
+.detailsCard {
+  text-align: center;
+  padding: 1rem 0;
+  margin: 0 auto;
+}
+
+.sprayType {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid black;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.sprayName {
+  margin-bottom: 0.3rem;
+}
+
+.sprayDetails {
+  background-color: #ffff;
+  width: 90%;
+  padding: 1rem;
+  margin: 0.5rem auto;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.sprayMixCard {
+  background-color: #ffff;
+  width: 90%;
+  padding: 1rem;
+  margin: 0.8rem auto;
+  border-radius: 0.5rem;
+}
+
+.editBtn {
+  padding: 0.5rem;
+  background-color: rgb(6, 214, 160);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  color: #ffff;
+  font-size: 0.8rem;
+}
+.labels {
+  padding-top: 1.5rem;
+  text-align: left;
+  width: 86%;
+  margin: 0 auto;
+}
+
+.sprayTitleDisplay {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 1rem;
+}
