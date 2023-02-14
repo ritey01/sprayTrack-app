@@ -7,12 +7,12 @@ export function SprayProvider({ children }) {
     paddock: "",
     crop: "",
     date: "",
-    sprayMix: { name: "", sprays: [] },
+    sprayList: [],
   };
 
   const mixInitial = {
     name: "",
-    sprays: [{ spray: "", rate: "", unit: "" }],
+    sprays: [{ spray: "", rate: 0, unit: "" }],
   };
   const [sprayEvent, setSprayEvent] = useState(initialState);
   const [sprayMix, setSprayMix] = useState(mixInitial);
