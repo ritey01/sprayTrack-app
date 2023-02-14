@@ -1,11 +1,8 @@
 import prisma from "../../../lib/prisma";
 
 export default async function sprayListHandler(req, res) {
-  //const { name, spray,rate,unit } = req.body;
-  const name = "test";
-  const spray = "testSpray";
-  const rate = 1;
-  const unit = "testUnit";
+  const { name, sprays } = req.body;
+  console.log("✅", req.body);
   //Checks if paddock exists
   const sprayExists = !!(await prisma.sprayList.findFirst({
     where: { title: name },
@@ -20,18 +17,21 @@ export default async function sprayListHandler(req, res) {
       const result = await prisma.sprayList.create({
         data: {
           title: name,
-          sprays: {
-            create: [
-              {
-                name: spray,
-                rates: {
-                  create: [{ rate: rate, metric: unit }],
-                },
-              },
-            ],
+
+          sprayMix: {
+            createMany: {
+              data: sprays.map((spray) => {
+                return {
+                  spray: spray.spray,
+                  rate: spray.rate,
+                  unit: spray.unit,
+                };
+              }),
+            },
           },
         },
       });
+
       console.log("🥵", result);
       res.status(201).json(result);
     } catch (err) {
