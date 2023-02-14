@@ -5,14 +5,14 @@ import styles from "../styles/SprayRate.module.css";
 import standard from "../styles/Standard.module.css";
 
 const SprayRate = () => {
-  const [sprayAmount, setSprayAmount] = useState(0);
+  const [sprayAmount, setSprayAmount] = useState("");
   const [unit, setUnit] = useState("");
   const [isActive, setIsActive] = useState();
   const { event, mix } = useContext(SprayContext);
   const [sprayMix, setSprayMix] = mix;
   const [sprayEvent, setSprayEvent] = event;
   // console.log(sprayEvent);
-  const unitList = ["litres", "kg", "mls", "grams"];
+  const unitList = ["Litres", "Kgs", "mls", "grams"];
   const handleSubmit = () => {
     // e.preventDefault();
 
@@ -29,7 +29,8 @@ const SprayRate = () => {
     //Adds rate and unit to sprayMix
     const newSprayMix = { ...sprayMix };
     const index = newSprayMix.sprays.length - 1;
-    newSprayMix.sprays[index].rate = sprayAmount;
+
+    newSprayMix.sprays[index].rate = parseInt(sprayAmount);
     newSprayMix.sprays[index].unit = unit;
     setSprayMix(newSprayMix);
   };
@@ -63,7 +64,7 @@ const SprayRate = () => {
               type="number"
               required
               value={sprayAmount}
-              onChange={(e) => setSprayAmount(e.target.value)}
+              onChange={(e) => setSprayAmount(parseInt(e.target.value))}
             />
           </div>
         </form>
