@@ -7,6 +7,10 @@ import SprayContext from "../context/sprayEvent";
 const SprayDetails = () => {
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
+
+  const submitSpray = (sprayEvent) => {
+    console.log("🥶", sprayEvent);
+  };
   console.log("🥶", sprayEvent);
   return (
     <div className={`${standard.cardBackground} ${styles.detailsCard}`}>
@@ -37,19 +41,21 @@ const SprayDetails = () => {
           Edit
         </Link>
       </p>
+
       <p className={styles.labels}>Spray</p>
       <div className={styles.sprayMixCard}>
         <div className={styles.sprayTitleDisplay}>
-          <p>{sprayEvent.sprayList.name}</p>
+          <p>{sprayEvent.sprayList.title}</p>
           <Link href={`/spray`} className={styles.editBtn}>
             Edit
           </Link>
         </div>
 
         {/* Checks if a spray is entered else returns a message */}
-        {!sprayEvent.sprayList.sprays[0].spray
+
+        {sprayEvent.sprayList.length == 0
           ? "No spray entered"
-          : sprayEvent.sprayList.sprays.map((spray) => {
+          : sprayEvent.sprayList.sprayMix.map((spray) => {
               return (
                 <>
                   <div className={styles.sprayType}>
@@ -68,9 +74,10 @@ const SprayDetails = () => {
         <Link href={`/spray`} className={standard.next}>
           Back
         </Link>
-        <Link href={`/paddock`} className={standard.next}>
+        <button onClick={() => submitSpray(sprayEvent)}>Submit</button>
+        {/* <Link href={`/paddock`} className={standard.next}>
           Start again
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

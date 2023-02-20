@@ -13,14 +13,12 @@ export async function getServerSideProps({ req, res }) {
   let sprayList;
   let errorCode = false;
   try {
-    //uses joining table to combine spray, rates and units with title
     const sprayMixes = await prisma.SprayList.findMany({
       include: {
         sprayMix: true,
-      }, //sprayMix is the joining table
+      },
     });
 
-    console.log(sprayMixes);
     errorCode = res.statusCode > 200 ? res.statusCode : false;
 
     //Allows the new item added to be seen without pyhsically refreshing the page
@@ -28,6 +26,7 @@ export async function getServerSideProps({ req, res }) {
       refreshData();
     }
 
+    //needs to be stringified and parsed to be able to be passed as props as has a nested array
     return {
       props: { sprayList: JSON.parse(JSON.stringify(sprayMixes)), errorCode },
     };
@@ -39,12 +38,13 @@ export async function getServerSideProps({ req, res }) {
     }
     res.statusCode = 500;
     errorCode = res.statusCode;
-    sprayList = [];
+    return {
+      props: { sprayList: [], errorCode },
+    };
   }
 }
 
 const Spray = ({ sprayList, errorCode }) => {
-  console.log(sprayList);
   const { event, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [sprayMix, setSprayMix] = mix;
@@ -155,9 +155,9 @@ const Spray = ({ sprayList, errorCode }) => {
         {isActive >= 0 ? (
           <Link
             onClick={() => {
-              setSprayEvent({ ...sprayEvent, sprayMix: spray });
+              setSprayEvent({ ...sprayEvent, sprayList: spray });
             }}
-            href={`/spray-details`}
+            href={`/sprayDetails`}
             className={standard.next}
           >
             Add

@@ -11,11 +11,22 @@ datasource db {
 model Paddock {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(255)
+  is_displayed Boolean
+  sprayEventId  Int
+   sprayEvent    SprayEvent @relation(fields: [sprayEventId], references: [id], onDelete: Cascade)
+
+   @@index([sprayEventId])
+
 }
 
 model Crops {
   id   Int    @id @default(autoincrement()) @db.UnsignedInt
   name String @db.VarChar(50)
+  is_displayed Boolean
+  sprayEventId  Int
+   sprayEvent    SprayEvent @relation(fields: [sprayEventId], references: [id], onDelete: Cascade)
+
+   @@index([sprayEventId])
 }
 
 
@@ -23,6 +34,11 @@ model SprayList {
   id         Int                 @id @default(autoincrement())
   title      String
   sprayMix SprayMix[]
+  is_displayed Boolean
+  sprayEventId  Int
+   sprayEvent    SprayEvent @relation(fields: [sprayEventId], references: [id], onDelete: Cascade)
+
+   @@index([sprayEventId])
 }
 
 model SprayMix {
@@ -43,10 +59,20 @@ enum Unit{
   grams
 }
 
+
 model Sprays {
    id         Int                 @id @default(autoincrement())
    name       String
+   is_displayed Boolean
   
+}
+
+model SprayEvent {
+   id           Int                 @id @default(autoincrement())
+   paddock      Paddock
+   crop         Crops
+   date         date
+   sprayList    SprayList
 }
 
 
