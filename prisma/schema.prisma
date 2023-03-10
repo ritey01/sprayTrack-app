@@ -9,49 +9,43 @@ datasource db {
 }
 
 model Paddock {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
-  is_displayed Boolean
-  sprayEventId  Int
-   sprayEvent    SprayEvent @relation(fields: [sprayEventId], references: [id], onDelete: Cascade)
+  id           Int     @id @default(autoincrement())
+  name         String  @db.VarChar(255)
+  is_displayed Boolean   @default(true)
+  sprayEvent   SprayEvent[]
 
-   @@index([sprayEventId])
-
+  @@index([id])
 }
 
 model Crops {
-  id   Int    @id @default(autoincrement()) @db.UnsignedInt
-  name String @db.VarChar(50)
-  is_displayed Boolean
-  sprayEventId  Int
-   sprayEvent    SprayEvent @relation(fields: [sprayEventId], references: [id], onDelete: Cascade)
+  id           Int     @id @default(autoincrement()) @db.UnsignedInt
+  name         String  @db.VarChar(50)
+  is_displayed Boolean   @default(true)
+  sprayEvent   SprayEvent[]
 
-   @@index([sprayEventId])
+  @@index([id])
 }
 
-
 model SprayList {
-  id         Int                 @id @default(autoincrement())
-  title      String
-  sprayMix SprayMix[]
-  is_displayed Boolean
-  sprayEventId  Int
-   sprayEvent    SprayEvent @relation(fields: [sprayEventId], references: [id], onDelete: Cascade)
+  id           Int        @id @default(autoincrement())
+  title        String
+  sprayMix     SprayMix[] 
+  is_displayed Boolean   @default(true)
+  sprayEvent   SprayEvent[]
 
-   @@index([sprayEventId])
+  @@index([id])
 }
 
 model SprayMix {
-   id           Int                 @id @default(autoincrement())
-   spray        String
-   rate         Int
-   unit         Unit
-   sprayListId  Int
-   spraylist    SprayList   @relation(fields: [sprayListId], references: [id], onDelete: Cascade)
-
-   @@index([sprayListId])
+ id           Int       @id @default(autoincrement())
+  rate         Int
+  unit         Unit
+  sprayListId  Int
+  sprayList    SprayList @relation(fields: [sprayListId], references: [id])
+  spray       SpraySprayMix[]
+  @@index([sprayListId])
 }
-   
+
 enum Unit{
   Litres
   mls
@@ -59,20 +53,40 @@ enum Unit{
   grams
 }
 
-
 model Sprays {
-   id         Int                 @id @default(autoincrement())
-   name       String
-   is_displayed Boolean
-  
+  id           Int       @id @default(autoincrement())
+  name         String
+  is_displayed Boolean   @default(true)
+  sprayMixes   SpraySprayMix[]
+}
+
+model SpraySprayMix {
+  id           Int       @id @default(autoincrement())
+  sprayId      Int
+  sprayMixId   Int
+  spray        Sprays    @relation(fields: [sprayId], references: [id])
+  sprayMix     SprayMix  @relation(fields: [sprayMixId], references: [id])
+
+  @@index([sprayId])
+  @@index([sprayMixId])
 }
 
 model SprayEvent {
-   id           Int                 @id @default(autoincrement())
-   paddock      Paddock
-   crop         Crops
-   date         date
-   sprayList    SprayList
+   id            Int      @id @default(autoincrement())
+  date          DateTime
+  paddock       Paddock  @relation(fields: [paddockId], references: [id])
+  paddockId     Int
+  crop          Crops     @relation(fields: [cropId], references: [id])
+  cropId        Int
+  sprayList     SprayList @relation(fields: [sprayListId], references: [id])
+  sprayListId   Int
+  createdBy     String?
+  createdAt     DateTime  @default(now())
+  
+
+  @@index([paddockId])
+  @@index([cropId])
+  @@index([sprayListId])
 }
 
 
