@@ -13,9 +13,10 @@ export async function getServerSideProps({ req, res }) {
   let sprayList;
   let errorCode = false;
   try {
-    const sprayMixes = await prisma.SprayList.findMany({
+    //Make a call to sprayMixes table and include the spray table
+    const sprayMixes = await prisma.SprayMix.findMany({
       include: {
-        sprayMix: true,
+        spray: true,
       },
     });
 
@@ -28,7 +29,7 @@ export async function getServerSideProps({ req, res }) {
 
     //needs to be stringified and parsed to be able to be passed as props as has a nested array
     return {
-      props: { sprayList: JSON.parse(JSON.stringify(sprayMixes)), errorCode },
+      props: { sprayMix: JSON.parse(JSON.stringify(sprayMixes)), errorCode },
     };
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
@@ -39,15 +40,15 @@ export async function getServerSideProps({ req, res }) {
     res.statusCode = 500;
     errorCode = res.statusCode;
     return {
-      props: { sprayList: [], errorCode },
+      props: { sprayMix: [], errorCode },
     };
   }
 }
 
-const Spray = ({ sprayList, errorCode }) => {
+const Spray = ({ sprayMix, errorCode }) => {
   const { event, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
-  const [sprayMix, setSprayMix] = mix;
+  const [sprayMixState, setSprayMixState] = mix;
   const [spray, setSpray] = useState();
   const [isActive, setIsActive] = useState();
   const [error, setError] = useState(false);
@@ -55,7 +56,7 @@ const Spray = ({ sprayList, errorCode }) => {
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
-
+  //Needs to be a display hide instead of delete
   const deletePost = async (id) => {
     try {
       await fetch(`/api/spray/${id}`, {
@@ -69,8 +70,8 @@ const Spray = ({ sprayList, errorCode }) => {
     }
   };
 
-  const handlePaddockClick = (index) => {
-    setSpray(sprayList[index]);
+  const handleSprayMixClick = (index) => {
+    setSpray(sprayMix[index]);
     setError(false);
     setIsActive(index);
   };
@@ -83,7 +84,7 @@ const Spray = ({ sprayList, errorCode }) => {
           href={`/makeSpray`}
           className={standard.addingButton}
           //resets sprayMix initial state to null so dont get empty fields in array
-          onClick={() => (sprayMix.sprays.length = 0)}
+          onClick={() => (sprayMixState.sprays.length = 0)}
         >
           {" "}
           <FontAwesomeIcon icon={faPlus} />
@@ -92,8 +93,11 @@ const Spray = ({ sprayList, errorCode }) => {
       </div>
 
       <ul className={`${styles.card} ${standard.cardBackground}`}>
-        {sprayList.length == 0 && <p>No sprays created yet</p>}
-        {sprayList.map((spray, index) => (
+        {/* Checks if there are any sprays in the sprayMix array fetched from the database */}
+        {sprayMix.length == 0 && <p>No sprays created yet</p>}
+
+        {/* Displays sprays fetched from sprayMix database */}
+        {sprayMix.map((spray, index) => (
           <li
             className={styles.sprayCard}
             key={index}
@@ -106,10 +110,11 @@ const Spray = ({ sprayList, errorCode }) => {
               border: isActive == index ? "3px solid rgb(30, 173, 113)" : null,
             }}
             onClick={() => {
-              handlePaddockClick(index);
+              handleSprayMixClick(index);
             }}
           >
             {spray.title}
+            {/* This will probable error not sure of what is returned on the sprayMix */}
             {spray.sprayMix.length === 0 ? (
               <p>No sprays found</p>
             ) : (

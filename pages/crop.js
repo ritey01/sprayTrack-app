@@ -49,8 +49,8 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function Crops({ crops, errorCode }) {
-  const [cropType, setCropType] = useState("");
-  const [id, setId] = useState("");
+  const [cropId, setCropId] = useState("");
+  // const [id, setId] = useState("");
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [message, setMessage] = useState(false);
@@ -79,8 +79,8 @@ export default function Crops({ crops, errorCode }) {
       <ItemList
         props={crops}
         name={"crops"}
-        setProp={setCropType}
-        setId={setId}
+        setProp={setCropId}
+        // setId={setId}
       />
 
       <div className={standard.styledNext}>
@@ -88,18 +88,18 @@ export default function Crops({ crops, errorCode }) {
           Back
         </Link>
 
-        {cropType ? (
+        {cropId ? (
           <>
             <button
               className={standard.deleteButton}
-              onClick={() => deleteItem(id)}
+              onClick={() => deleteItem(cropId)}
             >
               Delete
             </button>
 
             <Link
               onClick={() => {
-                setSprayEvent({ ...sprayEvent, crop: cropType });
+                setSprayEvent({ ...sprayEvent, cropId: cropId });
               }}
               href={`/date`}
               className={standard.next}

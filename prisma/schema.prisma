@@ -26,24 +26,24 @@ model Crops {
   @@index([id])
 }
 
-model SprayList {
-  id           Int        @id @default(autoincrement())
-  title        String
-  sprayMix     SprayMix[] 
+model SprayName {
+  id           Int     @id @default(autoincrement()) 
+  name         String  @db.VarChar(50)
   is_displayed Boolean   @default(true)
-  sprayEvent   SprayEvent[]
+  sprays Spray[] 
 
-  @@index([id])
+ 
+  
 }
 
 model SprayMix {
- id           Int       @id @default(autoincrement())
-  rate         Int
-  unit         Unit
-  sprayListId  Int
-  sprayList    SprayList @relation(fields: [sprayListId], references: [id])
-  spray       SpraySprayMix[]
-  @@index([sprayListId])
+  id           Int         @id @default(autoincrement())
+  title        String
+  is_displayed Boolean     @default(true)
+  sprays     SprayMixSpray[]
+  sprayEvent   SprayEvent[]
+
+  @@index([id])
 }
 
 enum Unit{
@@ -53,19 +53,26 @@ enum Unit{
   grams
 }
 
-model Sprays {
-  id           Int       @id @default(autoincrement())
-  name         String
+model Spray {
+  id           Int         @id @default(autoincrement())
+  rate         Int
+  unit         Unit
   is_displayed Boolean   @default(true)
-  sprayMixes   SpraySprayMix[]
+  sprayMixes SprayMixSpray[] 
+  sprayName    SprayName  @relation(fields: [sprayNameId], references: [id])
+  sprayNameId  Int
+  
+
+  @@index([id])
 }
 
-model SpraySprayMix {
-  id           Int       @id @default(autoincrement())
+
+model SprayMixSpray {
+  id           Int         @id @default(autoincrement())
   sprayId      Int
   sprayMixId   Int
-  spray        Sprays    @relation(fields: [sprayId], references: [id])
-  sprayMix     SprayMix  @relation(fields: [sprayMixId], references: [id])
+  spray          Spray         @relation(fields: [sprayId], references: [id])
+  sprayMix       SprayMix      @relation(fields: [sprayMixId], references: [id])
 
   @@index([sprayId])
   @@index([sprayMixId])
@@ -78,15 +85,15 @@ model SprayEvent {
   paddockId     Int
   crop          Crops     @relation(fields: [cropId], references: [id])
   cropId        Int
-  sprayList     SprayList @relation(fields: [sprayListId], references: [id])
-  sprayListId   Int
+  sprayMix     SprayMix @relation(fields: [sprayMixId], references: [id])
+  sprayMixId   Int
   createdBy     String?
   createdAt     DateTime  @default(now())
   
 
   @@index([paddockId])
   @@index([cropId])
-  @@index([sprayListId])
+  @@index([sprayMixId])
 }
 
 

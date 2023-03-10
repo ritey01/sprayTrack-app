@@ -7,7 +7,7 @@ export function SprayProvider({ children }) {
     paddockId: null,
     cropId: null,
     date: "",
-    sprayList: [],
+    sprayMix: null,
   };
 
   const mixInitial = {

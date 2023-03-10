@@ -44,6 +44,10 @@ export default function MakeSpray({ sprays, errorCode }) {
   const [id, setId] = useState("");
   const { event, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
+  //  initial state for mix/sprayMix const mixInitial = {
+  //   name: "",
+  //   sprays: [{ spray: "", rate: 0, unit: "" }],
+  // };
   const [sprayMix, setSprayMix] = mix;
   const [message, setMessage] = useState(false);
 
@@ -51,7 +55,7 @@ export default function MakeSpray({ sprays, errorCode }) {
     return <Error statusCode={errorCode} />;
   }
 
-  const handlePaddockClick = (index) => {
+  const handleSprayClick = (index) => {
     setSprayType(sprays[index].name);
   };
 
@@ -61,7 +65,7 @@ export default function MakeSpray({ sprays, errorCode }) {
     // const index = newSprayEvent.sprayMix.mixs.length;
     // newSprayEvent.sprayMix.mixs[index] = { spray: sprayType };
     // setSprayEvent(newSprayEvent);
-    const newSprayMix = { ...sprayMix };
+    const newSprayMix = { ...sprayMix }; //comes from context as initial state
     const index = newSprayMix.sprays.length;
     newSprayMix.sprays[index] = { spray: sprayType };
     setSprayMix(newSprayMix);
@@ -92,8 +96,8 @@ export default function MakeSpray({ sprays, errorCode }) {
             }}
             onClick={() => {
               setIsActive(index);
-              handlePaddockClick(index);
-              setId(spray.id);
+              handleSprayClick(index);
+              setId(spray.id); //is this needed?
             }}
           >
             {isActive == index && (
