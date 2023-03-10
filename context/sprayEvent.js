@@ -4,8 +4,8 @@ const SprayContext = createContext();
 
 export function SprayProvider({ children }) {
   const initialState = {
-    paddock: "",
-    crop: "",
+    paddockId: null,
+    cropId: null,
     date: "",
     sprayList: [],
   };

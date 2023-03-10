@@ -17,7 +17,7 @@ const ItemList = ({ props, name, setProp, setId }) => {
           setIsActive={setIsActive}
           isActive={isActive}
           key={prop.id}
-          setId={setId}
+          // setId={setId}
         />
       ))}
     </ul>

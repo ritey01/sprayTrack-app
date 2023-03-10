@@ -17,7 +17,7 @@ const refreshData = () => {
 export async function getServerSideProps({ req, res }) {
   let paddocks;
   let errorCode = false;
-
+  //fetches all the paddocks from Paddock Table
   try {
     paddocks = await prisma.paddock.findMany();
     errorCode = res.statusCode > 200 ? res.statusCode : false;
@@ -44,15 +44,15 @@ export async function getServerSideProps({ req, res }) {
 export default function Paddock({ paddocks, errorCode }) {
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
-  const [location, setLocation] = useState("");
-  const [id, setId] = useState("");
+  const [locationId, setLocationId] = useState();
+  // const [id, setId] = useState("");
 
   const [message, setMessage] = useState(false);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
-
+  //this needs to be changed to hide display rather than deleting the paddock from table
   const deletePost = async (id) => {
     try {
       await fetch(`/api/paddock/${id}`, {
@@ -74,23 +74,23 @@ export default function Paddock({ paddocks, errorCode }) {
       <ItemList
         props={paddocks}
         name={"paddocks"}
-        setProp={setLocation}
-        setId={setId}
+        setProp={setLocationId}
+        // setId={setId}
       />
 
       <div className={standard.styledNext}>
-        {location ? (
+        {locationId ? (
           <>
             <button
               className={standard.deleteButton}
-              onClick={() => deletePost(id)}
+              onClick={() => deletePost(locationId)}
             >
               Delete
             </button>
 
             <Link
               onClick={() => {
-                setSprayEvent({ ...sprayEvent, paddock: location });
+                setSprayEvent({ ...sprayEvent, paddockId: locationId });
               }}
               href={`/crop`}
               className={standard.next}

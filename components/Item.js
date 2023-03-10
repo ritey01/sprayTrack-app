@@ -4,9 +4,9 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/List.module.css";
 
 const Item = ({ prop, index, setProp, setIsActive, isActive, setId }) => {
-  const handleItemClick = () => {
-    setProp(prop.name);
-  };
+  // const handleItemClick = () => {
+  //   setProp(prop.name);
+  // };
 
   return (
     <li
@@ -19,8 +19,9 @@ const Item = ({ prop, index, setProp, setIsActive, isActive, setId }) => {
       }}
       onClick={() => {
         setIsActive(index);
-        handleItemClick(index);
-        setId(prop.id);
+        // handleItemClick(index);
+        setProp(prop.id);
+        // setId(prop.id);
       }}
     >
       {isActive == index && (
