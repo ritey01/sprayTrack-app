@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/List.module.css";
 
-const Item = ({ prop, index, setProp, setIsActive, isActive, setId }) => {
+const Item = ({ prop, index, setProp, setIsActive, isActive, setName }) => {
   // const handleItemClick = () => {
   //   setProp(prop.name);
   // };
@@ -21,7 +21,7 @@ const Item = ({ prop, index, setProp, setIsActive, isActive, setId }) => {
         setIsActive(index);
         // handleItemClick(index);
         setProp(prop.id);
-        // setId(prop.id);
+        setName(prop.name);
       }}
     >
       {isActive == index && (
