@@ -13,6 +13,7 @@ const SprayRate = () => {
   const [sprayEvent, setSprayEvent] = event;
   // console.log(sprayEvent);
   const unitList = ["Litres", "Kgs", "mls", "grams"];
+
   const handleSubmit = () => {
     // e.preventDefault();
 
@@ -33,6 +34,7 @@ const SprayRate = () => {
     newSprayMix.sprays[index].rate = parseInt(sprayAmount);
     newSprayMix.sprays[index].unit = unit;
     setSprayMix(newSprayMix);
+    console.log("🚀", sprayMix);
   };
   //Clears the last spray added to the sprayEvent
   const clearSpray = () => {
