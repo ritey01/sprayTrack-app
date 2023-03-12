@@ -63,16 +63,16 @@ model Spray {
   sprayNameId  Int
   
 
-  @@index([id])
+  @@index([sprayNameId])
 }
 
 
 model SprayMixSpray {
   id           Int         @id @default(autoincrement())
-  sprayId      Int
-  sprayMixId   Int
   spray          Spray         @relation(fields: [sprayId], references: [id])
+  sprayId      Int
   sprayMix       SprayMix      @relation(fields: [sprayMixId], references: [id])
+  sprayMixId   Int
 
   @@index([sprayId])
   @@index([sprayMixId])
@@ -80,7 +80,7 @@ model SprayMixSpray {
 
 model SprayEvent {
    id            Int      @id @default(autoincrement())
-  date          DateTime
+  date          String
   paddock       Paddock  @relation(fields: [paddockId], references: [id])
   paddockId     Int
   crop          Crops     @relation(fields: [cropId], references: [id])
