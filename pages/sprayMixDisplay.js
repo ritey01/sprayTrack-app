@@ -24,12 +24,6 @@ const SprayMixDisplay = () => {
   };
 
   const addSprayMix = async () => {
-    //Adds the spray mix to the sprayMixs array
-    // sprayMixs.push({
-    //   name: sprayMixName,
-    //   mixs: sprayEvent.sprayMix.mixs,
-    // });
-    //Adds the spray mix to the sprayEvent object
     const newSprayMix = { ...sprayMix };
     newSprayMix.name = sprayMixName;
     const newSprayEvent = { ...sprayEvent };
@@ -87,7 +81,7 @@ const SprayMixDisplay = () => {
           return (
             <>
               <div className={styles.sprayDetails}>
-                <p>{spray.spray}</p>
+                <p>{spray.sprayName}</p>
                 <p>
                   {spray.rate} {spray.unit} per{" "}
                   {spray.sprayArea > 1 ? (
