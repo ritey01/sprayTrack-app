@@ -46,7 +46,8 @@ export default function Paddock({ paddocks, errorCode }) {
   const [sprayEvent, setSprayEvent] = event;
   const [locationId, setLocationId] = useState();
   const [name, setName] = useState("");
-
+  const [paddockList, setPaddockList] = useState(paddocks);
+  console.log("paddockList", paddockList);
   const [message, setMessage] = useState(false);
 
   if (errorCode) {
@@ -59,8 +60,15 @@ export default function Paddock({ paddocks, errorCode }) {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
+      console.log("paddockList before deletion", paddockList);
 
-      refreshData();
+      const updatedPaddocks = paddockList.filter(
+        (paddock) => paddock.id !== id
+      );
+
+      console.log("paddockList after deletion", updatedPaddocks);
+
+      setPaddockList(updatedPaddocks);
     } catch (error) {
       console.log("error", error);
     }
@@ -72,7 +80,7 @@ export default function Paddock({ paddocks, errorCode }) {
       <AddItemButton name={"Add Paddock"} link={`/addPaddock`} />
 
       <ItemList
-        props={paddocks}
+        props={paddockList}
         name={"paddocks"}
         setProp={setLocationId}
         setName={setName}
