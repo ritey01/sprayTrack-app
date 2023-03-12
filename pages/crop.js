@@ -50,7 +50,7 @@ export async function getServerSideProps({ req, res }) {
 
 export default function Crops({ crops, errorCode }) {
   const [cropId, setCropId] = useState("");
-  // const [id, setId] = useState("");
+  const [name, setName] = useState("");
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [message, setMessage] = useState(false);
@@ -80,7 +80,7 @@ export default function Crops({ crops, errorCode }) {
         props={crops}
         name={"crops"}
         setProp={setCropId}
-        // setId={setId}
+        setName={setName}
       />
 
       <div className={standard.styledNext}>
@@ -99,7 +99,7 @@ export default function Crops({ crops, errorCode }) {
 
             <Link
               onClick={() => {
-                setSprayEvent({ ...sprayEvent, cropId: cropId });
+                setSprayEvent({ ...sprayEvent, cropId: cropId, crop: name });
               }}
               href={`/date`}
               className={standard.next}
