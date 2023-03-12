@@ -8,10 +8,17 @@ const SprayDetails = () => {
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
 
-  const submitSpray = (sprayEvent) => {
+  const submitSpray = async (sprayEvent) => {
     console.log("🥶", sprayEvent);
+    const body = { sprayEvent };
+    const result = await fetch(`/api/spray/postSprayEvent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    console.log("✅", result);
   };
-  console.log("🥶", sprayEvent);
+
   return (
     <div className={`${standard.cardBackground} ${styles.detailsCard}`}>
       <p className={styles.labels}> Date</p>
@@ -45,7 +52,7 @@ const SprayDetails = () => {
       <p className={styles.labels}>Spray</p>
       <div className={styles.sprayMixCard}>
         <div className={styles.sprayTitleDisplay}>
-          <p>{sprayEvent.sprayList.title}</p>
+          <p>{sprayEvent.sprayMix.title}</p>
           <Link href={`/spray`} className={styles.editBtn}>
             Edit
           </Link>
@@ -53,13 +60,13 @@ const SprayDetails = () => {
 
         {/* Checks if a spray is entered else returns a message */}
 
-        {sprayEvent.sprayList.length == 0
+        {sprayEvent.sprayMix.sprays.length == 0
           ? "No spray entered"
-          : sprayEvent.sprayList.sprayMix.map((spray) => {
+          : sprayEvent.sprayMix.sprays.map((spray) => {
               return (
                 <>
                   <div className={styles.sprayType}>
-                    <p className={styles.sprayName}>{spray.spray}</p>
+                    <p className={styles.sprayName}>{spray.sprayName}</p>
 
                     <p>
                       {spray.rate} {spray.unit} per hectares
