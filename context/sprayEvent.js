@@ -5,14 +5,21 @@ const SprayContext = createContext();
 export function SprayProvider({ children }) {
   const initialState = {
     paddockId: null,
+    paddock: "",
     cropId: null,
+    crop: "",
     date: "",
-    sprayMix: null,
+    //Think this needs to be
+    sprayMix: {
+      sprayMixId: null,
+      title: "",
+      sprays: [{ sprayId: null, sprayName: "", rate: 0, unit: "" }],
+    },
   };
 
   const mixInitial = {
     name: "",
-    sprays: [{ spray: "", rate: 0, unit: "" }],
+    sprays: [{ sprayId: null, sprayName: "", rate: 0, unit: "" }],
   };
   const [sprayEvent, setSprayEvent] = useState(initialState);
   const [sprayMix, setSprayMix] = useState(mixInitial);
