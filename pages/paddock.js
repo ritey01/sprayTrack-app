@@ -45,7 +45,7 @@ export default function Paddock({ paddocks, errorCode }) {
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [locationId, setLocationId] = useState();
-  // const [id, setId] = useState("");
+  const [name, setName] = useState("");
 
   const [message, setMessage] = useState(false);
 
@@ -75,7 +75,7 @@ export default function Paddock({ paddocks, errorCode }) {
         props={paddocks}
         name={"paddocks"}
         setProp={setLocationId}
-        // setId={setId}
+        setName={setName}
       />
 
       <div className={standard.styledNext}>
@@ -90,7 +90,11 @@ export default function Paddock({ paddocks, errorCode }) {
 
             <Link
               onClick={() => {
-                setSprayEvent({ ...sprayEvent, paddockId: locationId });
+                setSprayEvent({
+                  ...sprayEvent,
+                  paddockId: locationId,
+                  paddock: name,
+                });
               }}
               href={`/crop`}
               className={standard.next}
