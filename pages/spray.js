@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
 import styles from "../styles/Spray.module.css";
 import SprayContext from "../context/sprayEvent";
@@ -16,10 +16,19 @@ export async function getServerSideProps({ req, res }) {
     //Make a call to sprayMixes table and include the spray table
     const sprayMixes = await prisma.SprayMix.findMany({
       include: {
-        spray: true,
+        sprays: {
+          include: {
+            spray: {
+              include: {
+                sprayName: true,
+              },
+            },
+          },
+        },
       },
     });
-
+    // console.log("🤬", sprayMixes);
+    // console.log(JSON.stringify(sprayMixes));
     errorCode = res.statusCode > 200 ? res.statusCode : false;
 
     //Allows the new item added to be seen without pyhsically refreshing the page
@@ -30,6 +39,7 @@ export async function getServerSideProps({ req, res }) {
     //needs to be stringified and parsed to be able to be passed as props as has a nested array
     return {
       props: { sprayMix: JSON.parse(JSON.stringify(sprayMixes)), errorCode },
+      // props: { sprayMix: sprayMixes, errorCode },
     };
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
@@ -40,6 +50,7 @@ export async function getServerSideProps({ req, res }) {
     res.statusCode = 500;
     errorCode = res.statusCode;
     return {
+      // think it needs to be sprays: [] to match the props in the component
       props: { sprayMix: [], errorCode },
     };
   }
@@ -53,6 +64,9 @@ const Spray = ({ sprayMix, errorCode }) => {
   const [isActive, setIsActive] = useState();
   const [error, setError] = useState(false);
 
+  useEffect(() => {
+    console.log("spray", spray);
+  }, [spray]);
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
@@ -94,8 +108,8 @@ const Spray = ({ sprayMix, errorCode }) => {
 
       <ul className={`${styles.card} ${standard.cardBackground}`}>
         {/* Checks if there are any sprays in the sprayMix array fetched from the database */}
-        {sprayMix.length == 0 && <p>No sprays created yet</p>}
-
+        {/* {sprayMix.sprays.length == 0 && <p>No sprays created yet</p>} */}
+        {sprayMix.length === 0 && <p>No sprays created yet</p>}
         {/* Displays sprays fetched from sprayMix database */}
         {sprayMix.map((spray, index) => (
           <li
@@ -115,11 +129,11 @@ const Spray = ({ sprayMix, errorCode }) => {
           >
             {spray.title}
             {/* This will probable error not sure of what is returned on the sprayMix */}
-            {spray.sprayMix.length === 0 ? (
+            {spray.sprays.length === 0 ? (
               <p>No sprays found</p>
             ) : (
               <ul className={styles.sprays}>
-                {spray.sprayMix.map((mix) => {
+                {spray.sprays.map((mix) => {
                   return (
                     <>
                       <li
@@ -131,9 +145,10 @@ const Spray = ({ sprayMix, errorCode }) => {
                           }
                         }
                       >
-                        <p>{mix.spray}</p>
+                        {/* could be sprayName */}
+                        <p>{mix.spray.sprayName.name}</p>
                         <p>
-                          {mix.rate} {mix.unit} / hectare
+                          {mix.spray.rate} {mix.spray.unit} / hectare
                         </p>
                       </li>
                     </>
@@ -160,7 +175,20 @@ const Spray = ({ sprayMix, errorCode }) => {
         {isActive >= 0 ? (
           <Link
             onClick={() => {
-              setSprayEvent({ ...sprayEvent, sprayList: spray });
+              //need to sort this out
+              setSprayEvent({
+                ...sprayEvent,
+                sprayMix: {
+                  title: spray.title,
+                  sprayMixId: spray.id,
+                  sprays: spray.sprays.map((spray) => ({
+                    sprayId: spray.id,
+                    sprayName: spray.spray.sprayName.name,
+                    rate: spray.spray.rate,
+                    unit: spray.spray.unit,
+                  })),
+                },
+              });
             }}
             href={`/sprayDetails`}
             className={standard.next}
