@@ -11,12 +11,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export async function getServerSideProps({ req, res }) {
-  let sprays;
+  let sprayNames;
   let errorCode = false;
 
   try {
-    sprays = await prisma.sprays.findMany();
-    console.log("😡", sprays);
+    sprayNames = await prisma.sprayName.findMany();
+    console.log("😡", sprayNames);
     errorCode = res.statusCode > 200 ? res.statusCode : false;
 
     if (res.status < 300) {
@@ -30,23 +30,23 @@ export async function getServerSideProps({ req, res }) {
     }
     res.statusCode = 500;
     errorCode = res.statusCode;
-    sprays = [];
+    sprayNames = [];
   }
 
   return {
-    props: { sprays, errorCode },
+    props: { sprayNames, errorCode },
   };
 }
 
-export default function MakeSpray({ sprays, errorCode }) {
-  const [sprayType, setSprayType] = useState("");
+export default function MakeSpray({ sprayNames, errorCode }) {
+  const [sprayTypeId, setSprayTypeId] = useState("");
   const [isActive, setIsActive] = useState();
-  const [id, setId] = useState("");
+  const [sprayName, setSprayName] = useState("");
   const { event, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
-  //  initial state for mix/sprayMix const mixInitial = {
+  //  initial state for building mix/sprayMix to add to sprayEvent, want to add to spray:"",const mixInitial = {
   //   name: "",
-  //   sprays: [{ spray: "", rate: 0, unit: "" }],
+  //   sprays: [{ sprayId: null, sprayName:"", rate: 0, unit: "" }],
   // };
   const [sprayMix, setSprayMix] = mix;
   const [message, setMessage] = useState(false);
@@ -56,18 +56,19 @@ export default function MakeSpray({ sprays, errorCode }) {
   }
 
   const handleSprayClick = (index) => {
-    setSprayType(sprays[index].name);
+    setSprayTypeId(sprayNames[index].id);
+    setSprayName(sprayNames[index].name);
   };
 
   const dataSetter = () => {
-    //not sure if this is needed here as creating the sprayMix as state can then add the whole list to sprayEvent?
-    // const newSprayEvent = { ...sprayEvent };
-    // const index = newSprayEvent.sprayMix.mixs.length;
-    // newSprayEvent.sprayMix.mixs[index] = { spray: sprayType };
-    // setSprayEvent(newSprayEvent);
     const newSprayMix = { ...sprayMix }; //comes from context as initial state
     const index = newSprayMix.sprays.length;
-    newSprayMix.sprays[index] = { spray: sprayType };
+    //add id as this is mapped to the sprayName table from sprayMix
+    newSprayMix.sprays[index] = {
+      sprayId: sprayTypeId,
+      sprayName: sprayName,
+    };
+    //sets global state for sprayMix
     setSprayMix(newSprayMix);
   };
 
@@ -83,12 +84,12 @@ export default function MakeSpray({ sprays, errorCode }) {
       </div>
 
       <ul className={`${styles.card} ${standard.cardBackground}`}>
-        {sprays.length == 0 && <p>No sprays created yet</p>}
-        {sprays.map((spray, index) => (
+        {sprayNames.length == 0 && <p>No sprays created yet</p>}
+        {sprayNames.map((name, index) => (
           <li
             className={styles.spray}
             key={index}
-            value={spray}
+            value={name}
             style={{
               backgroundColor:
                 isActive == index ? "rgb(30, 173, 113, 0.18)" : "#ffff",
@@ -97,7 +98,6 @@ export default function MakeSpray({ sprays, errorCode }) {
             onClick={() => {
               setIsActive(index);
               handleSprayClick(index);
-              setId(spray.id); //is this needed?
             }}
           >
             {isActive == index && (
@@ -109,7 +109,7 @@ export default function MakeSpray({ sprays, errorCode }) {
                 />
               </span>
             )}
-            {spray.name}
+            {name.name}
           </li>
         ))}
       </ul>
