@@ -5,6 +5,7 @@
 - Input validation with Joi server and client 
 - Standardize input with title so duplicate
 - Parametized query with password and email storage
+- add a delete to sprayMix display
   
 
 ## Problems

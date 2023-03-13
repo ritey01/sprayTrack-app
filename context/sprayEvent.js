@@ -9,7 +9,6 @@ export function SprayProvider({ children }) {
     cropId: null,
     crop: "",
     date: "",
-    //Think this needs to be
     sprayMix: {
       sprayMixId: null,
       title: "",
@@ -18,7 +17,7 @@ export function SprayProvider({ children }) {
   };
 
   const mixInitial = {
-    name: "",
+    title: "",
     sprays: [{ sprayId: null, sprayName: "", rate: 0, unit: "" }],
   };
   const [sprayEvent, setSprayEvent] = useState(initialState);

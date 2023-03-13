@@ -8,8 +8,31 @@ const SprayDetails = () => {
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
 
+  const validateState = (state) => {
+    const emptyFields = [];
+    const fieldsToCheck = ["date", "paddock", "crop", "sprayMix"];
+    fieldsToCheck.forEach((field) => {
+      const value = state[field];
+      if (!value || (Array.isArray(value) && !value.length)) {
+        emptyFields.push(field);
+      }
+    });
+    if (emptyFields.length) {
+      return `The following fields are empty or null: ${emptyFields.join(
+        ", "
+      )}`;
+    } else {
+      return true;
+    }
+  };
+
   const submitSpray = async (sprayEvent) => {
-    console.log("🥶", sprayEvent);
+    const fieldCheck = validateState(sprayEvent);
+
+    if (!fieldCheck) {
+      setEmptyFields([]);
+    }
+
     const body = { sprayEvent };
     const result = await fetch(`/api/spray/postSprayEvent`, {
       method: "POST",
