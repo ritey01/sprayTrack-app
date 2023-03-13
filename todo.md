@@ -3,6 +3,7 @@
 - -change delete to hide display
 - back button on add crop with nothing entered
 - Input validation with Joi server and client 
+- Standardize input with title so duplicate
 - Parametized query with password and email storage
   
 

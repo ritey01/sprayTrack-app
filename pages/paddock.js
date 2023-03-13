@@ -53,20 +53,18 @@ export default function Paddock({ paddocks, errorCode }) {
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
-  //this needs to be changed to hide display rather than deleting the paddock from table
+
+  //Deletes a paddock from the Paddock Table if not recorded sprayEvent else changes is_displayed
   const deletePost = async (id) => {
     try {
       await fetch(`/api/paddock/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
-      console.log("paddockList before deletion", paddockList);
 
       const updatedPaddocks = paddockList.filter(
         (paddock) => paddock.id !== id
       );
-
-      console.log("paddockList after deletion", updatedPaddocks);
 
       setPaddockList(updatedPaddocks);
     } catch (error) {
