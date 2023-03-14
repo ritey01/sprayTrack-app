@@ -22,7 +22,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-spinners": "^0.13.7",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "sweetalert2": "^11.7.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",

@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import Swal from "sweetalert2";
 import standard from "../styles/Standard.module.css";
 import styles from "../styles/SprayDetails.module.css";
 import Link from "next/link";
@@ -7,32 +8,21 @@ import SprayContext from "../context/sprayEvent";
 const SprayDetails = () => {
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
+  const [emptyFields, setEmptyFields] = useState([]);
 
+  //Checks if all fields are filled in
   const validateState = (state) => {
-    const emptyFields = [];
+    setEmptyFields([]);
     const fieldsToCheck = ["date", "paddock", "crop", "sprayMix"];
     fieldsToCheck.forEach((field) => {
       const value = state[field];
       if (!value || (Array.isArray(value) && !value.length)) {
-        emptyFields.push(field);
+        emptyFields.push(field.charAt(0).toUpperCase() + field.slice(1));
       }
     });
-    if (emptyFields.length) {
-      return `The following fields are empty or null: ${emptyFields.join(
-        ", "
-      )}`;
-    } else {
-      return true;
-    }
   };
 
   const submitSpray = async (sprayEvent) => {
-    const fieldCheck = validateState(sprayEvent);
-
-    if (!fieldCheck) {
-      setEmptyFields([]);
-    }
-
     const body = { sprayEvent };
     const result = await fetch(`/api/spray/postSprayEvent`, {
       method: "POST",
@@ -40,6 +30,53 @@ const SprayDetails = () => {
       body: JSON.stringify(body),
     });
     console.log("✅", result);
+  };
+
+  const handleClick = (sprayEvent) => {
+    validateState(sprayEvent);
+    if (emptyFields.length) {
+      let message;
+      if (emptyFields.length === 1) {
+        message = `Please enter ${emptyFields[0]} details`;
+      } else if (emptyFields.length === 2) {
+        message = `Please enter ${emptyFields[0]} and ${emptyFields[1]} details`;
+      } else {
+        const lastField = emptyFields.pop();
+        const otherFields = emptyFields.join(", ");
+        message = `Please enter ${otherFields}, and ${lastField} details`;
+      }
+      Swal.fire({
+        text: message,
+        icon: "error",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "rgb(6, 214, 160)",
+        confirmButtonAriaLabel: "Ok",
+      });
+    } else {
+      const submit = submitSpray(sprayEvent);
+      if (submit) {
+        Swal.fire({
+          text: "Spray event saved",
+          icon: "success",
+          confirmButtonText: "Ok",
+          confirmButtonColor: "rgb(6, 214, 160)",
+          confirmButtonAriaLabel: "Ok",
+        });
+        //resets sprayEvent after submit
+        setSprayEvent({
+          paddockId: null,
+          paddock: "",
+          cropId: null,
+          crop: "",
+          date: "",
+          sprayMix: {
+            sprayMixId: null,
+            title: "",
+            sprays: [{ sprayId: null, sprayName: "", rate: 0, unit: "" }],
+          },
+        });
+      }
+    }
   };
 
   return (
@@ -100,11 +137,16 @@ const SprayDetails = () => {
               );
             })}
       </div>
+      <div>
+        {emptyFields.length > 0
+          ? console.log("empty fields", emptyFields)
+          : null}
+      </div>
       <div className={standard.styledNext}>
         <Link href={`/spray`} className={standard.next}>
           Back
         </Link>
-        <button onClick={() => submitSpray(sprayEvent)}>Submit</button>
+        <button onClick={() => handleClick(sprayEvent)}>Submit</button>
         {/* <Link href={`/paddock`} className={standard.next}>
           Start again
         </Link> */}
