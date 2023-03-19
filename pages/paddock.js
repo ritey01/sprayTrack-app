@@ -1,7 +1,9 @@
 import React, { useState, useContext } from "react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
 import Error from "./_error";
 import Link from "next/link";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import standard from "../styles/Standard.module.css";
 import AddItemButton from "../components/AddItemButton";
 import ItemList from "../components/ItemList";
@@ -17,6 +19,19 @@ const refreshData = () => {
 export async function getServerSideProps({ req, res }) {
   let paddocks;
   let errorCode = false;
+  //Check user is logged in first before fetching paddocks from Paddock Table
+  const session = await getServerSession(req, res, authOptions);
+
+  if (!session) {
+    //redirect to login page
+    return {
+      redirect: {
+        destination: "login",
+        permanent: false,
+      },
+    };
+  }
+
   //fetches all the paddocks from Paddock Table
   try {
     paddocks = await prisma.paddock.findMany();
@@ -37,11 +52,12 @@ export async function getServerSideProps({ req, res }) {
   }
 
   return {
-    props: { paddocks, errorCode },
+    props: { paddocks, errorCode, session },
   };
 }
 
-export default function Paddock({ paddocks, errorCode }) {
+export default function Paddock({ paddocks, errorCode, session }) {
+  console.log(session);
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [locationId, setLocationId] = useState();
