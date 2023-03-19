@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { getServerSession } from "next-auth/next";
+
 import { authOptions } from "./api/auth/[...nextauth]";
 import Error from "./_error";
 import Link from "next/link";
@@ -20,44 +21,42 @@ export async function getServerSideProps({ req, res }) {
   let paddocks;
   let errorCode = false;
   //Check user is logged in first before fetching paddocks from Paddock Table
-  const session = await getServerSession(req, res, authOptions);
-
-  if (!session) {
-    //redirect to login page
-    return {
-      redirect: {
-        destination: "login",
-        permanent: false,
-      },
-    };
-  }
 
   //fetches all the paddocks from Paddock Table
   try {
+    const session = await getServerSession(req, res, authOptions);
+
+    if (!session) {
+      res.statusCode = 401;
+      errorCode = res.statusCode;
+      paddocks = [];
+      return { props: { paddocks, errorCode, session } };
+    }
     paddocks = await prisma.paddock.findMany();
     errorCode = res.statusCode > 200 ? res.statusCode : false;
-
-    if (res.status < 300) {
-      refreshData();
-    }
+    console.log(errorCode);
+    // if (res.status < 300) {
+    //   refreshData();
+    // }
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       console.error(error.code);
     } else {
       console.error(error);
     }
+
     res.statusCode = 500;
     errorCode = res.statusCode;
+
     paddocks = [];
   }
 
   return {
-    props: { paddocks, errorCode, session },
+    props: { paddocks, errorCode },
   };
 }
 
-export default function Paddock({ paddocks, errorCode, session }) {
-  console.log(session);
+export default function Paddock({ paddocks, errorCode }) {
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [locationId, setLocationId] = useState();
