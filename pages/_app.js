@@ -32,14 +32,15 @@ export default function App({
   }, [Router]);
 
   return (
-    <Layout>
-      <SessionProvider session={session}>
+    <SessionProvider session={session}>
+      <Layout>
         <SprayProvider>
           <main className={inter.className}>
-            {isLoading ? <Loader /> : <Component {...pageProps} />}
+            <Component {...pageProps} />
+            {/* {isLoading ? <Loader /> : <Component {...pageProps} />} */}
           </main>
         </SprayProvider>
-      </SessionProvider>
-    </Layout>
+      </Layout>
+    </SessionProvider>
   );
 }
