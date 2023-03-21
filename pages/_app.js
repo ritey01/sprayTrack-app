@@ -33,6 +33,7 @@ export default function App({
 
   return (
     <SessionProvider session={session}>
+      {console.log(session)}
       <Layout>
         <SprayProvider>
           <main className={inter.className}>

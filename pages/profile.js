@@ -1,6 +1,6 @@
 // /pages/profile.jsx
 import { useSession, signIn, signOut } from "next-auth/react";
-import { getServerSession } from "next-auth/next";
+import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 export default function Component() {
@@ -10,7 +10,7 @@ export default function Component() {
     return (
       <>
         Signed in as {session.user.email} <br />
-        {/* <img src={session.user.image} /> <br /> */}
+        <img src={session.user.image} /> <br />
         {session.user.name} <br />
         <button onClick={() => signOut()}>Sign out</button>
       </>
@@ -25,7 +25,11 @@ export default function Component() {
 }
 
 export async function getServerSideProps(context) {
-  const session = await getServerSession(context.req, context.res, authOptions);
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
 
   if (!session) {
     //redirect to login page
