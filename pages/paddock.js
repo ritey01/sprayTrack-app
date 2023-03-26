@@ -1,7 +1,4 @@
 import React, { useState, useContext } from "react";
-import { getServerSession } from "next-auth/next";
-
-import { authOptions } from "./api/auth/[...nextauth]";
 import Error from "./_error";
 import Link from "next/link";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
@@ -24,20 +21,12 @@ export async function getServerSideProps({ req, res }) {
 
   //fetches all the paddocks from Paddock Table
   try {
-    const session = await getServerSession(req, res, authOptions);
-
-    if (!session) {
-      res.statusCode = 401;
-      errorCode = res.statusCode;
-      paddocks = [];
-      return { props: { paddocks, errorCode, session } };
-    }
     paddocks = await prisma.paddock.findMany();
     errorCode = res.statusCode > 200 ? res.statusCode : false;
     console.log(errorCode);
-    // if (res.status < 300) {
-    //   refreshData();
-    // }
+    if (res.status < 300) {
+      refreshData();
+    }
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       console.error(error.code);
@@ -47,7 +36,6 @@ export async function getServerSideProps({ req, res }) {
 
     res.statusCode = 500;
     errorCode = res.statusCode;
-
     paddocks = [];
   }
 

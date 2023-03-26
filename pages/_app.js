@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Router from "next/router";
-import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 import Layout from "../components/Layout";
 import Loader from "../components/loader";
@@ -12,10 +11,7 @@ import { Inter } from "@next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}) {
+export default function App({ Component, pageProps }) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -32,16 +28,12 @@ export default function App({
   }, [Router]);
 
   return (
-    <SessionProvider session={session}>
-      {console.log(session)}
-      <Layout>
-        <SprayProvider>
-          <main className={inter.className}>
-            <Component {...pageProps} />
-            {/* {isLoading ? <Loader /> : <Component {...pageProps} />} */}
-          </main>
-        </SprayProvider>
-      </Layout>
-    </SessionProvider>
+    <Layout>
+      <SprayProvider>
+        <main className={inter.className}>
+          {isLoading ? <Loader /> : <Component {...pageProps} />}
+        </main>
+      </SprayProvider>
+    </Layout>
   );
 }
