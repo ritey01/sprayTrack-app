@@ -11,7 +11,7 @@ const SprayRate = () => {
   const { event, mix } = useContext(SprayContext);
   const [sprayMix, setSprayMix] = mix;
   const [sprayEvent, setSprayEvent] = event;
-  // console.log(sprayEvent);
+
   const unitList = ["Litres", "Kgs", "mls", "grams"];
 
   const handleSubmit = () => {
@@ -39,7 +39,7 @@ const SprayRate = () => {
   //Clears the last spray added to the sprayEvent
   const clearSpray = () => {
     const newSprayEvent = { ...sprayEvent };
-    newSprayEvent.sprayMix.mixs.pop();
+    newSprayEvent.sprayMix.sprays.pop();
     setSprayEvent(newSprayEvent);
   };
 

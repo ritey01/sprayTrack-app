@@ -11,7 +11,12 @@ const SprayMixDisplay = () => {
   const [sprayEvent, setSprayEvent] = event;
   const [sprayMix, setSprayMix] = mix;
 
-  const handleSubmit = async () => {};
+  const deleteSpray = (index) => {
+    //removes the selected spray from the array
+    const newSprayMix = { ...sprayMix };
+    newSprayMix.sprays.splice(index, 1);
+    setSprayMix(newSprayMix);
+  };
 
   const resetData = (index) => {
     //removes the selected spray from the array
@@ -25,11 +30,11 @@ const SprayMixDisplay = () => {
 
   const addSprayMix = async () => {
     const newSprayMix = { ...sprayMix };
-    newSprayMix.name = sprayMixName;
+    newSprayMix.title = sprayMixName;
     const newSprayEvent = { ...sprayEvent };
-    newSprayEvent.sprayList = newSprayMix;
+    newSprayEvent.sprayMix = newSprayMix;
     setSprayEvent(newSprayEvent);
-    console.log("last 😈", sprayEvent);
+
     //need to reset the sprayMix object
     //do this with route change incase it errors?
     // setSprayMix({
@@ -38,7 +43,7 @@ const SprayMixDisplay = () => {
     // });
 
     //saves the created spraymix for later use
-    const body = { name: sprayMixName, sprays: sprayMix.sprays };
+    const body = { title: sprayMixName, sprays: sprayMix.sprays };
     const result = await fetch(`/api/spray/postSprayList`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -55,29 +60,24 @@ const SprayMixDisplay = () => {
         )}
 
         {/* If there is more than one spray in the spray mix, display the form to add a name to the spray mix */}
-
-        <form>
-          {" "}
-          <label htmlFor="sprayMixName" className={styles.formLabel}>
-            Spray Mix Name
-          </label>
-          <input
-            className={styles.formName}
-            id="sprayMixName"
-            type="string"
-            required
-            value={sprayMixName}
-            onChange={(e) => setSprayMixName(e.target.value)}
-          />
-        </form>
+        {sprayMix.sprays.length > 0 && (
+          <form>
+            {" "}
+            <label htmlFor="sprayMixName" className={styles.formLabel}>
+              Spray Mix Name
+            </label>
+            <input
+              className={styles.formName}
+              id="sprayMixName"
+              type="string"
+              required
+              value={sprayMixName}
+              onChange={(e) => setSprayMixName(e.target.value)}
+            />
+          </form>
+        )}
 
         {sprayMix.sprays.map((spray, index) => {
-          //   {
-          //     !sprayEvent.sprayMix.mixs[0] && <p>No spray entered</p>;
-          //   }
-          //const numberedRate = parseInt(spray.rate);
-          //const numberedArea = parseInt(spray.sprayArea);
-
           return (
             <>
               <div className={styles.sprayDetails}>
@@ -97,19 +97,28 @@ const SprayMixDisplay = () => {
                 >
                   Edit
                 </Link>
+                <button
+                  className={styles.deleteBut}
+                  onClick={() => deleteSpray(index)}
+                >
+                  Delete
+                </button>
               </div>
             </>
           );
         })}
-        <Link href={`/makeSpray`} className={styles.editBtn}>
-          Add another spray
-        </Link>
+        {sprayMix.sprays.length > 0 && (
+          <Link href={`/makeSpray`} className={styles.editBtn}>
+            Add another spray
+          </Link>
+        )}
       </div>
 
       <div className={standard.styledNext}>
         <Link href={`/sprayRate`} className={standard.next}>
           Back
         </Link>
+
         <Link
           href={`/sprayDetails`}
           className={standard.next}

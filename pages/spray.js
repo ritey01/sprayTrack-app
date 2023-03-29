@@ -27,8 +27,7 @@ export async function getServerSideProps({ req, res }) {
         },
       },
     });
-    // console.log("🤬", sprayMixes);
-    // console.log(JSON.stringify(sprayMixes));
+
     errorCode = res.statusCode > 200 ? res.statusCode : false;
 
     //Allows the new item added to be seen without pyhsically refreshing the page
@@ -39,7 +38,6 @@ export async function getServerSideProps({ req, res }) {
     //needs to be stringified and parsed to be able to be passed as props as has a nested array
     return {
       props: { sprayMix: JSON.parse(JSON.stringify(sprayMixes)), errorCode },
-      // props: { sprayMix: sprayMixes, errorCode },
     };
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
@@ -61,24 +59,29 @@ const Spray = ({ sprayMix, errorCode }) => {
   const [sprayEvent, setSprayEvent] = event;
   const [sprayMixState, setSprayMixState] = mix;
   const [spray, setSpray] = useState();
+  const [sprayMixList, setSprayMixList] = useState(sprayMix);
   const [isActive, setIsActive] = useState();
   const [error, setError] = useState(false);
 
+  console.log("sprayMixList", sprayMixList);
   useEffect(() => {
     console.log("spray", spray);
   }, [spray]);
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
-  //Needs to be a display hide instead of delete
+  //Deletes a sprayMix from the sprayMix Table if not recorded in sprayEvent else changes is_displayed
   const deletePost = async (id) => {
     try {
       await fetch(`/api/spray/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
+      const updatedSprayMix = sprayMixList.filter(
+        (sprayMix) => sprayMix.id !== id
+      );
 
-      refreshData();
+      setSprayMixList(updatedSprayMix);
     } catch (error) {
       console.log("error", error);
     }
@@ -109,69 +112,73 @@ const Spray = ({ sprayMix, errorCode }) => {
       <ul className={`${styles.card} ${standard.cardBackground}`}>
         {/* Checks if there are any sprays in the sprayMix array fetched from the database */}
         {/* {sprayMix.sprays.length == 0 && <p>No sprays created yet</p>} */}
-        {sprayMix.length === 0 && <p>No sprays created yet</p>}
+        {sprayMixList.length === 0 && <p>No sprays created yet</p>}
         {/* Displays sprays fetched from sprayMix database */}
-        {sprayMix.map((spray, index) => (
-          <li
-            className={styles.sprayCard}
-            key={index}
-            value={spray}
-            style={{
-              backgroundColor:
-                isActive == index ? "rgb(30, 173, 113, 0.28)" : "#ffff",
-              width: isActive == index ? "90%" : "80%",
-              //   color: isActive == index ? "#ffff" : "black",
-              border: isActive == index ? "3px solid rgb(30, 173, 113)" : null,
-            }}
-            onClick={() => {
-              handleSprayMixClick(index);
-            }}
-          >
-            {spray.title}
-            {/* This will probable error not sure of what is returned on the sprayMix */}
-            {spray.sprays.length === 0 ? (
-              <p>No sprays found</p>
-            ) : (
-              <ul className={styles.sprays}>
-                {spray.sprays.map((mix) => {
-                  return (
-                    <>
-                      <li
-                        className={styles.sprayDisplay}
-                        key={mix.id}
-                        style={
-                          {
-                            // color: isActive >= 0 ? "#ffff" : "black",
-                          }
-                        }
-                      >
-                        {/* could be sprayName */}
-                        <p>{mix.spray.sprayName.name}</p>
-                        <p>
-                          {mix.spray.rate} {mix.spray.unit} / hectare
-                        </p>
-                      </li>
-                    </>
-                  );
-                })}
-              </ul>
-            )}
-          </li>
-        ))}
+        {sprayMixList.map(
+          (spray, index) =>
+            spray.is_displayed && (
+              <li
+                className={styles.sprayCard}
+                key={index}
+                value={spray}
+                style={{
+                  backgroundColor:
+                    isActive == index ? "rgb(30, 173, 113, 0.28)" : "#ffff",
+                  width: isActive == index ? "90%" : "80%",
+                  //   color: isActive == index ? "#ffff" : "black",
+                  border:
+                    isActive == index ? "3px solid rgb(30, 173, 113)" : null,
+                }}
+                onClick={() => {
+                  handleSprayMixClick(index);
+                }}
+              >
+                {spray.title}
+
+                {spray.sprays.length === 0 ? (
+                  <p>No sprays found</p>
+                ) : (
+                  <ul className={styles.sprays}>
+                    {spray.sprays.map((mix) => {
+                      return (
+                        <>
+                          <li
+                            className={styles.sprayDisplay}
+                            key={mix.id}
+                            style={
+                              {
+                                // color: isActive >= 0 ? "#ffff" : "black",
+                              }
+                            }
+                          >
+                            {/* could be sprayName */}
+                            <p>{mix.spray.sprayName.name}</p>
+                            <p>
+                              {mix.spray.rate} {mix.spray.unit} / hectare
+                            </p>
+                          </li>
+                        </>
+                      );
+                    })}
+                  </ul>
+                )}
+              </li>
+            )
+        )}
       </ul>
       {error && <p className={styles.errorMessage}>Please select a spray</p>}
       <div className={standard.styledNext}>
         <Link href={`/date`} className={standard.next}>
           Back
         </Link>
-        {/* {spray && (
+        {spray && (
           <button
             className={standard.deleteButton}
-            onClick={() => deletePost(id)}
+            onClick={() => deletePost(spray.id)}
           >
             Delete
           </button>
-        )} */}
+        )}
         {isActive >= 0 ? (
           <Link
             onClick={() => {

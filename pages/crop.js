@@ -50,6 +50,7 @@ export async function getServerSideProps({ req, res }) {
 
 export default function Crops({ crops, errorCode }) {
   const [cropId, setCropId] = useState("");
+  const [cropList, setCropList] = useState(crops);
   const [name, setName] = useState("");
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
@@ -59,6 +60,7 @@ export default function Crops({ crops, errorCode }) {
     return <Error statusCode={errorCode} />;
   }
 
+  //Deletes a crop from the Crop Table if not recorded sprayEvent else changes is_displayed
   const deleteItem = async (id) => {
     try {
       await fetch(`/api/crop/${id}`, {
@@ -66,7 +68,13 @@ export default function Crops({ crops, errorCode }) {
         headers: { "Content-Type": "application/json" },
       });
 
-      await router.replace(router.asPath);
+      console.log("cropList before deletion", cropList);
+
+      const updatedCrops = cropList.filter((crop) => crop.id !== id);
+
+      console.log("cropList after deletion", updatedCrops);
+
+      setCropList(updatedCrops);
     } catch (error) {
       console.log("error", error);
     }
@@ -77,7 +85,7 @@ export default function Crops({ crops, errorCode }) {
       <h1 className={standard.title}>Select a crop</h1>
       <AddItemButton name={"Add Crop"} link={`/addCrop`} />
       <ItemList
-        props={crops}
+        props={cropList}
         name={"crops"}
         setProp={setCropId}
         setName={setName}

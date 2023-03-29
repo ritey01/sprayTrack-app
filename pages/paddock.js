@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import Error from "./_error";
 import Link from "next/link";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import standard from "../styles/Standard.module.css";
 import AddItemButton from "../components/AddItemButton";
 import ItemList from "../components/ItemList";
@@ -17,11 +17,13 @@ const refreshData = () => {
 export async function getServerSideProps({ req, res }) {
   let paddocks;
   let errorCode = false;
+  //Check user is logged in first before fetching paddocks from Paddock Table
+
   //fetches all the paddocks from Paddock Table
   try {
     paddocks = await prisma.paddock.findMany();
     errorCode = res.statusCode > 200 ? res.statusCode : false;
-
+    console.log(errorCode);
     if (res.status < 300) {
       refreshData();
     }
@@ -31,6 +33,7 @@ export async function getServerSideProps({ req, res }) {
     } else {
       console.error(error);
     }
+
     res.statusCode = 500;
     errorCode = res.statusCode;
     paddocks = [];
@@ -46,13 +49,15 @@ export default function Paddock({ paddocks, errorCode }) {
   const [sprayEvent, setSprayEvent] = event;
   const [locationId, setLocationId] = useState();
   const [name, setName] = useState("");
-
+  const [paddockList, setPaddockList] = useState(paddocks);
+  console.log("paddockList", paddockList);
   const [message, setMessage] = useState(false);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
-  //this needs to be changed to hide display rather than deleting the paddock from table
+
+  //Deletes a paddock from the Paddock Table if not recorded sprayEvent else changes is_displayed
   const deletePost = async (id) => {
     try {
       await fetch(`/api/paddock/${id}`, {
@@ -60,7 +65,11 @@ export default function Paddock({ paddocks, errorCode }) {
         headers: { "Content-Type": "application/json" },
       });
 
-      refreshData();
+      const updatedPaddocks = paddockList.filter(
+        (paddock) => paddock.id !== id
+      );
+
+      setPaddockList(updatedPaddocks);
     } catch (error) {
       console.log("error", error);
     }
@@ -72,7 +81,7 @@ export default function Paddock({ paddocks, errorCode }) {
       <AddItemButton name={"Add Paddock"} link={`/addPaddock`} />
 
       <ItemList
-        props={paddocks}
+        props={paddockList}
         name={"paddocks"}
         setProp={setLocationId}
         setName={setName}

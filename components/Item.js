@@ -9,28 +9,32 @@ const Item = ({ prop, index, setProp, setIsActive, isActive, setName }) => {
   // };
 
   return (
-    <li
-      className={styles.itemCard}
-      value={prop.name}
-      style={{
-        backgroundColor:
-          isActive == index ? "rgb(30, 173, 113, 0.18)" : "#ffff",
-        width: isActive == index ? "90%" : "80%",
-      }}
-      onClick={() => {
-        setIsActive(index);
-        // handleItemClick(index);
-        setProp(prop.id);
-        setName(prop.name);
-      }}
-    >
-      {isActive == index && (
-        <span style={{ color: "#ffff" }}>
-          <FontAwesomeIcon className={styles.tick} icon={faCheck} border />
-        </span>
-      )}
-      {prop.name}
-    </li>
+    <>
+      {prop.is_displayed ? (
+        <li
+          className={styles.itemCard}
+          value={prop.name}
+          style={{
+            backgroundColor:
+              isActive == index ? "rgb(30, 173, 113, 0.18)" : "#ffff",
+            width: isActive == index ? "90%" : "80%",
+          }}
+          onClick={() => {
+            setIsActive(index);
+            // handleItemClick(index);
+            setProp(prop.id);
+            setName(prop.name);
+          }}
+        >
+          {isActive == index && (
+            <span style={{ color: "#ffff" }}>
+              <FontAwesomeIcon className={styles.tick} icon={faCheck} border />
+            </span>
+          )}
+          {prop.name}
+        </li>
+      ) : null}
+    </>
   );
 };
 
