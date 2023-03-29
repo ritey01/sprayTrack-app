@@ -19,3 +19,12 @@ As a rural farmer I need an application that can work on an internet connection 
 As a spray truck operator I want to be able to easily enter the required data so that I can use the application while I am driving in the paddock.
 
 As a cropping farmer I want to be able to see previous spraying events so that I can make decisions on similar future spraying events.
+
+---
+
+NOTE:  This application is currently being built so full features have not been implemented and the UI is not finished.  Next steps:
+
+1) Implement Authorisation so a user can login and only get their spray information.
+2) Create dashboard to view spraying activites
+3) Put it out for user testing and feedback to make user focused and ensure it meets their needs
+4) Port it across to React Native
