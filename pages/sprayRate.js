@@ -15,18 +15,6 @@ const SprayRate = () => {
   const unitList = ["Litres", "Kgs", "mls", "grams"];
 
   const handleSubmit = () => {
-    // e.preventDefault();
-
-    //Adds the spray to the sprayEvent
-    //Not sure if this is needed as can add after spraymix created?
-    // const newSprayEvent = { ...sprayEvent };
-    // const index = newSprayEvent.sprayMix.mixs.length - 1;
-    // newSprayEvent.sprayMix.mixs[index].rate = sprayAmount;
-    // newSprayEvent.sprayMix.mixs[index].unit = unit;
-    // newSprayEvent.sprayMix.mixs[index].sprayArea = area;
-
-    //setSprayEvent(newSprayEvent);
-
     //Adds rate and unit to sprayMix
     const newSprayMix = { ...sprayMix };
     const index = newSprayMix.sprays.length - 1;

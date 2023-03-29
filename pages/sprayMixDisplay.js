@@ -19,10 +19,6 @@ const SprayMixDisplay = () => {
   };
 
   const resetData = (index) => {
-    //removes the selected spray from the array
-    // const newSprayEvent = { ...sprayEvent };
-    // newSprayEvent.sprayMix.mixs.splice(index, 1);
-    // setSprayEvent(newSprayEvent);
     const newSprayMix = { ...sprayMix };
     newSprayMix.sprays.splice(index, 1);
     setSprayMix(newSprayMix);
@@ -34,13 +30,6 @@ const SprayMixDisplay = () => {
     const newSprayEvent = { ...sprayEvent };
     newSprayEvent.sprayMix = newSprayMix;
     setSprayEvent(newSprayEvent);
-
-    //need to reset the sprayMix object
-    //do this with route change incase it errors?
-    // setSprayMix({
-    //   name: "",
-    //   sprays: [{ spray: "", rate: "", unit: "" }],
-    // });
 
     //saves the created spraymix for later use
     const body = { title: sprayMixName, sprays: sprayMix.sprays };
@@ -90,19 +79,21 @@ const SprayMixDisplay = () => {
                     <span>hectare</span>
                   )}
                 </p>
-                <Link
-                  href={`/makeSpray`}
-                  onClick={() => resetData(index)}
-                  className={styles.editBtn}
-                >
-                  Edit
-                </Link>
-                <button
-                  className={styles.deleteBut}
-                  onClick={() => deleteSpray(index)}
-                >
-                  Delete
-                </button>
+                <div className={styles.buttonGroup}>
+                  <Link
+                    href={`/makeSpray`}
+                    onClick={() => resetData(index)}
+                    className={styles.editBtn}
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    className={styles.deleteBut}
+                    onClick={() => deleteSpray(index)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </>
           );

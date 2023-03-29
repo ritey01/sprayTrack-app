@@ -1,7 +1,6 @@
 export default async function handler(req, res) {
-  console.log("imade it");
   const { name } = req.body;
-  console.log("🥵", name);
+
   //Checks if spray exists
   const sprayExists = !!(await prisma.sprayName.findFirst({
     where: { name: name },

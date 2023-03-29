@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export async function getServerSideProps({ req, res }) {
-  let sprayList;
   let errorCode = false;
   try {
     //Make a call to sprayMixes table and include the spray table

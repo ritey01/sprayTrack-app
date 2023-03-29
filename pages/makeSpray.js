@@ -16,7 +16,7 @@ export async function getServerSideProps({ req, res }) {
 
   try {
     sprayNames = await prisma.sprayName.findMany();
-    console.log("😡", sprayNames);
+
     errorCode = res.statusCode > 200 ? res.statusCode : false;
 
     if (res.status < 300) {
@@ -44,10 +44,6 @@ export default function MakeSpray({ sprayNames, errorCode }) {
   const [sprayName, setSprayName] = useState("");
   const { event, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
-  //  initial state for building mix/sprayMix to add to sprayEvent, want to add to spray:"",const mixInitial = {
-  //   name: "",
-  //   sprays: [{ sprayId: null, sprayName:"", rate: 0, unit: "" }],
-  // };
   const [sprayMix, setSprayMix] = mix;
   const [message, setMessage] = useState(false);
 

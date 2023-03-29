@@ -29,7 +29,6 @@ const SprayDetails = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-    console.log("✅", result);
   };
 
   const handleClick = (sprayEvent) => {

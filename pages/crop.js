@@ -31,15 +31,6 @@ export async function getServerSideProps({ req, res }) {
     crops = [];
   }
 
-  // if (errorCode === false && crops.length === 0) {
-  //   return {
-  //     props: {
-  //       crops: [],
-  //       errorCode,
-  //     },
-  //   };
-  // }
-
   return {
     props: {
       crops,
