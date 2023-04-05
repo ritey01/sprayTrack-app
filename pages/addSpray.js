@@ -20,11 +20,10 @@ const AddSpray = () => {
         idName={idName}
       />
       <div className={standard.addPageButtonDisplay}>
-        <div>
-          <Link href={`/makeSpray`} className={styles.addItemButton}>
-            Back
-          </Link>
-        </div>
+        <Link href={`/makeSpray`} className={styles.addItemButton}>
+          Back
+        </Link>
+
         <AddButton
           propName={spray}
           setProp={setSpray}

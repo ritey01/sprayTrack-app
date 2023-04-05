@@ -1,6 +1,6 @@
 .nowDate {
   padding: 1.5rem;
-  font-size: 1.5rem;
+  font-size: 1rem;
   background-color: #ffff;
   width: 80%;
   margin: 0 auto 1rem auto;
@@ -20,14 +20,7 @@
 .chooseDate {
   display: flex;
   flex-direction: column;
-  margin-left: 1rem;
-}
-
-.datePick {
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: center;
 }
 
 .dateCard {

@@ -15,7 +15,7 @@ const Item = ({ prop, index, setProp, setIsActive, isActive, setName }) => {
                 : "",
             width: isActive == index ? "90%" : "80%",
             color: isActive == index ? "white" : "#3d3f40",
-            border: isActive == index ? "none" : " 1px solid #26bbac;",
+            border: isActive == index ? "none" : " 1px solid #26bbac",
           }}
           onClick={() => {
             setIsActive(index);

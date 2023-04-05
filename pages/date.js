@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
 import styles from "../styles/Date.module.css";
 import standard from "../styles/Standard.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import dateCreate from "../components/DateCreate";
 import SprayContext from "../context/sprayEvent";
 
@@ -25,8 +23,10 @@ export default function DateTime() {
           className={styles.nowDate}
           value={time}
           style={{
-            backgroundColor:
-              isActive == "now" ? "rgb(30, 173, 113, 0.18)" : "#ffff",
+            background:
+              isActive == "now"
+                ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
+                : "",
             width: isActive == "now" ? "90%" : "80%",
           }}
           onClick={() => {
@@ -34,49 +34,33 @@ export default function DateTime() {
             handleDateClick();
           }}
         >
-          {isActive == "now" && (
-            <span style={{ color: "#ffff" }}>
-              <FontAwesomeIcon className={styles.tick} icon={faCheck} border />
-            </span>
-          )}
           Now
         </p>
         <form
           className={styles.nowDate}
           style={{
-            backgroundColor:
-              isActive == "later" ? "rgb(30, 173, 113, 0.18)" : "#ffff",
+            background:
+              isActive == "later"
+                ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
+                : "",
             width: isActive == "later" ? "90%" : "80%",
           }}
           onClick={() => {
             setIsActive("later");
           }}
         >
-          <div className={styles.datePick}>
-            <div>
-              {isActive == "later" && (
-                <span style={{ color: "#ffff" }}>
-                  <FontAwesomeIcon
-                    className={styles.tick}
-                    icon={faCheck}
-                    border
-                  />
-                </span>
-              )}
-            </div>
-            <div className={styles.chooseDate}>
-              <label htmlFor="date">Choose date</label>
-              <input
-                className={styles.dateInput}
-                id="date"
-                type="date"
-                required
-                value={time}
-                onChange={(e) => {
-                  setTime(e.target.value);
-                }}
-              />
-            </div>
+          <div className={styles.chooseDate}>
+            <label htmlFor="date">Choose date</label>
+            <input
+              className={styles.dateInput}
+              id="date"
+              type="date"
+              required
+              value={time}
+              onChange={(e) => {
+                setTime(e.target.value);
+              }}
+            />
           </div>
         </form>
       </div>
@@ -86,8 +70,7 @@ export default function DateTime() {
         </Link>
         <Link
           onClick={() => {
-            setSprayEvent({ ...sprayEvent, date: time }),
-              console.log(sprayEvent);
+            setSprayEvent({ ...sprayEvent, date: time });
           }}
           href={`/spray`}
           className={standard.next}

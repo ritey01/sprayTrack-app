@@ -48,7 +48,6 @@ const SprayMixDisplay = () => {
           <p className={styles.noSprayMessage}>No spray entered</p>
         )}
 
-        {/* If there is more than one spray in the spray mix, display the form to add a name to the spray mix */}
         {sprayMix.sprays.length > 0 && (
           <form>
             {" "}

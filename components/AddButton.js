@@ -15,13 +15,12 @@ const AddButton = ({ propName, href, endpoint }) => {
       // send request to the server
 
       const body = { name: propName };
-      console.log(endpoint);
+
       const result = await fetch(`/api/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      console.log("✅", result);
 
       if (!result.ok) {
         if (result.status === 400) {

@@ -20,11 +20,10 @@ const AddPaddock = () => {
         idName={idName}
       />
       <div className={standard.addPageButtonDisplay}>
-        <div>
-          <Link href={`/paddock`} className={styles.addItemButton}>
-            Back
-          </Link>
-        </div>
+        <Link href={`/paddock`} className={styles.addItemButton}>
+          Back
+        </Link>
+
         <AddButton
           propName={paddockName}
           setProp={setPaddockName}

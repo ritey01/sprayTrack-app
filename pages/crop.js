@@ -59,11 +59,7 @@ export default function Crops({ crops, errorCode }) {
         headers: { "Content-Type": "application/json" },
       });
 
-      console.log("cropList before deletion", cropList);
-
       const updatedCrops = cropList.filter((crop) => crop.id !== id);
-
-      console.log("cropList after deletion", updatedCrops);
 
       setCropList(updatedCrops);
     } catch (error) {
@@ -82,6 +78,7 @@ export default function Crops({ crops, errorCode }) {
         setName={setName}
       />
 
+      {message && <p className={standard.error}>Please select a crop</p>}
       <div className={standard.styledNext}>
         <Link href={`/paddock`} className={standard.next}>
           Back
@@ -108,11 +105,7 @@ export default function Crops({ crops, errorCode }) {
           </>
         ) : (
           <>
-            <div className={standard.messageDisplay}>
-              {message && (
-                <p className={standard.error}>Please select a crop</p>
-              )}
-            </div>
+            <div className={standard.messageDisplay}></div>
             <button
               href={``}
               className={standard.disabledNext}

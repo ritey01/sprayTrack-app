@@ -60,7 +60,7 @@
 }
 
 .addDataButton {
-  background-color: rgb(6, 214, 160);
+  background-color: #26bbac;
   margin: 0 auto;
   padding: 0.5rem 2rem;
   border: None;
@@ -88,10 +88,11 @@
 .error {
   color: red;
   font-size: 1rem;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .cardBackground {
-  background-color: rgba(17, 138, 178, 0.3);
   border-radius: 0.5rem;
   width: 95%;
 }
@@ -99,8 +100,7 @@
 .addPageButtonDisplay {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
+  margin: 0 auto;
 }
 
 @media screen and (min-width: 500px) {

@@ -22,7 +22,6 @@ const SprayRate = () => {
     newSprayMix.sprays[index].rate = parseInt(sprayAmount);
     newSprayMix.sprays[index].unit = unit;
     setSprayMix(newSprayMix);
-    console.log("🚀", sprayMix);
   };
   //Clears the last spray added to the sprayEvent
   const clearSpray = () => {
@@ -43,7 +42,7 @@ const SprayRate = () => {
 
       <div className={`${standard.cardBackground} ${styles.centerInput}`}>
         <form>
-          <div className={styles.paddockName}>
+          <div className={styles.sprayRate}>
             <label htmlFor="sprayAmount" className={styles.rateLabel}>
               Amount
             </label>
@@ -64,10 +63,10 @@ const SprayRate = () => {
             <li key={index} className={styles.btnLayout} value={unit || ""}>
               <button
                 style={{
-                  backgroundColor:
+                  background:
                     isActive == index
-                      ? "rgb(17, 138, 178)"
-                      : "rgb(6, 214, 160)",
+                      ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
+                      : "",
                 }}
                 className={styles.rateButtons}
                 onClick={() => handleUnitClick(index)}
