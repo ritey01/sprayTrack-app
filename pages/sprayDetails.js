@@ -142,10 +142,15 @@ const SprayDetails = () => {
           : null}
       </div>
       <div className={standard.styledNext}>
-        <Link href={`/spray`} className={standard.next}>
+        <Link href={`/spray`} className={styles.submitBtn}>
           Back
         </Link>
-        <button onClick={() => handleClick(sprayEvent)}>Submit</button>
+        <button
+          onClick={() => handleClick(sprayEvent)}
+          className={styles.submitBtn}
+        >
+          Submit
+        </button>
         {/* <Link href={`/paddock`} className={standard.next}>
           Start again
         </Link> */}

@@ -27,6 +27,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  border: 1px solid #26bbac;
 }
 .sprayMixCard {
   background-color: #ffff;
@@ -34,15 +35,16 @@
   padding: 1rem;
   margin: 0.8rem auto;
   border-radius: 0.5rem;
+  border: 1px solid #26bbac;
 }
 
 .editBtn {
   padding: 0.5rem;
-  background-color: rgb(6, 214, 160);
+  background-color: #26bbac;
   text-decoration: none;
   border-radius: 0.5rem;
   color: #ffff;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
 }
 .labels {
   padding-top: 1.5rem;
@@ -57,4 +59,16 @@
   align-items: center;
   justify-content: space-between;
   margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+.submitBtn {
+  padding: 0.5rem;
+  background-color: #26bbac;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  color: #ffff;
+  font-size: 0.6rem;
+  margin: 0.5rem auto;
+  border: none;
+  padding: 0.7rem 1rem;
 }
