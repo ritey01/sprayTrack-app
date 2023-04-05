@@ -3,10 +3,10 @@
 }
 
 .addItemButton {
-  background-color: rgb(6, 214, 160);
+  background-color: #26bbac;
   margin: 0 auto;
   padding: 0.5rem 2rem;
-  font-size: 1rem;
+  font-size: 0.6rem;
   border: None;
   color: #ffff;
   border-radius: 0.5rem;

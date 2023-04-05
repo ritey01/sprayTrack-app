@@ -57,9 +57,8 @@ export default function MakeSpray({ sprayNames, errorCode }) {
   };
 
   const dataSetter = () => {
-    const newSprayMix = { ...sprayMix }; //comes from context as initial state
+    const newSprayMix = { ...sprayMix };
     const index = newSprayMix.sprays.length;
-    //add id as this is mapped to the sprayName table from sprayMix
     newSprayMix.sprays[index] = {
       sprayId: sprayTypeId,
       sprayName: sprayName,
@@ -75,7 +74,7 @@ export default function MakeSpray({ sprayNames, errorCode }) {
         <Link href={`/addSpray`} className={standard.addingButton}>
           {" "}
           <FontAwesomeIcon icon={faPlus} />
-          Add spray name
+          Spray name
         </Link>
       </div>
 
@@ -87,24 +86,18 @@ export default function MakeSpray({ sprayNames, errorCode }) {
             key={index}
             value={name}
             style={{
-              backgroundColor:
-                isActive == index ? "rgb(30, 173, 113, 0.18)" : "#ffff",
+              background:
+                isActive == index
+                  ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
+                  : "",
               width: isActive == index ? "90%" : "80%",
+              border: isActive == index ? "none" : " 1px solid #26bbac",
             }}
             onClick={() => {
               setIsActive(index);
               handleSprayClick(index);
             }}
           >
-            {isActive == index && (
-              <span style={{ color: "#ffff" }}>
-                <FontAwesomeIcon
-                  className={styles.tick}
-                  icon={faCheck}
-                  border
-                />
-              </span>
-            )}
             {name.name}
           </li>
         ))}

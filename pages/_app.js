@@ -30,9 +30,9 @@ export default function App({ Component, pageProps }) {
   return (
     <Layout>
       <SprayProvider>
-        <main className={inter.className}>
+        <div className={inter.className}>
           {isLoading ? <Loader /> : <Component {...pageProps} />}
-        </main>
+        </div>
       </SprayProvider>
     </Layout>
   );

@@ -1,24 +1,24 @@
 .main {
-  max-width: 50%;
-  margin: 3rem auto 0 auto;
+  max-width: 70%;
+  margin: 1rem auto 0 auto;
 }
 
 .title {
-  color: "black";
+  color: #3d3f40;
   text-align: center;
-  font-size: 1.4rem;
+  font-size: 1rem;
   margin-top: 0;
   margin-bottom: 1.7rem;
 }
 
 .addingButton {
-  background-color: rgb(6, 214, 160);
+  background-color: #26bbac;
   color: #ffff;
   padding: 0.6rem;
   border: none;
   border-radius: 0.5rem;
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   white-space: nowrap;
 }
 
@@ -43,24 +43,24 @@
 }
 .next {
   text-decoration: none;
-  background-color: rgb(6, 214, 160);
+  background-color: #26bbac;
   color: #ffff;
-  padding: 1rem;
+  padding: 0.6rem 1.1rem 0.6rem 1.1rem;
   border-radius: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
 }
 .disabledNext {
   text-decoration: none;
-  background-color: rgb(6, 214, 160);
+  background-color: #26bbac;
   color: #ffff;
-  padding: 1rem;
+  padding: 0.6rem 1.1rem 0.6rem 1.1rem;
   border-radius: 0.5rem;
   border: none;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
 }
 
 .addDataButton {
-  background-color: rgb(6, 214, 160);
+  background-color: #26bbac;
   margin: 0 auto;
   padding: 0.5rem 2rem;
   border: None;
@@ -71,12 +71,12 @@
 
 .deleteButton {
   text-decoration: none;
-  background-color: rgb(239, 71, 111);
+  background-color: #b44526;
   color: #ffff;
-  padding: 1rem;
+  padding: 0.6rem 1.1rem 0.6rem 1.1rem;
   border-radius: 0.5rem;
   border: none;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
 }
 
 .messageDisplay {
@@ -88,10 +88,11 @@
 .error {
   color: red;
   font-size: 1rem;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .cardBackground {
-  background-color: rgba(17, 138, 178, 0.3);
   border-radius: 0.5rem;
   width: 95%;
 }
@@ -99,8 +100,7 @@
 .addPageButtonDisplay {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
+  margin: 0 auto;
 }
 
 @media screen and (min-width: 500px) {

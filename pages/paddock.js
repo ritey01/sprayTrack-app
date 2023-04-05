@@ -76,9 +76,9 @@ export default function Paddock({ paddocks, errorCode }) {
   };
 
   return (
-    <div>
+    <div className={standard.addContainer}>
       <h1 className={standard.title}>Select a paddock</h1>
-      <AddItemButton name={"Add Paddock"} link={`/addPaddock`} />
+      <AddItemButton name={" Paddock"} link={`/addPaddock`} />
 
       <ItemList
         props={paddockList}
@@ -87,6 +87,7 @@ export default function Paddock({ paddocks, errorCode }) {
         setName={setName}
       />
 
+      {message && <p className={standard.error}>Please select a paddock</p>}
       <div className={standard.styledNext}>
         {locationId ? (
           <>
@@ -113,9 +114,6 @@ export default function Paddock({ paddocks, errorCode }) {
           </>
         ) : (
           <div className={standard.messageDisplay}>
-            {message && (
-              <p className={standard.error}>Please select a paddock</p>
-            )}
             <button
               href={``}
               className={standard.disabledNext}

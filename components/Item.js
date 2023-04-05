@@ -1,6 +1,4 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/List.module.css";
 
 const Item = ({ prop, index, setProp, setIsActive, isActive, setName }) => {
@@ -11,9 +9,13 @@ const Item = ({ prop, index, setProp, setIsActive, isActive, setName }) => {
           className={styles.itemCard}
           value={prop.name}
           style={{
-            backgroundColor:
-              isActive == index ? "rgb(30, 173, 113, 0.18)" : "#ffff",
+            background:
+              isActive == index
+                ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
+                : "",
             width: isActive == index ? "90%" : "80%",
+            color: isActive == index ? "white" : "#3d3f40",
+            border: isActive == index ? "none" : " 1px solid #26bbac",
           }}
           onClick={() => {
             setIsActive(index);
@@ -21,11 +23,6 @@ const Item = ({ prop, index, setProp, setIsActive, isActive, setName }) => {
             setName(prop.name);
           }}
         >
-          {isActive == index && (
-            <span style={{ color: "#ffff" }}>
-              <FontAwesomeIcon className={styles.tick} icon={faCheck} border />
-            </span>
-          )}
           {prop.name}
         </li>
       ) : null}

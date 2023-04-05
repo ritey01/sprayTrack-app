@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
 import styles from "../styles/Spray.module.css";
 import SprayContext from "../context/sprayEvent";
@@ -47,7 +47,6 @@ export async function getServerSideProps({ req, res }) {
     res.statusCode = 500;
     errorCode = res.statusCode;
     return {
-      // think it needs to be sprays: [] to match the props in the component
       props: { sprayMix: [], errorCode },
     };
   }
@@ -62,10 +61,6 @@ const Spray = ({ sprayMix, errorCode }) => {
   const [isActive, setIsActive] = useState();
   const [error, setError] = useState(false);
 
-  console.log("sprayMixList", sprayMixList);
-  useEffect(() => {
-    console.log("spray", spray);
-  }, [spray]);
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
@@ -104,13 +99,13 @@ const Spray = ({ sprayMix, errorCode }) => {
         >
           {" "}
           <FontAwesomeIcon icon={faPlus} />
-          Add Spray
+          Spray
         </Link>
       </div>
 
       <ul className={`${styles.card} ${standard.cardBackground}`}>
         {/* Checks if there are any sprays in the sprayMix array fetched from the database */}
-        {/* {sprayMix.sprays.length == 0 && <p>No sprays created yet</p>} */}
+
         {sprayMixList.length === 0 && <p>No sprays created yet</p>}
         {/* Displays sprays fetched from sprayMix database */}
         {sprayMixList.map(
@@ -121,12 +116,12 @@ const Spray = ({ sprayMix, errorCode }) => {
                 key={index}
                 value={spray}
                 style={{
-                  backgroundColor:
-                    isActive == index ? "rgb(30, 173, 113, 0.28)" : "#ffff",
+                  background:
+                    isActive == index
+                      ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
+                      : "",
                   width: isActive == index ? "90%" : "80%",
-                  //   color: isActive == index ? "#ffff" : "black",
-                  border:
-                    isActive == index ? "3px solid rgb(30, 173, 113)" : null,
+                  border: isActive == index ? null : "1px solid #26bbac",
                 }}
                 onClick={() => {
                   handleSprayMixClick(index);
@@ -141,16 +136,7 @@ const Spray = ({ sprayMix, errorCode }) => {
                     {spray.sprays.map((mix) => {
                       return (
                         <>
-                          <li
-                            className={styles.sprayDisplay}
-                            key={mix.id}
-                            style={
-                              {
-                                // color: isActive >= 0 ? "#ffff" : "black",
-                              }
-                            }
-                          >
-                            {/* could be sprayName */}
+                          <li className={styles.sprayDisplay} key={mix.id}>
                             <p>{mix.spray.sprayName.name}</p>
                             <p>
                               {mix.spray.rate} {mix.spray.unit} / hectare
@@ -181,7 +167,6 @@ const Spray = ({ sprayMix, errorCode }) => {
         {isActive >= 0 ? (
           <Link
             onClick={() => {
-              //need to sort this out
               setSprayEvent({
                 ...sprayEvent,
                 sprayMix: {
