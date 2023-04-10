@@ -9,8 +9,8 @@ import { getServerSideProps } from "../pages/crop";
 describe("crop", () => {
   test("renders crop page", () => {
     const crops = [
-      { cropName: "Wheat", id: 1 },
-      { cropName: "Barley", id: 2 },
+      { cropName: "Wheat", id: 1, is_displayed: true },
+      { cropName: "Barley", id: 2, is_displayed: true },
     ];
 
     render(

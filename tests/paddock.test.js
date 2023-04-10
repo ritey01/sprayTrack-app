@@ -12,8 +12,8 @@ import { handle } from "../pages/api/paddock/[id]";
 describe("paddock", () => {
   test("renders paddock page", () => {
     const paddocks = [
-      { paddockName: "Paddock A", id: 1 },
-      { paddockName: "Paddock B", id: 2 },
+      { paddockName: "Paddock A", id: 1, is_displayed: true },
+      { paddockName: "Paddock B", id: 2, is_displayed: true },
     ];
 
     render(
@@ -23,8 +23,9 @@ describe("paddock", () => {
     );
 
     expect(screen.getByRole("heading")).toHaveTextContent("Select a paddock");
-    expect(screen.getByText("Add Paddock")).toBeInTheDocument();
+    expect(screen.getByText("Paddock")).toBeInTheDocument();
     expect(screen.getByText("Next")).toBeInTheDocument();
+
     expect(screen.getAllByRole("listitem").length).toBe(2);
   });
 
@@ -47,7 +48,7 @@ describe("paddock", () => {
       </SprayProvider>
     );
 
-    const linkEl = screen.getByRole("link", { name: "Add Paddock" });
+    const linkEl = screen.getByRole("link", { name: "Paddock" });
 
     expect(linkEl).toHaveAttribute("href", "/addPaddock");
   });

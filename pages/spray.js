@@ -61,6 +61,7 @@ const Spray = ({ sprayMix, errorCode }) => {
   const [isActive, setIsActive] = useState();
   const [error, setError] = useState(false);
 
+  console.log(sprayMix);
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }

@@ -18,10 +18,11 @@ export default async function handler(req, res) {
         .status(200)
         .json({ message: "Crop found and updated to be displayed" });
       return;
+    } else {
+      //If exists and has is_displayed set to true, return error
+      res.status(400).json({ message: "Crop already exists and is displayed" });
+      return;
     }
-    //If exists and has is_displayed set to true, return error
-    res.status(400).json({ message: "Crop already exists and is displayed" });
-    return;
   }
   //If doesn't exist, create new paddock
   if (!cropExists && req.method === "POST") {

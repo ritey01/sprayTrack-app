@@ -130,8 +130,13 @@ describe("addCrop", () => {
       expect(res.status).toBeCalledWith(201);
     });
 
-    test("WHEN the route api/crop/postCrop is called with a crop name that already exists THEN an error is returned", async () => {
+    test("WHEN the route api/crop/postCrop is called with a crop name that already exists but is set to is_displayed false THEN a message is returned and is_displayed is changed to true", async () => {
+      const resIsdisplayed = {
+        status: jest.fn().mockReturnThis(200),
+        json: jest.fn(),
+      };
       prisma.crops.findFirst = jest.fn().mockResolvedValue(true);
+      prisma.crops.update = jest.fn().mockResolvedValue(resIsdisplayed);
 
       const res = {
         status: jest.fn().mockReturnThis(400),
@@ -146,9 +151,33 @@ describe("addCrop", () => {
 
       await postCrop(req, res);
 
+      expect(res.status).toBeCalledWith(200);
+      expect(res.json).toBeCalledWith({
+        message: "Crop found and updated to be displayed",
+      });
+    });
+    test("WHEN the route api/crop/postCrop is called with a crop name that already exists and is_displayed is true THEN an message is returned ", async () => {
+      const res = {
+        status: jest.fn().mockReturnThis(400),
+        json: jest.fn(),
+      };
+      const cropExists = (prisma.crops.findFirst = jest
+        .fn()
+        .mockResolvedValue(res));
+      // mock cropExists.is_displayed = true
+      cropExists.is_displayed = true;
+
+      const req = {
+        body: { name: "testCrop" },
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+      };
+
+      await postCrop(req, res);
+
       expect(res.status).toBeCalledWith(400);
       expect(res.json).toBeCalledWith({
-        message: "Crop already exists",
+        message: "Crop already exists and is displayed",
       });
     });
   });
