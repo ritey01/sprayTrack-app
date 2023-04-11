@@ -1,6 +1,5 @@
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom";
-// import "@testing-library/jest-dom/extend-expect";
 import Spray from "../pages/spray";
 import prisma from "../lib/prisma";
 import { SprayProvider } from "../context/sprayEvent";
@@ -15,7 +14,21 @@ describe("'Spray', GIVEN the user is on the spray choice page", () => {
   let mockErrorCode;
   beforeEach(() => {
     mockSprayMix = [
-      { id: 1, title: "Spray Mix 1", sprays: [], is_displayed: true },
+      {
+        id: 1,
+        title: "Spray Mix 1",
+        sprays: [
+          {
+            spray: {
+              sprayId: 1,
+              sprayName: { name: "Roundup" },
+              rate: 2,
+              unit: "mls",
+            },
+          },
+        ],
+        is_displayed: true,
+      },
     ];
     mockErrorCode = false;
   });
@@ -23,14 +36,14 @@ describe("'Spray', GIVEN the user is on the spray choice page", () => {
   test.only("WHEN the page renders THEN the user sees a heading, a list of spray options, a back button and a next button", async () => {
     render(
       <SprayProvider>
-        <Spray sprayList={mockSprayMix} errorCode={mockErrorCode} />
+        <Spray sprayMix={mockSprayMix} errorCode={mockErrorCode} />
       </SprayProvider>
     );
     expect(screen.getByRole("heading")).toHaveTextContent("Select a spray");
     expect(screen.getByText("Spray")).toBeInTheDocument();
     expect(screen.getByText("Add")).toBeInTheDocument();
-    expect(screen.getByText("My list")).toBeInTheDocument();
-    expect(screen.getAllByRole("listitem").length).toBe(1);
+    expect(screen.getByText("Spray Mix 1")).toBeInTheDocument();
+    expect(screen.getByText("Roundup")).toBeInTheDocument();
   });
 
   test("WHEN there are no sprays THEN the spray list is empty and page still renders", () => {
