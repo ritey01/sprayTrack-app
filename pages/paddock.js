@@ -21,12 +21,10 @@ const refreshData = () => {
 export async function getServerSideProps(context) {
   let paddocks;
   let errorCode = false;
-  //Check user is logged in first before fetching paddocks from Paddock Table
 
   //fetches all the paddocks from Paddock Table
   try {
     paddocks = await prisma.paddock.findMany();
-    console.log("✅", context);
     errorCode = context.res.statusCode > 200 ? context.res.statusCode : false;
     console.log(errorCode);
     if (context.res.status < 300) {

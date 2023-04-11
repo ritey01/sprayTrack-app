@@ -43,11 +43,6 @@ const AddButton = ({ propName, href, endpoint }) => {
 
   return (
     <>
-      <div className={standard.messageDisplay}>
-        {error && <p className={styles.error}>{message}</p>}
-
-        {valid && <p className={standard.error}>Please enter a name</p>}
-      </div>
       <div className={styles.buttonDisplay}>
         {propName ? (
           <div>
@@ -69,6 +64,11 @@ const AddButton = ({ propName, href, endpoint }) => {
             </div>
           </>
         )}
+      </div>
+      <div className={standard.messageDisplay}>
+        {error && <p className={styles.error}>{message}</p>}
+
+        {valid && <p className={standard.error}>Please enter a name</p>}
       </div>
     </>
   );
