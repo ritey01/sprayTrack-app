@@ -12,7 +12,7 @@ const Item = ({ prop, index, setProp, setIsActive, isActive, setName }) => {
             background:
               isActive == index
                 ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
-                : "",
+                : "#faf9f6",
             width: isActive == index ? "90%" : "80%",
             color: isActive == index ? "white" : "#3d3f40",
             border: isActive == index ? "none" : " 1px solid #26bbac",
