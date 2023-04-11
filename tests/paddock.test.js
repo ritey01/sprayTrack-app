@@ -1,21 +1,31 @@
 import React from "react";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import Paddock from "../pages/paddock";
 import { testClient } from "../lib/test-utils";
 import userEvent from "@testing-library/user-event";
 import prisma from "../lib/prisma";
-import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { SessionProvider, useSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 import { SprayProvider } from "../context/sprayEvent";
 import { getServerSideProps } from "../pages/paddock";
 import { handle } from "../pages/api/paddock/[id]";
 
+jest.mock("next-auth/react");
+
+const mockSession = {
+  expires: "1",
+  user: { name: "test", email: "test@gmail.com", image: "test.jpg" },
+};
+
 describe("paddock", () => {
-  test("renders paddock page", () => {
+  test.only("renders paddock page", () => {
     const paddocks = [
       { paddockName: "Paddock A", id: 1, is_displayed: true },
       { paddockName: "Paddock B", id: 2, is_displayed: true },
     ];
 
+    // useSession.mockReturnvalueOnce(mockSession);
     render(
       <SprayProvider>
         <Paddock paddocks={paddocks} errorCode={false} />

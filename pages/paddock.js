@@ -84,7 +84,7 @@ export default function Paddock({ paddocks, errorCode }) {
       console.log("error", error);
     }
   };
-
+  console.log(session);
   return (
     <>
       {session ? (
