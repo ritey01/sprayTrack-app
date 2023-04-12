@@ -12,6 +12,11 @@ npm run dev
 yarn dev
 ```
 
+Connect the database 
+
+```bash 
+pscale connect sprayapp initial-setup --port 3309 
+```
 ## User stories
 
 As a cropping farmer I want a way to record the details of any crop spraying I do so that I meet the legal requirements of recording spray events and I have a record for future review.
