@@ -7,11 +7,37 @@ import userEvent from "@testing-library/user-event";
 import prisma from "../lib/prisma";
 import { SessionProvider, useSession } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
+import NextAuth from "next-auth";
 import { SprayProvider } from "../context/sprayEvent";
 import { getServerSideProps } from "../pages/paddock";
 import { handle } from "../pages/api/paddock/[id]";
 
-jest.mock("next-auth/react");
+const authOptions = {
+  providers: [
+    {
+      id: "google",
+      name: "Google",
+      type: "oauth",
+      version: "2.0",
+      scope: "https://www.googleapis.com/auth/userinfo.profile",
+    },
+  ],
+};
+
+jest.mock("next-auth/react", () => ({
+  ...jest.requireActual("next-auth/react"),
+  useSession: jest.fn(),
+}));
+
+jest.mock("next-auth/next", () => ({
+  ...jest.requireActual("next-auth/next"),
+  getServerSession: jest.fn(),
+}));
+
+jest.mock("next-auth", () => ({
+  ...jest.requireActual("next-auth"),
+  NextAuth: jest.fn(),
+}));
 
 const mockSession = {
   expires: "1",
@@ -25,7 +51,7 @@ describe("paddock", () => {
       { paddockName: "Paddock B", id: 2, is_displayed: true },
     ];
 
-    // useSession.mockReturnvalueOnce(mockSession);
+    useSession.mockReturnvalueOnce(mockSession);
     render(
       <SprayProvider>
         <Paddock paddocks={paddocks} errorCode={false} />

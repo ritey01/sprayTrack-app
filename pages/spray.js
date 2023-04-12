@@ -119,7 +119,7 @@ const Spray = ({ sprayMix, errorCode }) => {
                   background:
                     isActive == index
                       ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
-                      : "",
+                      : " #ffff",
                   width: isActive == index ? "90%" : "80%",
                   border: isActive == index ? null : "1px solid #26bbac",
                 }}
