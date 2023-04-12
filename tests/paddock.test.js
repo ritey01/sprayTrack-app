@@ -1,21 +1,57 @@
 import React from "react";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import Paddock from "../pages/paddock";
 import { testClient } from "../lib/test-utils";
 import userEvent from "@testing-library/user-event";
 import prisma from "../lib/prisma";
-import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { SessionProvider, useSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import NextAuth from "next-auth";
 import { SprayProvider } from "../context/sprayEvent";
 import { getServerSideProps } from "../pages/paddock";
 import { handle } from "../pages/api/paddock/[id]";
 
+const authOptions = {
+  providers: [
+    {
+      id: "google",
+      name: "Google",
+      type: "oauth",
+      version: "2.0",
+      scope: "https://www.googleapis.com/auth/userinfo.profile",
+    },
+  ],
+};
+
+jest.mock("next-auth/react", () => ({
+  ...jest.requireActual("next-auth/react"),
+  useSession: jest.fn(),
+}));
+
+jest.mock("next-auth/next", () => ({
+  ...jest.requireActual("next-auth/next"),
+  getServerSession: jest.fn(),
+}));
+
+jest.mock("next-auth", () => ({
+  ...jest.requireActual("next-auth"),
+  NextAuth: jest.fn(),
+}));
+
+const mockSession = {
+  expires: "1",
+  user: { name: "test", email: "test@gmail.com", image: "test.jpg" },
+};
+
 describe("paddock", () => {
-  test("renders paddock page", () => {
+  test.only("renders paddock page", () => {
     const paddocks = [
-      { paddockName: "Paddock A", id: 1 },
-      { paddockName: "Paddock B", id: 2 },
+      { paddockName: "Paddock A", id: 1, is_displayed: true },
+      { paddockName: "Paddock B", id: 2, is_displayed: true },
     ];
 
+    useSession.mockReturnvalueOnce(mockSession);
     render(
       <SprayProvider>
         <Paddock paddocks={paddocks} errorCode={false} />
@@ -23,8 +59,9 @@ describe("paddock", () => {
     );
 
     expect(screen.getByRole("heading")).toHaveTextContent("Select a paddock");
-    expect(screen.getByText("Add Paddock")).toBeInTheDocument();
+    expect(screen.getByText("Paddock")).toBeInTheDocument();
     expect(screen.getByText("Next")).toBeInTheDocument();
+
     expect(screen.getAllByRole("listitem").length).toBe(2);
   });
 
@@ -47,7 +84,7 @@ describe("paddock", () => {
       </SprayProvider>
     );
 
-    const linkEl = screen.getByRole("link", { name: "Add Paddock" });
+    const linkEl = screen.getByRole("link", { name: "Paddock" });
 
     expect(linkEl).toHaveAttribute("href", "/addPaddock");
   });

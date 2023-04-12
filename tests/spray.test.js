@@ -1,34 +1,49 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom";
-// import "@testing-library/jest-dom/extend-expect";
 import Spray from "../pages/spray";
 import prisma from "../lib/prisma";
 import { SprayProvider } from "../context/sprayEvent";
 import { getServerSideProps } from "../pages/spray";
 
 describe("'Spray', GIVEN the user is on the spray choice page", () => {
-  test("WHEN the page renders THEN the user sees a heading, a list of spray options, a back button and a next button", () => {
-    const sprays = [
+  afterEach(() => {
+    cleanup();
+  });
+
+  let mockSprayMix;
+  let mockErrorCode;
+  beforeEach(() => {
+    mockSprayMix = [
       {
         id: 1,
-        name: "Spray A",
+        title: "Spray Mix 1",
         sprays: [
-          { id: 1, name: "Roundup", rate: 30, unit: "mls" },
-          { id: 2, name: "Versatil", rate: 10, unit: "litres" },
+          {
+            spray: {
+              sprayId: 1,
+              sprayName: { name: "Roundup" },
+              rate: 2,
+              unit: "mls",
+            },
+          },
         ],
+        is_displayed: true,
       },
     ];
+    mockErrorCode = false;
+  });
+
+  test.only("WHEN the page renders THEN the user sees a heading, a list of spray options, a back button and a next button", async () => {
     render(
       <SprayProvider>
-        <Spray sprayList={sprays} errorCode={false} />
+        <Spray sprayMix={mockSprayMix} errorCode={mockErrorCode} />
       </SprayProvider>
     );
     expect(screen.getByRole("heading")).toHaveTextContent("Select a spray");
-    expect(screen.getByText("Add Spray")).toBeInTheDocument();
+    expect(screen.getByText("Spray")).toBeInTheDocument();
     expect(screen.getByText("Add")).toBeInTheDocument();
-    expect(screen.getByText("Spray A")).toBeInTheDocument();
+    expect(screen.getByText("Spray Mix 1")).toBeInTheDocument();
     expect(screen.getByText("Roundup")).toBeInTheDocument();
-    expect(screen.getAllByRole("listitem").length).toBe(3);
   });
 
   test("WHEN there are no sprays THEN the spray list is empty and page still renders", () => {

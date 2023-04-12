@@ -2,29 +2,32 @@ import React, { useState, useContext } from "react";
 import Error from "./_error";
 import Link from "next/link";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { getServerSession } from "next-auth/next";
+import { useSession } from "next-auth/react";
+import { router } from "next/router";
 import standard from "../styles/Standard.module.css";
 import AddItemButton from "../components/AddItemButton";
 import ItemList from "../components/ItemList";
 import SprayContext from "../context/sprayEvent";
+import AccessDenied from "../components/AccessDenied";
+import { authOptions } from "./api/auth/[...nextauth]";
 import prisma from "../lib/prisma";
-import { router } from "next/router";
 
 //Allows an added paddock to be displayed on the paddock page
 const refreshData = () => {
   router.replace(router.asPath);
 };
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps(context) {
   let paddocks;
   let errorCode = false;
-  //Check user is logged in first before fetching paddocks from Paddock Table
 
   //fetches all the paddocks from Paddock Table
   try {
     paddocks = await prisma.paddock.findMany();
-    errorCode = res.statusCode > 200 ? res.statusCode : false;
+    errorCode = context.res.statusCode > 200 ? context.res.statusCode : false;
     console.log(errorCode);
-    if (res.status < 300) {
+    if (context.res.status < 300) {
       refreshData();
     }
   } catch (error) {
@@ -34,13 +37,17 @@ export async function getServerSideProps({ req, res }) {
       console.error(error);
     }
 
-    res.statusCode = 500;
-    errorCode = res.statusCode;
+    context.res.statusCode = 500;
+    errorCode = context.res.statusCode;
     paddocks = [];
   }
 
   return {
-    props: { paddocks, errorCode },
+    props: {
+      paddocks,
+      errorCode,
+      session: await getServerSession(context.req, context.res, authOptions),
+    },
   };
 }
 
@@ -52,6 +59,7 @@ export default function Paddock({ paddocks, errorCode }) {
   const [paddockList, setPaddockList] = useState(paddocks);
   console.log("paddockList", paddockList);
   const [message, setMessage] = useState(false);
+  const { data: session } = useSession();
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -74,58 +82,64 @@ export default function Paddock({ paddocks, errorCode }) {
       console.log("error", error);
     }
   };
-
+  console.log(session);
   return (
-    <div className={standard.addContainer}>
-      <h1 className={standard.title}>Select a paddock</h1>
-      <AddItemButton name={" Paddock"} link={`/addPaddock`} />
+    <>
+      {session ? (
+        <div className={standard.addContainer}>
+          <h1 className={standard.title}>Select a paddock</h1>
+          <AddItemButton name={" Paddock"} link={`/addPaddock`} />
 
-      <ItemList
-        props={paddockList}
-        name={"paddocks"}
-        setProp={setLocationId}
-        setName={setName}
-      />
+          <ItemList
+            props={paddockList}
+            name={"paddocks"}
+            setProp={setLocationId}
+            setName={setName}
+          />
 
-      {message && <p className={standard.error}>Please select a paddock</p>}
-      <div className={standard.styledNext}>
-        {locationId ? (
-          <>
-            <button
-              className={standard.deleteButton}
-              onClick={() => deletePost(locationId)}
-            >
-              Delete
-            </button>
+          {message && <p className={standard.error}>Please select a paddock</p>}
+          <div className={standard.styledNext}>
+            {locationId ? (
+              <>
+                <button
+                  className={standard.deleteButton}
+                  onClick={() => deletePost(locationId)}
+                >
+                  Delete
+                </button>
 
-            <Link
-              onClick={() => {
-                setSprayEvent({
-                  ...sprayEvent,
-                  paddockId: locationId,
-                  paddock: name,
-                });
-              }}
-              href={`/crop`}
-              className={standard.next}
-            >
-              Add
-            </Link>
-          </>
-        ) : (
-          <div className={standard.messageDisplay}>
-            <button
-              href={``}
-              className={standard.disabledNext}
-              onClick={() => {
-                setMessage(true);
-              }}
-            >
-              Next
-            </button>
+                <Link
+                  onClick={() => {
+                    setSprayEvent({
+                      ...sprayEvent,
+                      paddockId: locationId,
+                      paddock: name,
+                    });
+                  }}
+                  href={`/crop`}
+                  className={standard.next}
+                >
+                  Add
+                </Link>
+              </>
+            ) : (
+              <div className={standard.messageDisplay}>
+                <button
+                  href={``}
+                  className={standard.disabledNext}
+                  onClick={() => {
+                    setMessage(true);
+                  }}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      ) : (
+        <AccessDenied />
+      )}
+    </>
   );
 }

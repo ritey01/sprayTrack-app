@@ -129,8 +129,13 @@ describe("postPaddock POST paddock/addPaddock", () => {
     expect(res.status).toBeCalledWith(201);
   });
 
-  test("WHEN the route api/paddock/postPaddock is called with a paddock name that already exists THEN an error is returned", async () => {
+  test("WHEN the route api/paddock/postPaddock is called with a paddock name that already exists but is set to is_displayed false THEN a message is returned and is_displayed is changed to true", async () => {
+    const resIsdisplayed = {
+      status: jest.fn().mockReturnThis(200),
+      json: jest.fn(),
+    };
     prisma.paddock.findFirst = jest.fn().mockResolvedValue(true);
+    prisma.paddock.update = jest.fn().mockResolvedValue(resIsdisplayed);
 
     const res = {
       status: jest.fn().mockReturnThis(400),
@@ -145,9 +150,9 @@ describe("postPaddock POST paddock/addPaddock", () => {
 
     await postPaddock(req, res);
 
-    expect(res.status).toBeCalledWith(400);
+    expect(res.status).toBeCalledWith(200);
     expect(res.json).toBeCalledWith({
-      message: "Paddock already exists",
+      message: "Paddock found and updated to be displayed",
     });
   });
 });
