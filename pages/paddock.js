@@ -9,7 +9,7 @@ import standard from "../styles/Standard.module.css";
 import AddItemButton from "../components/AddItemButton";
 import ItemList from "../components/ItemList";
 import SprayContext from "../context/sprayEvent";
-import AccessDenied from "../components/AccessDenied";
+import AccessDenied from "../components/accessDenied";
 import { authOptions } from "./api/auth/[...nextauth]";
 import prisma from "../lib/prisma";
 

@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import Link from "next/link";
 import styles from "../styles/Date.module.css";
 import standard from "../styles/Standard.module.css";
-import dateCreate from "../components/DateCreate";
+import dateCreate from "../components/dateCreate";
 import SprayContext from "../context/sprayEvent";
 
 export default function DateTime() {

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import Link from "next/link";
-import styles from "../styles/sprayMixDisplay.module.css";
+import styles from "../styles/SprayMixDisplay.module.css";
 import standard from "../styles/Standard.module.css";
 import SprayContext from "../context/sprayEvent";
 
