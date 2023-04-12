@@ -61,8 +61,6 @@ export default function Paddock({ paddocks, errorCode }) {
   const [message, setMessage] = useState(false);
   const { data: session } = useSession();
 
-  // if (typeof window === "undefined") return null;
-
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }

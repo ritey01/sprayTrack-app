@@ -18,3 +18,4 @@
 ## current status
 -Cant get the database to record the users information automatically, it seems the PrismaAdapter is doing something weird, if this is commented out it can log in and out via github, if I enable it I get a user account error.  NOt sure if it is a nexy-auth to Prisma issue or a Prisma to planetscale issue.
 - fix error message display with the "add" pages.  Because the error is part of the add button componet it doesnt display well
+- fix no border around sprays on spray page when not active
