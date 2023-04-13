@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   //accesses the current user session object,allows Next.js to render the user details on the client side of the app
   const { data: session } = useSession();
-
+  console.log(session);
   if (session) {
     return (
       <>
