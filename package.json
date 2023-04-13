@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watch",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "vercel-build": "prisma generate && next build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
