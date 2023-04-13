@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import Error from "./_error";
 import Link from "next/link";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"; // need to change this to Prisma.PrismaClientKnownRequestError tp prevent future errors
 import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
 import { router } from "next/router";
