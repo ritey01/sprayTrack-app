@@ -4,7 +4,6 @@ import Link from "next/link";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"; // need to change this to Prisma.PrismaClientKnownRequestError tp prevent future errors
 import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
-import { router } from "next/router";
 import standard from "../styles/Standard.module.css";
 import AddItemButton from "../components/AddItemButton";
 import ItemList from "../components/ItemList";
@@ -12,11 +11,6 @@ import SprayContext from "../context/sprayEvent";
 import AccessDenied from "../components/accessDenied";
 import { authOptions } from "./api/auth/[...nextauth]";
 import prisma from "../lib/prisma";
-
-//Allows an added paddock to be displayed on the paddock page
-const refreshData = () => {
-  router.replace(router.asPath);
-};
 
 export async function getServerSideProps(context) {
   let paddocks;
@@ -26,7 +20,7 @@ export async function getServerSideProps(context) {
   try {
     paddocks = await prisma.paddock.findMany();
     errorCode = context.res.statusCode > 200 ? context.res.statusCode : false;
-    console.log(errorCode);
+
     if (context.res.status < 300) {
       refreshData();
     }
@@ -82,7 +76,7 @@ export default function Paddock({ paddocks, errorCode }) {
       console.log("error", error);
     }
   };
-  console.log(session);
+
   return (
     <>
       {session ? (

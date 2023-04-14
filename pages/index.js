@@ -22,7 +22,13 @@ export default function Home() {
   return (
     <>
       <p> Not signed in </p>
-      <button onClick={() => signIn()}>Sign in</button>
+      <button
+        onClick={() =>
+          signIn("google", { callbackUrl: "http://localhost:3000/paddock" })
+        }
+      >
+        Sign in
+      </button>
     </>
   );
 }

@@ -1,14 +1,17 @@
 import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
 import standard from "../styles/Standard.module.css";
 import styles from "../styles/SprayDetails.module.css";
 import Link from "next/link";
 import SprayContext from "../context/sprayEvent";
+import AccessDenied from "../components/accessDenied";
 
 const SprayDetails = () => {
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [emptyFields, setEmptyFields] = useState([]);
+  const { data: session } = useSession();
 
   //Checks if all fields are filled in
   const validateState = (state) => {
@@ -79,83 +82,89 @@ const SprayDetails = () => {
   };
 
   return (
-    <div className={`${standard.cardBackground} ${styles.detailsCard}`}>
-      <p className={styles.labels}> Date</p>
+    <>
+      {session ? (
+        <div className={`${standard.cardBackground} ${styles.detailsCard}`}>
+          <p className={styles.labels}> Date</p>
 
-      <p className={styles.sprayDetails}>
-        {/* Checks if date else returns message */}
-        {sprayEvent.date ? sprayEvent.date : "No date entered"}
-        <Link href={`/date`} className={styles.editBtn}>
-          Edit
-        </Link>
-      </p>
+          <p className={styles.sprayDetails}>
+            {/* Checks if date else returns message */}
+            {sprayEvent.date ? sprayEvent.date : "No date entered"}
+            <Link href={`/date`} className={styles.editBtn}>
+              Edit
+            </Link>
+          </p>
 
-      <p className={styles.labels}> Paddock</p>
-      <p className={styles.sprayDetails}>
-        {/* Checks if a paddock entered else returns a message */}
-        {sprayEvent.paddock ? sprayEvent.paddock : "No paddock entered"}
-        <Link href={`/paddock`} className={styles.editBtn}>
-          Edit
-        </Link>
-      </p>
+          <p className={styles.labels}> Paddock</p>
+          <p className={styles.sprayDetails}>
+            {/* Checks if a paddock entered else returns a message */}
+            {sprayEvent.paddock ? sprayEvent.paddock : "No paddock entered"}
+            <Link href={`/paddock`} className={styles.editBtn}>
+              Edit
+            </Link>
+          </p>
 
-      <p className={styles.labels}> Crop</p>
-      <p className={styles.sprayDetails}>
-        {/* Checks if a crop entered else returns a message */}
-        {sprayEvent.crop ? sprayEvent.crop : "No crop entered"}
-        <Link href={`/crop`} className={styles.editBtn}>
-          Edit
-        </Link>
-      </p>
+          <p className={styles.labels}> Crop</p>
+          <p className={styles.sprayDetails}>
+            {/* Checks if a crop entered else returns a message */}
+            {sprayEvent.crop ? sprayEvent.crop : "No crop entered"}
+            <Link href={`/crop`} className={styles.editBtn}>
+              Edit
+            </Link>
+          </p>
 
-      <p className={styles.labels}>Spray</p>
-      <div className={styles.sprayMixCard}>
-        <div className={styles.sprayTitleDisplay}>
-          <p>{sprayEvent.sprayMix.title}</p>
-          <Link href={`/spray`} className={styles.editBtn}>
-            Edit
-          </Link>
-        </div>
+          <p className={styles.labels}>Spray</p>
+          <div className={styles.sprayMixCard}>
+            <div className={styles.sprayTitleDisplay}>
+              <p>{sprayEvent.sprayMix.title}</p>
+              <Link href={`/spray`} className={styles.editBtn}>
+                Edit
+              </Link>
+            </div>
 
-        {/* Checks if a spray is entered else returns a message */}
+            {/* Checks if a spray is entered else returns a message */}
 
-        {sprayEvent.sprayMix.sprays.length == 0
-          ? "No spray entered"
-          : sprayEvent.sprayMix.sprays.map((spray) => {
-              return (
-                <>
-                  <div className={styles.sprayType}>
-                    <p className={styles.sprayName}>{spray.sprayName}</p>
+            {sprayEvent.sprayMix.sprays.length == 0
+              ? "No spray entered"
+              : sprayEvent.sprayMix.sprays.map((spray) => {
+                  return (
+                    <>
+                      <div className={styles.sprayType}>
+                        <p className={styles.sprayName}>{spray.sprayName}</p>
 
-                    <p>
-                      {spray.rate} {spray.unit} per hectares
-                    </p>
-                    <div className={styles.line}></div>
-                  </div>
-                </>
-              );
-            })}
-      </div>
-      <div>
-        {emptyFields.length > 0
-          ? console.log("empty fields", emptyFields)
-          : null}
-      </div>
-      <div className={standard.styledNext}>
-        <Link href={`/spray`} className={styles.submitBtn}>
-          Back
-        </Link>
-        <button
-          onClick={() => handleClick(sprayEvent)}
-          className={styles.submitBtn}
-        >
-          Submit
-        </button>
-        {/* <Link href={`/paddock`} className={standard.next}>
+                        <p>
+                          {spray.rate} {spray.unit} per hectares
+                        </p>
+                        <div className={styles.line}></div>
+                      </div>
+                    </>
+                  );
+                })}
+          </div>
+          <div>
+            {emptyFields.length > 0
+              ? console.log("empty fields", emptyFields)
+              : null}
+          </div>
+          <div className={standard.styledNext}>
+            <Link href={`/spray`} className={styles.submitBtn}>
+              Back
+            </Link>
+            <button
+              onClick={() => handleClick(sprayEvent)}
+              className={styles.submitBtn}
+            >
+              Submit
+            </button>
+            {/* <Link href={`/paddock`} className={standard.next}>
           Start again
         </Link> */}
-      </div>
-    </div>
+          </div>
+        </div>
+      ) : (
+        <AccessDenied />
+      )}
+    </>
   );
 };
 export default SprayDetails;

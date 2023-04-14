@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import SprayContext from "../context/sprayEvent";
 import styles from "../styles/SprayRate.module.css";
 import standard from "../styles/Standard.module.css";
+import AccessDenied from "../components/accessDenied";
 
 const SprayRate = () => {
   const [sprayAmount, setSprayAmount] = useState("");
@@ -11,6 +13,7 @@ const SprayRate = () => {
   const { event, mix } = useContext(SprayContext);
   const [sprayMix, setSprayMix] = mix;
   const [sprayEvent, setSprayEvent] = event;
+  const { data: session } = useSession();
 
   const unitList = ["Litres", "Kgs", "mls", "grams"];
 
@@ -37,65 +40,71 @@ const SprayRate = () => {
   };
 
   return (
-    <div>
-      <h1 className={standard.title}>Spray Rate</h1>
+    <>
+      {session ? (
+        <div>
+          <h1 className={standard.title}>Spray Rate</h1>
 
-      <div className={`${standard.cardBackground} ${styles.centerInput}`}>
-        <form>
-          <div className={styles.sprayRate}>
-            <label htmlFor="sprayAmount" className={styles.rateLabel}>
-              Amount
-            </label>
-            <input
-              className={styles.rateInput}
-              aria-label="Amount"
-              id="sprayAmount"
-              type="number"
-              required
-              value={sprayAmount}
-              onChange={(e) => setSprayAmount(parseInt(e.target.value))}
-            />
+          <div className={`${standard.cardBackground} ${styles.centerInput}`}>
+            <form>
+              <div className={styles.sprayRate}>
+                <label htmlFor="sprayAmount" className={styles.rateLabel}>
+                  Amount
+                </label>
+                <input
+                  className={styles.rateInput}
+                  aria-label="Amount"
+                  id="sprayAmount"
+                  type="number"
+                  required
+                  value={sprayAmount}
+                  onChange={(e) => setSprayAmount(parseInt(e.target.value))}
+                />
+              </div>
+            </form>
+
+            <ul className={styles.volumeBtnDisplay}>
+              {unitList.map((unitL, index) => (
+                <li key={index} className={styles.btnLayout} value={unit || ""}>
+                  <button
+                    style={{
+                      background:
+                        isActive == index
+                          ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
+                          : "",
+                    }}
+                    className={styles.rateButtons}
+                    onClick={() => handleUnitClick(index)}
+                  >
+                    {unitL}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
-        </form>
 
-        <ul className={styles.volumeBtnDisplay}>
-          {unitList.map((unitL, index) => (
-            <li key={index} className={styles.btnLayout} value={unit || ""}>
-              <button
-                style={{
-                  background:
-                    isActive == index
-                      ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
-                      : "",
-                }}
-                className={styles.rateButtons}
-                onClick={() => handleUnitClick(index)}
-              >
-                {unitL}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className={standard.styledNext}>
-        <Link
-          href={`/makeSpray`}
-          className={standard.next}
-          // clears last spray added to the sprayEvent
-          onClick={() => clearSpray()}
-        >
-          Back
-        </Link>
-        <Link
-          href={`/sprayMixDisplay`}
-          className={standard.next}
-          onClick={() => handleSubmit()}
-        >
-          Next
-        </Link>
-      </div>
-    </div>
+          <div className={standard.styledNext}>
+            <Link
+              href={`/makeSpray`}
+              className={standard.next}
+              // clears last spray added to the sprayEvent
+              onClick={() => clearSpray()}
+            >
+              Back
+            </Link>
+            <Link
+              href={`/sprayMixDisplay`}
+              className={standard.next}
+              onClick={() => handleSubmit()}
+            >
+              Next
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <AccessDenied />
+      )}
+    </>
   );
 };
 

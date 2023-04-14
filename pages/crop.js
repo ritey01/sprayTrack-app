@@ -1,23 +1,26 @@
 import React, { useState, useContext } from "react";
 import Error from "./_error";
 import Link from "next/link";
-import { router } from "next/router";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import { getServerSession } from "next-auth/next";
+import { useSession } from "next-auth/react";
 import prisma from "../lib/prisma";
 import standard from "../styles/Standard.module.css";
 import AddItemButton from "../components/AddItemButton";
 import ItemList from "../components/ItemList";
 import SprayContext from "../context/sprayEvent";
+import AccessDenied from "../components/accessDenied";
+import { authOptions } from "./api/auth/[...nextauth]";
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps(context) {
   let crops;
   let errorCode = false;
 
   try {
     crops = await prisma.crops.findMany();
-    errorCode = res.statusCode > 200 ? res.statusCode : false;
+    errorCode = context.res.statusCode > 200 ? context.res.statusCode : false;
 
-    if (res.status < 300) {
+    if (context.res.status < 300) {
       refreshData();
     }
   } catch (error) {
@@ -26,8 +29,8 @@ export async function getServerSideProps({ req, res }) {
     } else {
       console.error(error);
     }
-    res.statusCode = 500;
-    errorCode = res.statusCode;
+    context.res.statusCode = 500;
+    errorCode = context.res.statusCode;
     crops = [];
   }
 
@@ -35,6 +38,7 @@ export async function getServerSideProps({ req, res }) {
     props: {
       crops,
       errorCode,
+      session: await getServerSession(context.req, context.res, authOptions),
     },
   };
 }
@@ -46,6 +50,7 @@ export default function Crops({ crops, errorCode }) {
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [message, setMessage] = useState(false);
+  const { data: session } = useSession();
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -68,56 +73,66 @@ export default function Crops({ crops, errorCode }) {
   };
 
   return (
-    <div>
-      <h1 className={standard.title}>Select a crop</h1>
-      <AddItemButton name={"Add Crop"} link={`/addCrop`} />
-      <ItemList
-        props={cropList}
-        name={"crops"}
-        setProp={setCropId}
-        setName={setName}
-      />
+    <>
+      {session ? (
+        <div>
+          <h1 className={standard.title}>Select a crop</h1>
+          <AddItemButton name={"Add Crop"} link={`/addCrop`} />
+          <ItemList
+            props={cropList}
+            name={"crops"}
+            setProp={setCropId}
+            setName={setName}
+          />
 
-      {message && <p className={standard.error}>Please select a crop</p>}
-      <div className={standard.styledNext}>
-        <Link href={`/paddock`} className={standard.next}>
-          Back
-        </Link>
-
-        {cropId ? (
-          <>
-            <button
-              className={standard.deleteButton}
-              onClick={() => deleteItem(cropId)}
-            >
-              Delete
-            </button>
-
-            <Link
-              onClick={() => {
-                setSprayEvent({ ...sprayEvent, cropId: cropId, crop: name });
-              }}
-              href={`/date`}
-              className={standard.next}
-            >
-              Next
+          {message && <p className={standard.error}>Please select a crop</p>}
+          <div className={standard.styledNext}>
+            <Link href={`/paddock`} className={standard.next}>
+              Back
             </Link>
-          </>
-        ) : (
-          <>
-            <div className={standard.messageDisplay}></div>
-            <button
-              href={``}
-              className={standard.disabledNext}
-              onClick={() => {
-                setMessage(true);
-              }}
-            >
-              Next
-            </button>
-          </>
-        )}
-      </div>
-    </div>
+
+            {cropId ? (
+              <>
+                <button
+                  className={standard.deleteButton}
+                  onClick={() => deleteItem(cropId)}
+                >
+                  Delete
+                </button>
+
+                <Link
+                  onClick={() => {
+                    setSprayEvent({
+                      ...sprayEvent,
+                      cropId: cropId,
+                      crop: name,
+                    });
+                  }}
+                  href={`/date`}
+                  className={standard.next}
+                >
+                  Next
+                </Link>
+              </>
+            ) : (
+              <>
+                <div className={standard.messageDisplay}></div>
+                <button
+                  href={``}
+                  className={standard.disabledNext}
+                  onClick={() => {
+                    setMessage(true);
+                  }}
+                >
+                  Next
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      ) : (
+        <AccessDenied />
+      )}
+    </>
   );
 }
