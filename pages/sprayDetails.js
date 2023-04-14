@@ -124,22 +124,24 @@ const SprayDetails = () => {
 
             {/* Checks if a spray is entered else returns a message */}
 
-            {sprayEvent.sprayMix.sprays.length == 0
-              ? "No spray entered"
-              : sprayEvent.sprayMix.sprays.map((spray) => {
+            {sprayEvent.sprayMix.sprays.length == 0 ? (
+              <p>No spray entered</p>
+            ) : (
+              <ul className={styles.sprayList}>
+                {sprayEvent.sprayMix.sprays.map((spray) => {
                   return (
-                    <>
-                      <div className={styles.sprayType}>
-                        <p className={styles.sprayName}>{spray.sprayName}</p>
+                    <li className={styles.sprayType} key={spray.sprayId}>
+                      <p className={styles.sprayName}>{spray.sprayName}</p>
 
-                        <p>
-                          {spray.rate} {spray.unit} per hectares
-                        </p>
-                        <div className={styles.line}></div>
-                      </div>
-                    </>
+                      <p>
+                        {spray.rate} {spray.unit} per hectares
+                      </p>
+                      <div className={styles.line}></div>
+                    </li>
                   );
                 })}
+              </ul>
+            )}
           </div>
           <div>
             {emptyFields.length > 0
@@ -156,10 +158,10 @@ const SprayDetails = () => {
             >
               Submit
             </button>
-            {/* <Link href={`/paddock`} className={standard.next}>
-          Start again
-        </Link> */}
           </div>
+          <Link href={`/paddock`} className={standard.next}>
+            Start again
+          </Link>
         </div>
       ) : (
         <AccessDenied />

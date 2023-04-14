@@ -148,7 +148,16 @@ const Spray = ({ sprayMix, errorCode }) => {
                         {spray.sprays.map((mix) => {
                           return (
                             <>
-                              <li className={styles.sprayDisplay} key={mix.id}>
+                              <li
+                                className={styles.sprayDisplay}
+                                key={mix.id}
+                                style={{
+                                  border:
+                                    isActive == sprayMixList.indexOf(spray)
+                                      ? "1px solid #ffff"
+                                      : "1px solid black",
+                                }}
+                              >
                                 <p>{mix.spray.sprayName.name}</p>
                                 <p>
                                   {mix.spray.rate} {mix.spray.unit} / hectare
