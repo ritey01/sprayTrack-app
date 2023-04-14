@@ -7,13 +7,13 @@
 
 .sprayDisplay {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-size: 0.6rem;
   text-align: center;
-  padding: 0;
-  margin: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid #ffff;
+  padding-left: 0.7rem;
+}
+.sprayName {
+  padding-left: 1rem;
 }
 
 .addSprayBtn {
@@ -48,6 +48,7 @@
   width: 80%;
   margin: 0 auto 1rem auto;
   border-radius: 0.5rem;
+  color: #545454;
 }
 
 .button {

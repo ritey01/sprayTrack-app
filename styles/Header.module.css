@@ -1,10 +1,12 @@
 .headerLayout {
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column;
   align-items: center;
   border-bottom: 2px solid #b5b5b5;
-  max-width: 80%;
+  max-width: 80%; */
+  background-color: #545454;
   margin: 0 auto 2rem auto;
+  padding-left: 2rem;
 }
 
 .logo {

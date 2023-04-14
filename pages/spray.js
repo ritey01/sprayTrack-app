@@ -120,12 +120,13 @@ const Spray = ({ sprayMix, errorCode }) => {
 
             {sprayMixList.length === 0 && <p>No sprays created yet</p>}
             {/* Displays sprays fetched from sprayMix database */}
+
             {sprayMixList.map(
               (spray, index) =>
                 spray.is_displayed && (
                   <li
                     className={styles.sprayCard}
-                    key={index}
+                    key={spray.id}
                     value={spray}
                     style={{
                       background:
@@ -145,24 +146,33 @@ const Spray = ({ sprayMix, errorCode }) => {
                       <p>No sprays found</p>
                     ) : (
                       <ul className={styles.sprays}>
+                        <hr
+                          style={{
+                            borderTop:
+                              isActive == sprayMixList.indexOf(spray)
+                                ? "1px solid #ffff"
+                                : "1px solid #545454",
+                          }}
+                        />
                         {spray.sprays.map((mix) => {
                           return (
                             <>
-                              <li
-                                className={styles.sprayDisplay}
-                                key={mix.id}
-                                style={{
-                                  border:
-                                    isActive == sprayMixList.indexOf(spray)
-                                      ? "1px solid #ffff"
-                                      : "1px solid black",
-                                }}
-                              >
+                              <li className={styles.sprayDisplay} key={mix.id}>
                                 <p>{mix.spray.sprayName.name}</p>
-                                <p>
+                                <p className={styles.sprayName}>
                                   {mix.spray.rate} {mix.spray.unit} / hectare
                                 </p>
                               </li>
+                              {spray.sprays.length > 1 ? (
+                                <hr
+                                  style={{
+                                    borderTop:
+                                      isActive == sprayMixList.indexOf(spray)
+                                        ? "1px solid #ffff"
+                                        : "1px solid #545454",
+                                  }}
+                                />
+                              ) : null}
                             </>
                           );
                         })}
