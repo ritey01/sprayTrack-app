@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     });
 
     if (paddockExists) {
-      //If exsits and has is_displayed set to false, update to true
+      //If exists and has is_displayed set to false, update to true
       if (!paddockExists.is_displayed) {
         await prisma.paddock.update({
           where: { id: paddockExists.id },

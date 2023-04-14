@@ -7,6 +7,7 @@ import AccessDenied from "../components/accessDenied";
 
 const AddCrop = () => {
   const [cropName, setCropName] = useState("");
+  const { data: session } = useSession();
   const labelName = "Crop Name";
   const idName = "cropName";
 
