@@ -9,6 +9,9 @@ import AccessDenied from "../components/accessDenied";
 
 const AddPaddock = () => {
   const [paddockName, setPaddockName] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
+  const [valid, setValid] = useState(false);
   const { data: session } = useSession();
   const labelName = "Paddock Name";
   const idName = "paddockName";
@@ -17,24 +20,38 @@ const AddPaddock = () => {
     <>
       {session ? (
         <div>
-          <h1 className={standard.title}>Add a Paddock</h1>
+          <h1 className={standard.title}>Add Paddock</h1>
           <AddItemName
             labelName={labelName}
             propName={paddockName}
             setProp={setPaddockName}
             idName={idName}
           />
-          <div className={standard.addPageButtonDisplay}>
-            <Link href={`/paddock`} className={styles.addItemButton}>
-              Back
-            </Link>
 
-            <AddButton
-              propName={paddockName}
-              setProp={setPaddockName}
-              href={`/paddock`}
-              endpoint={`paddock/postPaddock`}
-            />
+          <div className={standard.messageDisplay}>
+            {error && <p className={styles.error}>{message}</p>}
+
+            {valid && <p className={standard.error}>Please enter a name</p>}
+          </div>
+
+          <div className={standard.addPageButtonDisplay}>
+            <div className={styles.backButton}>
+              <Link href={`/paddock`} className={styles.addItemButton}>
+                Back
+              </Link>
+            </div>
+
+            <div>
+              <AddButton
+                propName={paddockName}
+                setProp={setPaddockName}
+                href={`/paddock`}
+                endpoint={`paddock/postPaddock`}
+                setMessage={setMessage}
+                setError={setError}
+                setValid={setValid}
+              />
+            </div>
           </div>
         </div>
       ) : (

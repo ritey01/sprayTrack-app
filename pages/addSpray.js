@@ -9,6 +9,9 @@ import AccessDenied from "../components/accessDenied";
 
 const AddSpray = () => {
   const [spray, setSpray] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
+  const [valid, setValid] = useState(false);
   const { data: session } = useSession();
   const labelName = "Spray Name";
   const idName = "sprayName";
@@ -24,6 +27,13 @@ const AddSpray = () => {
             setProp={setSpray}
             idName={idName}
           />
+
+          <div className={standard.messageDisplay}>
+            {error && <p className={styles.error}>{message}</p>}
+
+            {valid && <p className={standard.error}>Please enter a name</p>}
+          </div>
+
           <div className={standard.addPageButtonDisplay}>
             <Link href={`/makeSpray`} className={styles.addItemButton}>
               Back

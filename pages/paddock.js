@@ -72,6 +72,7 @@ export default function Paddock({ paddocks, errorCode }) {
       );
 
       setPaddockList(updatedPaddocks);
+      setLocationId(null);
     } catch (error) {
       console.log("error", error);
     }
@@ -80,7 +81,7 @@ export default function Paddock({ paddocks, errorCode }) {
   return (
     <>
       {session ? (
-        <div className={standard.addContainer}>
+        <div>
           <h1 className={standard.title}>Select a paddock</h1>
           <AddItemButton name={" Paddock"} link={`/addPaddock`} />
 

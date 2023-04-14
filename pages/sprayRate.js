@@ -57,6 +57,7 @@ const SprayRate = () => {
                   id="sprayAmount"
                   type="number"
                   required
+                  placeholder="Rate per hectare"
                   value={sprayAmount}
                   onChange={(e) => setSprayAmount(parseInt(e.target.value))}
                 />
