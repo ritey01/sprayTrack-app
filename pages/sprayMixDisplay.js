@@ -7,7 +7,9 @@ import SprayContext from "../context/sprayEvent";
 import AccessDenied from "../components/accessDenied";
 
 const SprayMixDisplay = () => {
-  const [sprayMixName, setSprayMixName] = useState("");
+  const [sprayMixName, setSprayMixName] = useState(
+    (typeof window !== "undefined" && localStorage.getItem("title")) || ""
+  );
   const { event, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [sprayMix, setSprayMix] = mix;
@@ -25,6 +27,11 @@ const SprayMixDisplay = () => {
     newSprayMix.sprays.splice(index, 1);
     setSprayMix(newSprayMix);
   };
+  const setSprayMixTitle = (event) => {
+    setSprayMixName(event);
+    //saves the spray mix name for display on the card between adding sprays
+    localStorage.setItem("title", event);
+  };
 
   const addSprayMix = async () => {
     const newSprayMix = { ...sprayMix };
@@ -32,6 +39,7 @@ const SprayMixDisplay = () => {
     const newSprayEvent = { ...sprayEvent };
     newSprayEvent.sprayMix = newSprayMix;
     setSprayEvent(newSprayEvent);
+    localStorage.removeItem("title");
 
     //saves the created spraymix for later use
     const body = { title: sprayMixName, sprays: sprayMix.sprays };
@@ -60,49 +68,54 @@ const SprayMixDisplay = () => {
                 <label htmlFor="sprayMixName" className={styles.formLabel}>
                   Spray Mix Name
                 </label>
-                <input
-                  className={styles.formName}
-                  id="sprayMixName"
-                  type="string"
-                  required
-                  value={sprayMixName}
-                  onChange={(e) => setSprayMixName(e.target.value)}
-                />
+                {!sprayMixName ? (
+                  <input
+                    className={styles.formName}
+                    id="sprayMixName"
+                    type="string"
+                    required
+                    value={sprayMixName}
+                    onChange={(e) => setSprayMixTitle(e.target.value)}
+                  />
+                ) : (
+                  <p>{sprayMixName}</p>
+                )}
               </form>
             )}
-
-            {sprayMix.sprays.map((spray, index) => {
-              return (
-                <>
-                  <div className={styles.sprayDetails}>
-                    <p>{spray.sprayName}</p>
-                    <p>
-                      {spray.rate} {spray.unit} per{" "}
-                      {spray.sprayArea > 1 ? (
-                        <span>hectares</span>
-                      ) : (
-                        <span>hectare</span>
-                      )}
-                    </p>
-                    <div className={styles.buttonGroup}>
-                      <Link
-                        href={`/makeSpray`}
-                        onClick={() => resetData(index)}
-                        className={styles.editBtn}
-                      >
-                        Edit
-                      </Link>
-                      <button
-                        className={styles.deleteBut}
-                        onClick={() => deleteSpray(index)}
-                      >
-                        Delete
-                      </button>
+            <ul>
+              {sprayMix.sprays.map((spray, index) => {
+                return (
+                  <li key={spray.sprayId}>
+                    <div className={styles.sprayDetails}>
+                      <p>{spray.sprayName}</p>
+                      <p>
+                        {spray.rate} {spray.unit} per{" "}
+                        {spray.sprayArea > 1 ? (
+                          <span>hectares</span>
+                        ) : (
+                          <span>hectare</span>
+                        )}
+                      </p>
+                      <div className={styles.buttonGroup}>
+                        <Link
+                          href={`/makeSpray`}
+                          onClick={() => resetData(index)}
+                          className={styles.editBtn}
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          className={styles.deleteBut}
+                          onClick={() => deleteSpray(index)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </>
-              );
-            })}
+                  </li>
+                );
+              })}
+            </ul>
             {sprayMix.sprays.length > 0 && (
               <Link href={`/makeSpray`} className={styles.editBtn}>
                 Add another spray
