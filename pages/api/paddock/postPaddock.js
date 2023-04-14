@@ -1,10 +1,10 @@
-import prisma from "../../../lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
+import prisma from "../../../lib/prisma";
 
 export default async function handler(req, res) {
-  const session = await getServerSession(req, res, authOptions);
   const { name } = req.body;
+  const session = await getServerSession(req, res, authOptions);
 
   if (session) {
     //Checks if paddock exists
