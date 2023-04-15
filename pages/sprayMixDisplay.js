@@ -50,6 +50,10 @@ const SprayMixDisplay = () => {
     });
   };
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   return (
     <>
       {session ? (
@@ -74,7 +78,7 @@ const SprayMixDisplay = () => {
                     id="sprayMixName"
                     type="string"
                     required
-                    value={sprayMixName}
+                    value={capitalizeFirstLetter(sprayMixName)}
                     onChange={(e) => setSprayMixTitle(e.target.value)}
                   />
                 ) : (

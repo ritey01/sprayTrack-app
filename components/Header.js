@@ -3,7 +3,7 @@ import logo from "../assets/sprayerLogo.svg";
 import charLogo from "../assets/charLogo.png";
 import newLogo from "../assets/logo.png";
 import squLogo from "../assets/squLogo.png";
-import logoLong from "../assets/logoLong.png";
+import logoLong from "../assets/logoLong-resized.png";
 import Image from "next/image";
 
 const Header = () => {
@@ -13,10 +13,9 @@ const Header = () => {
         alt="SprayTruck Logo"
         src={logoLong}
         className={styles.logo}
-        width={100}
-        height={100}
+        width={80}
+        height={80}
       />
-      {/* <h1 className={styles.title}>sprayTrack</h1> */}
     </div>
   );
 };

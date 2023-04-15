@@ -2,6 +2,9 @@ import React from "react";
 import styles from "../styles/AddItemName.module.css";
 
 const AddItemName = ({ labelName, propName, setProp, idName }) => {
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   return (
     <form>
       <div className={styles.styledCard}>
@@ -12,7 +15,7 @@ const AddItemName = ({ labelName, propName, setProp, idName }) => {
             id={idName}
             type="string"
             required
-            value={propName}
+            value={capitalizeFirstLetter(propName)}
             onChange={(e) => setProp(e.target.value)}
           />
         </div>
