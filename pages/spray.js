@@ -163,16 +163,6 @@ const Spray = ({ sprayMix, errorCode }) => {
                                   {mix.spray.rate} {mix.spray.unit} / hectare
                                 </p>
                               </li>
-                              {spray.sprays.length > 1 ? (
-                                <hr
-                                  style={{
-                                    borderTop:
-                                      isActive == sprayMixList.indexOf(spray)
-                                        ? "1px solid #ffff"
-                                        : "1px solid #545454",
-                                  }}
-                                />
-                              ) : null}
                             </>
                           );
                         })}

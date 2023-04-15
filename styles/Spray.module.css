@@ -34,12 +34,12 @@
   text-align: center;
 }
 .inactiveBtn {
-  background-color: rgb(6, 214, 160);
+  background-color: #26bbac;
   color: #ffff;
   border-radius: 0.5rem;
   padding: 0 1.2rem;
   border: none;
-  font-size: 1rem;
+  font-size: 0.7rem;
 }
 .sprayCard {
   padding: 1rem;
