@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   //accesses the current user session object,allows Next.js to render the user details on the client side of the app
   const { data: session } = useSession();
-  console.log(session);
+
   if (session) {
     return (
       <>
@@ -19,14 +19,16 @@ export default function Home() {
       </>
     );
   }
+
+  const callbackUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://spray-track-app.vercel.app/paddock"
+      : "http://localhost:3000/paddock";
+
   return (
     <>
       <p> Not signed in </p>
-      <button
-        onClick={() =>
-          signIn("google", { callbackUrl: "http://localhost:3000/paddock" })
-        }
-      >
+      <button onClick={() => signIn("google", { callbackUrl: callbackUrl })}>
         Sign in
       </button>
     </>
