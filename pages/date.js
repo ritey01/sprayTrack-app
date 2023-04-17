@@ -22,7 +22,9 @@ export default function DateTime() {
     <>
       {session ? (
         <div className={styles.date}>
-          <h1 className={standard.title}>Spray Date</h1>
+          <h1 className={standard.title} data-testid="spray-date">
+            Spray Date
+          </h1>
           <div className={`${standard.cardBackground} ${styles.dateCard}`}>
             <p
               className={styles.nowDate}
