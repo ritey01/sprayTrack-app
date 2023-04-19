@@ -13,6 +13,9 @@ model Paddock {
   name         String  @db.VarChar(255)
   is_displayed Boolean   @default(true)
   sprayEvent   SprayEvent[]
+  company   Company?  @relation(fields: [companyId], references: [id])
+  companyId  Int?
+  
 }
 
 model Crops {
@@ -99,8 +102,10 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  companyId     Int?
   accounts      Account[]
   sessions      Session[]
+  
 }
 model Account {
   id                 String  @id @default(cuid())
@@ -139,3 +144,23 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Company {
+  id           Int     @id @default(autoincrement())
+  name         String  @db.VarChar(255)
+  employees   Employee[]
+  paddocks      Paddock[]
+}
+
+ 
+model Employee {
+  id           Int         @id @default(autoincrement())
+  name String  @db.VarChar(100)
+  email  String   @unique
+  is_active Boolean     @default(true)
+  is_admin  Boolean     @default(false)
+  company   Company  @relation(fields: [companyId], references: [id])
+  companyId  Int
+  
+
+  @@index([companyId])
+}

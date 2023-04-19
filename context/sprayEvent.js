@@ -20,13 +20,17 @@ export function SprayProvider({ children }) {
     title: "",
     sprays: [{ sprayId: null, sprayName: "", rate: 0, unit: "" }],
   };
+
+  const companyIdInit = null;
   const [sprayEvent, setSprayEvent] = useState(initialState);
   const [sprayMix, setSprayMix] = useState(mixInitial);
+  const [companyId, setCompanyId] = useState(companyIdInit);
   return (
     <SprayContext.Provider
       value={{
         event: [sprayEvent, setSprayEvent],
         mix: [sprayMix, setSprayMix],
+        company: [companyId, setCompanyId],
       }}
     >
       {children}

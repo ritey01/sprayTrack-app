@@ -3,7 +3,6 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "../../../lib/prisma";
 
-// console.log("prisma", prisma);
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -14,6 +13,24 @@ export const authOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async session({ session, user }) {
+      const employee = await prisma.employee.findUnique({
+        where: { email: session.user.email },
+      });
+
+      if (!employee) {
+        return false;
+      }
+
+      user.companyId = employee.companyId;
+
+      return {
+        session,
+        user,
+      };
+    },
+  },
 };
-console.log("authOptions", authOptions);
+
 export default NextAuth(authOptions);

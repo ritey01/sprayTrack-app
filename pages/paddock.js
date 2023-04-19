@@ -15,10 +15,17 @@ import prisma from "../lib/prisma";
 export async function getServerSideProps(context) {
   let paddocks;
   let errorCode = false;
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const companyId = session.user.companyId;
 
   //fetches all the paddocks from Paddock Table
   try {
-    paddocks = await prisma.paddock.findMany();
+    paddocks = await prisma.paddock.findMany({
+      where: {
+        companyId: companyId,
+      },
+    });
+
     errorCode = context.res.statusCode > 200 ? context.res.statusCode : false;
 
     if (context.res.status < 300) {
@@ -40,7 +47,7 @@ export async function getServerSideProps(context) {
     props: {
       paddocks,
       errorCode,
-      session: await getServerSession(context.req, context.res, authOptions),
+      session,
     },
   };
 }
