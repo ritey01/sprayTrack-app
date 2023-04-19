@@ -5,11 +5,12 @@ import prisma from "../../../lib/prisma";
 export default async function handler(req, res) {
   const { name } = req.body;
   const session = await getServerSession(req, res, authOptions);
+  const companyId = session.user.companyId;
 
   if (session) {
     //Checks if spray exists
     const sprayExists = await prisma.sprayName.findFirst({
-      where: { name: name },
+      where: { name: name, companyId: companyId },
     });
 
     if (sprayExists) {
@@ -34,6 +35,9 @@ export default async function handler(req, res) {
       const result = await prisma.sprayName.create({
         data: {
           name: name,
+          company: {
+            connect: { id: companyId },
+          },
         },
       });
 

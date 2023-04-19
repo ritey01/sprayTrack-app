@@ -16,9 +16,15 @@ import prisma from "../lib/prisma";
 export async function getServerSideProps(context) {
   let sprayNames;
   let errorCode = false;
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const companyId = session.user.companyId;
 
   try {
-    sprayNames = await prisma.sprayName.findMany();
+    sprayNames = await prisma.sprayName.findMany({
+      where: {
+        companyId: companyId,
+      },
+    });
 
     errorCode = context.res.statusCode > 200 ? context.res.statusCode : false;
 
@@ -40,7 +46,7 @@ export async function getServerSideProps(context) {
     props: {
       sprayNames,
       errorCode,
-      session: await getServerSession(context.req, context.res, authOptions),
+      session,
     },
   };
 }

@@ -86,7 +86,7 @@ const SprayMixDisplay = () => {
                 )}
               </form>
             )}
-            <ul>
+            <ul className={styles.sprayList}>
               {sprayMix.sprays.map((spray, index) => {
                 return (
                   <li key={spray.sprayId}>

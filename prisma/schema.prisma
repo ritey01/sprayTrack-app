@@ -15,6 +15,8 @@ model Paddock {
   sprayEvent   SprayEvent[]
   company   Company?  @relation(fields: [companyId], references: [id])
   companyId  Int?
+
+   @@index([companyId])
   
 }
 
@@ -23,8 +25,10 @@ model Crops {
   name         String  @db.VarChar(50)
   is_displayed Boolean   @default(true)
   sprayEvent   SprayEvent[]
+  company   Company?  @relation(fields: [companyId], references: [id])
+  companyId  Int?
 
-  @@index([id])
+   @@index([companyId])
 }
 
 model SprayName {
@@ -32,8 +36,10 @@ model SprayName {
   name         String  @db.VarChar(50)
   is_displayed Boolean   @default(true)
   sprays Spray[] 
+  company   Company?  @relation(fields: [companyId], references: [id])
+  companyId  Int?
 
- 
+  @@index([companyId])
   
 }
 
@@ -43,8 +49,10 @@ model SprayMix {
   is_displayed Boolean     @default(true)
   sprays     SprayMixSpray[]
   sprayEvent   SprayEvent[]
+   company   Company?  @relation(fields: [companyId], references: [id])
+  companyId  Int?
 
-  @@index([id])
+   @@index([companyId])
 }
 
 enum Unit{
@@ -63,7 +71,7 @@ model Spray {
   sprayName    SprayName  @relation(fields: [sprayNameId], references: [id])
   sprayNameId  Int
   
-
+ 
   @@index([sprayNameId])
 }
 
@@ -90,12 +98,16 @@ model SprayEvent {
   sprayMixId   Int
   createdBy     String?
   createdAt     DateTime  @default(now())
+  company   Company?  @relation(fields: [companyId], references: [id])
+  companyId  Int?
   
-
+  
+ @@index([companyId])
   @@index([paddockId])
   @@index([cropId])
   @@index([sprayMixId])
 }
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -149,6 +161,10 @@ model Company {
   name         String  @db.VarChar(255)
   employees   Employee[]
   paddocks      Paddock[]
+  crops         Crops[]
+  sprayMixes    SprayMix[]
+  sprayNames    SprayName[]
+  SprayEvent    SprayEvent[]
 }
 
  

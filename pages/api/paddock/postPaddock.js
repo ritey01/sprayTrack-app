@@ -5,8 +5,8 @@ import prisma from "../../../lib/prisma";
 export default async function handler(req, res) {
   const { name } = req.body;
   const session = await getServerSession(req, res, authOptions);
-  console.log("✅", session.user.companyId);
   const companyId = session.user.companyId;
+
   if (session) {
     //Checks if paddock exists
     const paddockExists = await prisma.paddock.findFirst({

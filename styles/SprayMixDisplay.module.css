@@ -61,3 +61,7 @@
   display: flex;
   justify-content: space-around;
 }
+.sprayList {
+  list-style-type: none;
+  padding-left: 0;
+}

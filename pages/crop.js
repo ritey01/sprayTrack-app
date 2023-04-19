@@ -15,9 +15,16 @@ import { authOptions } from "./api/auth/[...nextauth]";
 export async function getServerSideProps(context) {
   let crops;
   let errorCode = false;
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const companyId = session.user.companyId;
 
   try {
-    crops = await prisma.crops.findMany();
+    crops = await prisma.crops.findMany({
+      where: {
+        companyId: companyId,
+      },
+    });
+
     errorCode = context.res.statusCode > 200 ? context.res.statusCode : false;
 
     if (context.res.status < 300) {
@@ -38,7 +45,7 @@ export async function getServerSideProps(context) {
     props: {
       crops,
       errorCode,
-      session: await getServerSession(context.req, context.res, authOptions),
+      session,
     },
   };
 }

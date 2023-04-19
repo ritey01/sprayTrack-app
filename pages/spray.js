@@ -15,9 +15,15 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export async function getServerSideProps(context) {
   let errorCode = false;
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const companyId = session.user.companyId;
+
   try {
     //Make a call to sprayMixes table and include the spray table
     const sprayMixes = await prisma.SprayMix.findMany({
+      where: {
+        companyId: companyId,
+      },
       include: {
         sprays: {
           include: {
@@ -43,7 +49,7 @@ export async function getServerSideProps(context) {
       props: {
         sprayMix: JSON.parse(JSON.stringify(sprayMixes)),
         errorCode,
-        session: await getServerSession(context.req, context.res, authOptions),
+        session,
       },
     };
   } catch (error) {

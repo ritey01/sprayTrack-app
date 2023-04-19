@@ -5,6 +5,7 @@ import prisma from "../../../lib/prisma";
 export default async function sprayEventHandler(req, res) {
   const { sprayEvent } = req.body;
   const session = await getServerSession(req, res, authOptions);
+  const companyId = session.user.companyId;
 
   if (session) {
     if (req.method === "POST") {
@@ -12,6 +13,9 @@ export default async function sprayEventHandler(req, res) {
         const result = await prisma.sprayEvent.create({
           data: {
             date: sprayEvent.date,
+            company: {
+              connect: { id: companyId },
+            },
             paddock: {
               connect: { id: sprayEvent.paddockId },
             },

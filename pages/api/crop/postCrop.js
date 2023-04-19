@@ -5,11 +5,12 @@ import { authOptions } from "../auth/[...nextauth]";
 export default async function handler(req, res) {
   const { name } = req.body;
   const session = await getServerSession(req, res, authOptions);
+  const companyId = session.user.companyId;
 
   if (session) {
     //checks if crop exists
     const cropExists = await prisma.crops.findFirst({
-      where: { name: name },
+      where: { name: name, companyId: companyId },
     });
 
     if (cropExists) {
@@ -36,6 +37,9 @@ export default async function handler(req, res) {
       const result = await prisma.crops.create({
         data: {
           name: name,
+          company: {
+            connect: { id: companyId },
+          },
         },
       });
 
