@@ -1,5 +1,6 @@
 ## todo
 - remove cypress
+- edit for sprayMixDisplayTitle
 - back button on add crop with nothing entered
 - Input validation with Joi server and client 
 - Parametized query with password and email storage
