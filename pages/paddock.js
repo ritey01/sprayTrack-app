@@ -17,6 +17,16 @@ export async function getServerSideProps(context) {
   let paddocks;
   let errorCode = false;
   const session = await getServerSession(context.req, context.res, authOptions);
+  if (!session) {
+    return {
+      props: {
+        paddocks: [],
+        errorCode: 404,
+        session,
+      },
+    };
+  }
+
   const companyId = session.user.companyId;
 
   //fetches all the paddocks from Paddock Table
@@ -31,10 +41,6 @@ export async function getServerSideProps(context) {
 
     if (context.res.status < 300) {
       refreshData();
-    }
-
-    if (context.res.status === 404) {
-      return <NotAuthorised />;
     }
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
@@ -63,9 +69,12 @@ export default function Paddock({ paddocks, errorCode }) {
   const [locationId, setLocationId] = useState();
   const [name, setName] = useState("");
   const [paddockList, setPaddockList] = useState(paddocks);
-  console.log("paddockList", paddockList);
   const [message, setMessage] = useState(false);
   const { data: session } = useSession();
+
+  if (!session) {
+    return <NotAuthorised />;
+  }
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
