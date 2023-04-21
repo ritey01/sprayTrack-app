@@ -34,7 +34,7 @@ export async function getServerSideProps(context) {
     }
 
     if (context.res.status === 404) {
-      <NotAuthorised />;
+      return <NotAuthorised />;
     }
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
