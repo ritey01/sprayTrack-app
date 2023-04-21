@@ -11,6 +11,7 @@ import SprayContext from "../context/sprayEvent";
 import AccessDenied from "../components/accessDenied";
 import { authOptions } from "./api/auth/[...nextauth]";
 import prisma from "../lib/prisma";
+import NotAuthorised from "../components/NotAuthorised";
 
 export async function getServerSideProps(context) {
   let paddocks;
@@ -30,6 +31,10 @@ export async function getServerSideProps(context) {
 
     if (context.res.status < 300) {
       refreshData();
+    }
+
+    if (context.res.status === 404) {
+      <NotAuthorised />;
     }
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
