@@ -180,3 +180,8 @@ model Employee {
 
   @@index([companyId])
 }
+
+model authorisedEmail {
+  id   Int    @id @default(autoincrement())
+  email   String   @unique
+}
