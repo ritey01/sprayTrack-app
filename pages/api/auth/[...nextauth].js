@@ -14,22 +14,27 @@ export const authOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async session({ session, user }) {
-      const employee = await prisma.employee.findUnique({
-        where: { email: session.user.email },
+    //Checks if user is in the Employee table if not redirects to registerCompany
+    async signIn({ user }) {
+      const employee1 = await prisma.employee.findUnique({
+        where: { email: user.email },
       });
 
-      if (!employee) {
-        return false;
+      if (employee1) {
+        return true;
+      } else {
+        // Redirect to "/registerCompany"
+        return "/registerCompany";
       }
-
-      user.companyId = employee.companyId;
-
-      return {
-        session,
-        user,
-      };
     },
+    // async session({ session, user }) {
+    //   // user.companyId = employee.companyId;
+
+    //   return {
+    //     session,
+    //     user,
+    //   };
+    // },
   },
 };
 

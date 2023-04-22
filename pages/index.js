@@ -23,7 +23,7 @@ export default function Home() {
   if (session) {
     return (
       <>
-        <p> Signed in as {session.user.email} </p>
+        {/* <p> Signed in as {session.user.email} </p> */}
         <button onClick={() => signOut()}>Sign out</button>
       </>
     );

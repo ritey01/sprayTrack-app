@@ -19,10 +19,9 @@ export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
   if (!session) {
     return {
-      props: {
-        paddocks: [],
-        errorCode: 404,
-        session,
+      redirect: {
+        destination: "/registerCompany",
+        permanent: false,
       },
     };
   }
@@ -72,9 +71,14 @@ export default function Paddock({ paddocks, errorCode }) {
   const [message, setMessage] = useState(false);
   const { data: session } = useSession();
 
-  if (!session) {
-    return <NotAuthorised />;
-  }
+  // if (!session) {
+  //   return {
+  //     redirect: {
+  //       destination: "/register",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
