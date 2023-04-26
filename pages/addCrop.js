@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import AddButton from "../components/AddButton";
 import standard from "../styles/Standard.module.css";
+import styles from "../styles/AddButton.module.css";
 import AddItemName from "../components/AddItemName";
 import AccessDenied from "../components/accessDenied";
 
@@ -25,18 +27,31 @@ const AddCrop = () => {
             setProp={setCropName}
             idName={idName}
           />
+
           <div className={standard.messageDisplay}>
             {error && <p className={styles.error}>{message}</p>}
 
             {valid && <p className={standard.error}>Please enter a name</p>}
           </div>
 
-          <AddButton
-            propName={cropName}
-            setProp={setCropName}
-            href={`/crop`}
-            endpoint={`crop/postCrop`}
-          />
+          <div className={standard.addPageButtonDisplay}>
+            <div className={styles.backButton}>
+              <Link href={`/crop`} className={styles.addItemButton}>
+                Back
+              </Link>
+            </div>
+            <div>
+              <AddButton
+                propName={cropName}
+                setProp={setCropName}
+                href={`/crop`}
+                endpoint={`crop/postCrop`}
+                setMessage={setMessage}
+                setError={setError}
+                setValid={setValid}
+              />
+            </div>
+          </div>
         </div>
       ) : (
         <AccessDenied />

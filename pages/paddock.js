@@ -17,15 +17,15 @@ export async function getServerSideProps(context) {
   let paddocks;
   let errorCode = false;
   const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/registerCompany",
-        permanent: false,
-      },
-    };
-  }
-
+  // if (!session) {
+  //   return {
+  //     redirect: {
+  //       destination: "/registerCompany",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
+  console.log("paddock ✅", session);
   const companyId = session.user.companyId;
 
   //fetches all the paddocks from Paddock Table

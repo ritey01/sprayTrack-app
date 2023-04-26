@@ -37,6 +37,7 @@ export default async function handler(req, res) {
       const result = await prisma.crops.create({
         data: {
           name: name,
+          is_displayed: true,
           company: {
             connect: { id: companyId },
           },
