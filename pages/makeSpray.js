@@ -55,6 +55,7 @@ export default function MakeSpray({ sprayNames, errorCode }) {
   const [sprayTypeId, setSprayTypeId] = useState("");
   const [isActive, setIsActive] = useState();
   const [sprayName, setSprayName] = useState("");
+  const [sprayList, setSprayList] = useState(sprayNames);
   const { mix } = useContext(SprayContext);
   const [sprayMix, setSprayMix] = mix;
   const [message, setMessage] = useState(false);
@@ -80,6 +81,24 @@ export default function MakeSpray({ sprayNames, errorCode }) {
     setSprayMix(newSprayMix);
   };
 
+  const deleteItem = async (id) => {
+    try {
+      await fetch(`/api/sprayName/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const updatedSprayNames = sprayNames.filter(
+        (sprayName) => sprayName.id !== id
+      );
+
+      setSprayList(updatedSprayNames);
+      setSprayTypeId(null);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <>
       {session ? (
@@ -94,8 +113,8 @@ export default function MakeSpray({ sprayNames, errorCode }) {
           </div>
 
           <ul className={`${styles.card} ${standard.cardBackground}`}>
-            {sprayNames.length == 0 && <p>No sprays created yet</p>}
-            {sprayNames.map((name, index) => (
+            {sprayList.length == 0 && <p>No sprays created yet</p>}
+            {sprayList.map((name, index) => (
               <li
                 className={styles.spray}
                 key={index}
@@ -104,7 +123,7 @@ export default function MakeSpray({ sprayNames, errorCode }) {
                   background:
                     isActive == index
                       ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
-                      : "",
+                      : "#ffff",
                   width: isActive == index ? "90%" : "80%",
                   border: isActive == index ? "none" : " 1px solid #26bbac",
                 }}
@@ -121,13 +140,32 @@ export default function MakeSpray({ sprayNames, errorCode }) {
             <Link href={`/spray`} className={standard.next}>
               Back
             </Link>
-            <Link
-              href={`/sprayRate`}
-              className={standard.next}
-              onClick={() => dataSetter()}
-            >
-              Next
-            </Link>
+
+            {sprayTypeId ? (
+              <>
+                <button
+                  className={standard.deleteButton}
+                  onClick={() => deleteItem(sprayTypeId)}
+                >
+                  Delete
+                </button>
+                <Link
+                  href={`/sprayRate`}
+                  className={standard.next}
+                  onClick={() => dataSetter()}
+                >
+                  Next
+                </Link>{" "}
+              </>
+            ) : (
+              <Link
+                href={`/sprayRate`}
+                className={standard.next}
+                onClick={() => dataSetter()}
+              >
+                Next
+              </Link>
+            )}
           </div>
         </div>
       ) : (
