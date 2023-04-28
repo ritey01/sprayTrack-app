@@ -38,6 +38,7 @@ export default async function sprayListHandler(req, res) {
         const result = await prisma.sprayMix.create({
           data: {
             title: title,
+            is_displayed: true,
             company: {
               connect: { id: companyId },
             },

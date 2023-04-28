@@ -36,7 +36,10 @@ export default async function handler(req, res) {
       const result = await prisma.paddock.create({
         data: {
           name: name,
-          companyId: companyId,
+          is_displayed: true,
+          company: {
+            connect: { id: companyId },
+          },
         },
       });
 
