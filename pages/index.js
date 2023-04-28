@@ -1,7 +1,8 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
-
+import googleButton from "../assets/smallGoogle.png";
+import styles from "../styles/Index.module.css";
 import React from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 
@@ -29,12 +30,16 @@ export default function Home() {
     );
   } else {
     return (
-      <>
+      <div className={styles.googleCon}>
         <p> Not signed in </p>
-        <button onClick={() => signIn("google", { callbackUrl: callbackUrl })}>
-          Sign in
+
+        <button
+          className={styles.googleSignIn}
+          onClick={() => signIn("google", { callbackUrl: callbackUrl })}
+        >
+          <Image alt="Google sign in" src={googleButton} width={125} />
         </button>
-      </>
+      </div>
     );
   }
 }
