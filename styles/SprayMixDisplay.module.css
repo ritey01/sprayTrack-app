@@ -13,14 +13,23 @@
   margin: 0 auto 2rem auto;
   text-align: center;
 }
+
+.sprayMixTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .editBtn {
   background-color: #26bbac;
   text-decoration: none;
   border-radius: 0.5rem;
   color: #ffff;
   font-size: 0.6rem;
-  width: 30%;
-  padding: 0.5rem 0.8rem;
+  width: 18%;
+  padding: 0.5rem;
+  border: none;
 }
 
 .noSprayMessage {
@@ -37,10 +46,19 @@
   font-size: 1rem;
 }
 
+.formDisplay {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem auto;
+  width: 90%;
+}
+
 .formLabel {
   font-size: 1rem;
-  margin-bottom: 1rem;
-  color: #3d3f40;
+  margin-right: 0.5rem;
+  white-space: nowrap;
 }
 
 .formName:focus {
@@ -51,7 +69,6 @@
   background-color: #b44526;
   border-radius: 0.5rem;
   color: #ffff;
-  /* width: 30%; */
   padding: 0.5rem 0.8rem;
   font-size: 0.6rem;
   border: none;
@@ -64,4 +81,24 @@
 .sprayList {
   list-style-type: none;
   padding-left: 0;
+}
+
+.noSprayDisplay {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.editBtnSpray {
+  background-color: #26bbac;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  color: #ffff;
+  font-size: 0.6rem;
+  width: 30%;
+  padding: 0.5rem 0.8rem;
+  border: none;
 }
