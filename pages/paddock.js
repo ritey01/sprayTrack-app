@@ -25,7 +25,7 @@ export async function getServerSideProps(context) {
   //     },
   //   };
   // }
-  console.log("paddock ✅", session);
+
   const companyId = session.user.companyId;
 
   //fetches all the paddocks from Paddock Table
