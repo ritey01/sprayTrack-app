@@ -15,8 +15,8 @@ const AddItemName = ({ labelName, propName, setProp, idName }) => {
             id={idName}
             type="string"
             required
-            value={capitalizeFirstLetter(propName)}
-            onChange={(e) => setProp(e.target.value)}
+            value={propName}
+            onChange={(e) => setProp(capitalizeFirstLetter(e.target.value))}
           />
         </div>
       </div>
