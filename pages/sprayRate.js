@@ -49,7 +49,7 @@ const SprayRate = () => {
             <form>
               <div className={styles.sprayRate}>
                 <label htmlFor="sprayAmount" className={styles.rateLabel}>
-                  Amount
+                  Rate per hectare:
                 </label>
                 <input
                   className={styles.rateInput}
@@ -57,7 +57,6 @@ const SprayRate = () => {
                   id="sprayAmount"
                   type="number"
                   required
-                  placeholder="Rate per hectare"
                   value={sprayAmount}
                   onChange={(e) => setSprayAmount(parseInt(e.target.value))}
                 />
@@ -72,7 +71,9 @@ const SprayRate = () => {
                       background:
                         isActive == index
                           ? "linear-gradient(315deg, #26bbac,#bcfb69 )"
-                          : "",
+                          : "#faf9f6",
+                      color: isActive == index ? "white" : "#3d3f40",
+                      border: isActive == index ? "none" : " 1px solid #26bbac",
                     }}
                     className={styles.rateButtons}
                     onClick={() => handleUnitClick(index)}
