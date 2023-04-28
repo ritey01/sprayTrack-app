@@ -50,6 +50,11 @@ const SprayMixDisplay = () => {
     });
   };
 
+  const titleReset = () => {
+    setSprayMixName("");
+    localStorage.removeItem("title");
+  };
+
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
@@ -63,14 +68,19 @@ const SprayMixDisplay = () => {
             className={`${standard.cardBackground} ${styles.sprayMixDisplay}`}
           >
             {sprayMix.sprays.length == 0 && (
-              <p className={styles.noSprayMessage}>No spray entered</p>
+              <div className={styles.noSprayDisplay}>
+                <p className={styles.noSprayMessage}>No spray entered</p>
+                <Link href={`/makeSpray`} className={styles.editBtnSpray}>
+                  Add another spray
+                </Link>
+              </div>
             )}
 
             {sprayMix.sprays.length > 0 && (
-              <form>
+              <form className={styles.formDisplay}>
                 {" "}
                 <label htmlFor="sprayMixName" className={styles.formLabel}>
-                  Spray Mix Name
+                  Mix Name:
                 </label>
                 {!sprayMixName ? (
                   <input
@@ -82,7 +92,12 @@ const SprayMixDisplay = () => {
                     onChange={(e) => setSprayMixTitle(e.target.value)}
                   />
                 ) : (
-                  <p>{sprayMixName}</p>
+                  <div className={styles.sprayMixTitle}>
+                    <p>{sprayMixName}</p>
+                    <button onClick={titleReset} className={styles.editBtn}>
+                      Edit
+                    </button>
+                  </div>
                 )}
               </form>
             )}
@@ -121,7 +136,7 @@ const SprayMixDisplay = () => {
               })}
             </ul>
             {sprayMix.sprays.length > 0 && (
-              <Link href={`/makeSpray`} className={styles.editBtn}>
+              <Link href={`/makeSpray`} className={styles.editBtnSpray}>
                 Add another spray
               </Link>
             )}
