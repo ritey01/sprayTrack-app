@@ -44,6 +44,9 @@ const AddSpray = () => {
               setProp={setSpray}
               href={`/makeSpray`}
               endpoint={`spray/postSpray`}
+              setMessage={setMessage}
+              setError={setError}
+              setValid={setValid}
             />
           </div>
         </div>
