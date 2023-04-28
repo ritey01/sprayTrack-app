@@ -102,3 +102,14 @@
   padding: 0.5rem 0.8rem;
   border: none;
 }
+
+.doneButton {
+  background-color: #26bbac;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  color: #ffff;
+  font-size: 0.6rem;
+
+  padding: 0.5rem 0.8rem;
+  border: none;
+}

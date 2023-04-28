@@ -18,12 +18,17 @@ const SprayRate = () => {
   const unitList = ["Litres", "Kgs", "mls", "grams"];
 
   const handleSubmit = () => {
-    //Adds rate and unit to sprayMix
     const newSprayMix = { ...sprayMix };
+    //makespray creates first object in array so now the length is 1 for first spray
     const index = newSprayMix.sprays.length - 1;
+    //copy sprays[index] then add rate and unit to it
 
-    newSprayMix.sprays[index].rate = parseInt(sprayAmount);
-    newSprayMix.sprays[index].unit = unit;
+    newSprayMix.sprays[index] = {
+      ...newSprayMix.sprays[index],
+      rate: parseInt(sprayAmount),
+      unit: unit,
+    };
+
     setSprayMix(newSprayMix);
   };
   //Clears the last spray added to the sprayEvent

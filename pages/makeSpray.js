@@ -72,11 +72,21 @@ export default function MakeSpray({ sprayNames, errorCode }) {
 
   const dataSetter = () => {
     const newSprayMix = { ...sprayMix };
-    const index = newSprayMix.sprays.length;
-    newSprayMix.sprays[index] = {
-      sprayId: sprayTypeId,
-      sprayName: sprayName,
-    };
+
+    if (newSprayMix.sprays.length === 0) {
+      //create a new object within sprays list with sprayId and sprayName
+      newSprayMix.sprays[0] = {
+        sprayId: sprayTypeId,
+        sprayName: sprayName,
+      };
+    } else {
+      const index = newSprayMix.sprays.length;
+      newSprayMix.sprays[index] = {
+        sprayId: sprayTypeId,
+        sprayName: sprayName,
+      };
+    }
+
     //sets global state for sprayMix
     setSprayMix(newSprayMix);
   };
@@ -98,7 +108,7 @@ export default function MakeSpray({ sprayNames, errorCode }) {
       console.log("error", error);
     }
   };
-
+  console.log("😈", sprayMix);
   return (
     <>
       {session ? (
