@@ -15,6 +15,7 @@ export default async function sprayEventHandler(req, res) {
           data: {
             date: sprayEvent.date,
             comment: sprayEvent.comment,
+            createdBy: sprayEvent.createdBy,
             company: {
               connect: { id: companyId },
             },

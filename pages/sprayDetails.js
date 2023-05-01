@@ -27,7 +27,11 @@ const SprayDetails = () => {
   };
 
   const submitSpray = async (sprayEvent) => {
-    const body = { ...sprayEvent, comment: comment };
+    const body = {
+      ...sprayEvent,
+      comment: comment,
+      createdBy: session.user.name,
+    };
     const result = await fetch(`/api/spray/postSprayEvent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -96,6 +100,7 @@ const SprayDetails = () => {
     }
   };
 
+  console.log("😈", session.user.name);
   return (
     <>
       {session ? (
