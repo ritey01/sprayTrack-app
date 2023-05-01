@@ -75,3 +75,26 @@
 .sprayList {
   padding: 0;
 }
+
+.commentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: 1.5rem auto;
+  padding: 1rem;
+}
+
+.commentInput {
+  width: 100%;
+  margin: 0.5rem auto;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #26bbac;
+  background-color: #ffff;
+}
+
+.commentInputValue {
+  width: 90%;
+  margin: 1rem;
+}

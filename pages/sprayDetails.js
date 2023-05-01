@@ -8,6 +8,7 @@ import SprayContext from "../context/sprayEvent";
 import AccessDenied from "../components/accessDenied";
 
 const SprayDetails = () => {
+  const [comment, setComment] = useState("");
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [emptyFields, setEmptyFields] = useState([]);
@@ -26,12 +27,17 @@ const SprayDetails = () => {
   };
 
   const submitSpray = async (sprayEvent) => {
-    const body = { sprayEvent };
+    const body = { ...sprayEvent, comment: comment };
     const result = await fetch(`/api/spray/postSprayEvent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+    if (result.status === 201) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const handleClick = (sprayEvent) => {
@@ -76,6 +82,15 @@ const SprayDetails = () => {
             title: "",
             sprays: [{ sprayId: null, sprayName: "", rate: 0, unit: "" }],
           },
+        });
+        setComment("");
+      } else {
+        Swal.fire({
+          text: "Error saving spray event",
+          icon: "error",
+          confirmButtonText: "Ok",
+          confirmButtonColor: "rgb(6, 214, 160)",
+          confirmButtonAriaLabel: "Ok",
         });
       }
     }
@@ -143,6 +158,22 @@ const SprayDetails = () => {
               </ul>
             )}
           </div>
+
+          <form>
+            <div className={styles.commentContainer}>
+              <label htmlFor="comment">Comments:</label>
+              <div className={styles.commentInput}>
+                <input
+                  className={styles.commentInputValue}
+                  id="commentValue"
+                  type="string"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
+              </div>
+            </div>
+          </form>
+
           <div>
             {emptyFields.length > 0
               ? console.log("empty fields", emptyFields)

@@ -3,7 +3,8 @@ import { authOptions } from "../auth/[...nextauth]";
 import prisma from "../../../lib/prisma";
 
 export default async function sprayEventHandler(req, res) {
-  const { sprayEvent } = req.body;
+  const sprayEvent = req.body;
+  console.log("✅", sprayEvent);
   const session = await getServerSession(req, res, authOptions);
   const companyId = session.user.companyId;
 
@@ -13,6 +14,7 @@ export default async function sprayEventHandler(req, res) {
         const result = await prisma.sprayEvent.create({
           data: {
             date: sprayEvent.date,
+            comment: sprayEvent.comment,
             company: {
               connect: { id: companyId },
             },
@@ -29,10 +31,11 @@ export default async function sprayEventHandler(req, res) {
             },
           },
         });
-
-        res.status(201).json(result);
+        if (result) {
+          res.status(201).json(result);
+        }
       } catch (err) {
-        console.log(err);
+        res.status(500).json({ error: "Failed to change save data" });
       }
     } else {
       throw new Error(
