@@ -1,5 +1,5 @@
 const dateCreate = () => {
-  return new Intl.DateTimeFormat("en-CA", { dateStyle: "short" }).format(
+  return new Intl.DateTimeFormat(["ban", "id"], { dateStyle: "short" }).format(
     new Date()
   );
 };
