@@ -60,7 +60,7 @@ const SprayMixDisplay = () => {
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-  console.log("✅ spraymixes", sprayMix);
+
   return (
     <>
       {session ? (

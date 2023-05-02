@@ -50,7 +50,6 @@ export const authOptions = {
         user.companyId = companyId.companyId;
       }
 
-      console.log("nextAuth ✅", session);
       return {
         session,
         user,

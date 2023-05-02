@@ -100,7 +100,6 @@ const SprayDetails = () => {
     }
   };
 
-  console.log("😈", session.user.name);
   return (
     <>
       {session ? (

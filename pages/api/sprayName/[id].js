@@ -16,7 +16,7 @@ export default async function handle(req, res) {
             sprayId: sprayNameId,
           },
         });
-        console.log("✅", count);
+
         //If sprayName is used in sprayMixSpray (for use in SprayMix), change is_displayed in the sprayName table to false
         if (count > 0) {
           try {

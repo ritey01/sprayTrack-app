@@ -108,7 +108,7 @@ export default function MakeSpray({ sprayNames, errorCode }) {
       console.log("error", error);
     }
   };
-  console.log("😈", sprayMix);
+
   return (
     <>
       {session ? (
