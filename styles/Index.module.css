@@ -2,6 +2,10 @@
   border: none;
 }
 
+.googleSignIn:active {
+  transform: scale(1.2);
+}
+
 .googleCon {
   display: flex;
   flex-direction: column;

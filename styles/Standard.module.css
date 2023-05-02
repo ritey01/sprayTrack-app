@@ -20,6 +20,12 @@
   font-size: 0.6rem;
   white-space: nowrap;
 }
+.addingButton:focus {
+  outline: none;
+  /* make bigger when clicked */
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
+}
 
 .addButtonDisplay {
   text-align: center;
@@ -40,6 +46,7 @@
   text-align: center;
   margin: 2rem auto;
 }
+
 .next {
   text-decoration: none;
   background-color: #26bbac;
@@ -47,6 +54,10 @@
   padding: 0.6rem 1.1rem 0.6rem 1.1rem;
   border-radius: 0.5rem;
   font-size: 0.6rem;
+}
+
+.next:active {
+  transform: scale(1.2);
 }
 .disabledNext {
   text-decoration: none;
@@ -56,6 +67,10 @@
   border-radius: 0.5rem;
   border: none;
   font-size: 0.6rem;
+}
+
+.disabledNext:active {
+  transform: scale(1.2);
 }
 
 .addDataButton {
@@ -68,6 +83,10 @@
   text-decoration: none;
 }
 
+.addDataButton:active {
+  transform: scale(1.2);
+}
+
 .deleteButton {
   text-decoration: none;
   background-color: #b44526;
@@ -76,6 +95,10 @@
   border-radius: 0.5rem;
   border: none;
   font-size: 0.6rem;
+}
+
+.deleteButton:active {
+  transform: scale(1.2);
 }
 
 .messageDisplay {

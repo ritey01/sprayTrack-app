@@ -9,6 +9,10 @@
   text-decoration: none;
 }
 
+.addItemButton:active {
+  transform: scale(1.2);
+}
+
 .error {
   color: red;
   font-size: 1.2rem;
