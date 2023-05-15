@@ -37,6 +37,7 @@ const SprayDetails = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+
     if (result.status === 201) {
       return true;
     } else {
@@ -44,7 +45,7 @@ const SprayDetails = () => {
     }
   };
 
-  const handleClick = (sprayEvent) => {
+  const handleClick = async (sprayEvent) => {
     validateState(sprayEvent);
     if (emptyFields.length) {
       let message;
@@ -65,7 +66,8 @@ const SprayDetails = () => {
         confirmButtonAriaLabel: "Ok",
       });
     } else {
-      const submit = submitSpray(sprayEvent);
+      const submit = await submitSpray(sprayEvent);
+      console.log(submit);
       if (submit) {
         Swal.fire({
           text: "Spray event saved",

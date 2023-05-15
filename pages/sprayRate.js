@@ -61,9 +61,10 @@ const SprayRate = () => {
                   aria-label="Amount"
                   id="sprayAmount"
                   type="number"
+                  step="any"
                   required
                   value={sprayAmount}
-                  onChange={(e) => setSprayAmount(parseInt(e.target.value))}
+                  onChange={(e) => setSprayAmount(parseFloat(e.target.value))}
                 />
               </div>
             </form>
