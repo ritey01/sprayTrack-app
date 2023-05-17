@@ -64,7 +64,7 @@ enum Unit{
 
 model Spray {
   id           Int         @id @default(autoincrement())
-  rate         Int
+  rate         Float
   unit         Unit
   is_displayed Boolean   @default(true)
   sprayMixes SprayMixSpray[] 
@@ -100,7 +100,7 @@ model SprayEvent {
   createdAt     DateTime  @default(now())
   company   Company?  @relation(fields: [companyId], references: [id])
   companyId  Int?
-  comment     String
+  comment     String?
   
   
  @@index([companyId])

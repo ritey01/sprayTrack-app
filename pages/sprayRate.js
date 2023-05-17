@@ -25,7 +25,7 @@ const SprayRate = () => {
 
     newSprayMix.sprays[index] = {
       ...newSprayMix.sprays[index],
-      rate: parseInt(sprayAmount),
+      rate: sprayAmount,
       unit: unit,
     };
 

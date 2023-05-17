@@ -32,6 +32,7 @@ const SprayDetails = () => {
       comment: comment,
       createdBy: session.user.name,
     };
+    console.log(body);
     const result = await fetch(`/api/spray/postSprayEvent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -67,7 +68,7 @@ const SprayDetails = () => {
       });
     } else {
       const submit = await submitSpray(sprayEvent);
-      console.log(submit);
+
       if (submit) {
         Swal.fire({
           text: "Spray event saved",
