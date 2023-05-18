@@ -12,12 +12,14 @@ export function SprayProvider({ children }) {
     sprayMix: {
       sprayMixId: null,
       title: "",
-      sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
+      sprays: [],
+      // sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
     },
   };
 
   const mixInitial = {
     title: "",
+    sprayMixId: null,
     sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
   };
 
