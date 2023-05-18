@@ -9,8 +9,9 @@ import AccessDenied from "../components/accessDenied";
 
 const SprayDetails = () => {
   const [comment, setComment] = useState("");
-  const { event } = useContext(SprayContext);
+  const { event, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
+  const [sprayMixId, setSprayMixId] = mix;
   const [emptyFields, setEmptyFields] = useState([]);
   const { data: session } = useSession();
 
@@ -31,8 +32,9 @@ const SprayDetails = () => {
       ...sprayEvent,
       comment: comment,
       createdBy: session.user.name,
+      sprayMixId: sprayMixId,
     };
-    console.log(body);
+
     const result = await fetch(`/api/spray/postSprayEvent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -40,6 +42,11 @@ const SprayDetails = () => {
     });
 
     if (result.status === 201) {
+      setSprayMixId({
+        title: "",
+        sprayMixId: null,
+        sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
+      });
       return true;
     } else {
       return false;
