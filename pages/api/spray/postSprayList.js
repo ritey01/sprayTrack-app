@@ -60,7 +60,7 @@ export default async function sprayListHandler(req, res) {
           },
         });
 
-        res.status(201).json(result);
+        return res.status(201).json(result);
       } catch (err) {
         console.log(err);
       }
