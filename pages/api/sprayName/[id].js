@@ -4,7 +4,7 @@ import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handle(req, res) {
   const sprayNameId = parseInt(req.query.id);
-  console.log("Im here");
+
   const session = await getServerSession(req, res, authOptions);
 
   if (session) {
