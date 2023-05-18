@@ -50,6 +50,12 @@ const SprayMixDisplay = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+    const data = await result.json();
+
+    // Set spraymix id for sprayevent to be saved
+    newSprayMix.sprayMixId = data.id;
+
+    setSprayMix(newSprayMix);
   };
 
   const titleReset = () => {
@@ -70,7 +76,7 @@ const SprayMixDisplay = () => {
           <div
             className={`${standard.cardBackground} ${styles.sprayMixDisplay}`}
           >
-            {sprayMix.sprays[0].sprayName !== "" && (
+            {sprayMix.sprays.length !== 0 && (
               <form className={styles.formDisplay}>
                 {" "}
                 <label htmlFor="sprayMixName" className={styles.formLabel}>
@@ -100,7 +106,7 @@ const SprayMixDisplay = () => {
             )}
 
             {/* checks if the spray in the spray list is the intial from context/sprayEvent */}
-            {sprayMix.sprays[0].sprayId !== null ? (
+            {sprayMix.sprays.length !== 0 ? (
               <>
                 <ul className={styles.sprayList}>
                   {sprayMix.sprays.map((spray, index) => {
