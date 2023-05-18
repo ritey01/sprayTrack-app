@@ -15,6 +15,7 @@ const SprayDetails = () => {
   const [emptyFields, setEmptyFields] = useState([]);
   const { data: session } = useSession();
 
+  //console.log("✅", sprayEvent);
   //Checks if all fields are filled in
   const validateState = (state) => {
     setEmptyFields([]);
@@ -28,6 +29,7 @@ const SprayDetails = () => {
   };
 
   const submitSpray = async (sprayEvent) => {
+    //this also needs to add the list of spraymixes from state to the sprayevent
     const body = {
       ...sprayEvent,
       comment: comment,
@@ -109,6 +111,7 @@ const SprayDetails = () => {
       }
     }
   };
+  console.log("🚀", sprayMixId);
 
   return (
     <>
@@ -153,21 +156,27 @@ const SprayDetails = () => {
 
             {/* Checks if a spray is entered else returns a message */}
 
-            {sprayEvent.sprayMix.sprays.length == 0 ? (
+            {sprayMixId.length == 0 ? (
               <p>No spray entered</p>
             ) : (
               <ul className={styles.sprayList}>
-                {sprayEvent.sprayMix.sprays.map((spray) => {
-                  return (
-                    <li className={styles.sprayType} key={spray.sprayId}>
-                      <p className={styles.sprayName}>{spray.sprayName}</p>
+                {sprayMixId.map((mix) => {
+                  return mix.sprays.map((spray) => {
+                    console.log("✅", spray);
+                    return (
+                      <li className={styles.sprayType} key={spray.sprayId}>
+                        <p>{mix.title}</p>
+                        <p className={styles.sprayName}>
+                          {spray.spray.sprayName.name}
+                        </p>
 
-                      <p>
-                        {spray.rate} {spray.unit} per hectares
-                      </p>
-                      <div className={styles.line}></div>
-                    </li>
-                  );
+                        <p>
+                          {spray.spray.rate} {spray.spray.unit} per hectares
+                        </p>
+                        <div className={styles.line}></div>
+                      </li>
+                    );
+                  });
                 })}
               </ul>
             )}

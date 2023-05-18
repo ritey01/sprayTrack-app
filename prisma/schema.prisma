@@ -48,7 +48,7 @@ model SprayMix {
   title        String
   is_displayed Boolean     @default(true)
   sprays     SprayMixSpray[]
-  sprayEvent   SprayEvent[]
+  sprayEvent    SprayMixSprayEvent[]
    company   Company?  @relation(fields: [companyId], references: [id])
   companyId  Int?
 
@@ -87,6 +87,17 @@ model SprayMixSpray {
   @@index([sprayMixId])
 }
 
+model SprayMixSprayEvent {
+  id           Int         @id @default(autoincrement())
+  sprayEvent          SprayEvent         @relation(fields: [sprayEventId], references: [id])
+  sprayEventId      Int
+  sprayMix       SprayMix      @relation(fields: [sprayMixId], references: [id])
+  sprayMixId   Int
+
+  @@index([sprayEventId])
+  @@index([sprayMixId])
+}
+
 model SprayEvent {
    id            Int      @id @default(autoincrement())
   date          String
@@ -94,8 +105,8 @@ model SprayEvent {
   paddockId     Int
   crop          Crops     @relation(fields: [cropId], references: [id])
   cropId        Int
-  sprayMix     SprayMix @relation(fields: [sprayMixId], references: [id])
-  sprayMixId   Int
+  sprayMix      SprayMixSprayEvent[]
+ 
   createdBy     String?
   createdAt     DateTime  @default(now())
   company   Company?  @relation(fields: [companyId], references: [id])
@@ -106,7 +117,7 @@ model SprayEvent {
  @@index([companyId])
   @@index([paddockId])
   @@index([cropId])
-  @@index([sprayMixId])
+  
 }
 
 model User {

@@ -103,6 +103,15 @@ const Spray = ({ sprayMix, errorCode }) => {
     setIsActive(index);
   };
 
+  const setSprayData = async () => {
+    //copy sprayMixState array and add selected sprayMix to the array
+
+    const newSprayState = [...sprayMixState];
+    console.log(newSprayState);
+    newSprayState.push(spray);
+    setSprayMixState(newSprayState);
+  };
+
   return (
     <>
       {session ? (
@@ -195,21 +204,17 @@ const Spray = ({ sprayMix, errorCode }) => {
             )}
             {isActive >= 0 ? (
               <Link
-                onClick={() => {
-                  setSprayEvent({
-                    ...sprayEvent,
-                    sprayMix: {
-                      title: spray.title,
-                      sprayMixId: spray.id,
-                      sprays: spray.sprays.map((spray) => ({
-                        sprayId: spray.id,
-                        sprayName: spray.spray.sprayName.name,
-                        rate: spray.spray.rate,
-                        unit: spray.spray.unit,
-                      })),
-                    },
-                  });
-                }}
+                onClick={
+                  () => {
+                    setSprayData();
+                  }
+                  // setSprayData()
+                  // setSprayEvent((sprayEvent) => {
+                  //   const newSprayMix = [...sprayEvent.sprayMix];
+                  //   newSprayMix.push(spray.id);
+                  //   return { ...sprayEvent, sprayMix: newSprayMix };
+                  // });
+                }
                 href={`/sprayDetails`}
                 className={standard.next}
               >

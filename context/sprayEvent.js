@@ -9,19 +9,22 @@ export function SprayProvider({ children }) {
     cropId: null,
     crop: "",
     date: "",
-    sprayMix: {
-      sprayMixId: null,
-      title: "",
-      sprays: [],
-      // sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
-    },
+    sprayMix: [],
+    // sprayMix: {
+    //   sprayMixId: null,
+    //   title: "",
+    //   sprays: [],
+    // sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
+    //},
   };
 
-  const mixInitial = {
-    title: "",
-    sprayMixId: null,
-    sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
-  };
+  const mixInitial = [
+    // {
+    //   title: "",
+    //   sprayMixId: null,
+    //   sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
+    // },
+  ];
 
   const companyIdInit = null;
   const [sprayEvent, setSprayEvent] = useState(initialState);
