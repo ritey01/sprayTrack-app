@@ -1,12 +1,9 @@
 ## todo
 - remove cypress
-- edit for sprayMixDisplayTitle
-- back button on add crop with nothing entered
+-fix delete on spray concoction display
 - Input validation with Joi server and client 
 - Parametized query with password and email storage
-- add a delete to sprayMix display
 - date display
-- @@index database
 - clean out the users details in the database where the user has authenicated and then not been authorised
 - -Add admin https://authjs.dev/guides/basics/role-based-access-control
 - Implement server-side validation of user input to prevent XSS attacks, you can follow these steps:
@@ -28,10 +25,8 @@ Use security headers: You can use security headers like X-XSS-Protection, X-Cont
 ## Problems
 - When selecting a "created" spraylist how that is represented in sprayEvent state versus the table. Currently state is sprayList:[] versus table SprayListID
 - When creating a spraymix can proceed without selecting a spray
-- Spray Mix Name not persisting when first entered and then go back to add more spray
 
-- fix no border around sprays on spray page when not active
-- add message display makeSpray.js when nothing selected
+
 
 ## current status
-
+- not saving correctly into database with sprayEvent-id with sprayMix that is csuing issue I think.  So i added this in the return from the api and then set it on the context for the mix and changed the intitial state.  Now the id is going onto the state object but I cant reset this once it is submitted so now has all of the sprays on it.
