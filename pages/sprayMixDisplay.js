@@ -17,6 +17,8 @@ const SprayMixDisplay = () => {
   const [error, setError] = useState(false);
   const { data: session } = useSession();
 
+  console.log("😈", sprayMix);
+
   const deleteSpray = (index) => {
     //removes the selected spray from the array
     const newSprayMix = { ...sprayMix };
@@ -39,6 +41,8 @@ const SprayMixDisplay = () => {
     const newSprayMix = { ...sprayMix };
     newSprayMix.title = sprayMixName;
     const newSprayEvent = { ...sprayEvent };
+    //Add newSprayMix to sprayEvent.sprayMix array
+
     newSprayEvent.sprayMix = newSprayMix;
     setSprayEvent(newSprayEvent);
     localStorage.removeItem("title");
@@ -105,7 +109,7 @@ const SprayMixDisplay = () => {
               </form>
             )}
 
-            {/* checks if the spray in the spray list is the intial from context/sprayEvent */}
+            {/* checks if the spray in the spray list  */}
             {sprayMix.sprays.length !== 0 ? (
               <>
                 <ul className={styles.sprayList}>

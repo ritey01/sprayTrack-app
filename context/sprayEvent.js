@@ -18,13 +18,14 @@ export function SprayProvider({ children }) {
     //},
   };
 
-  const mixInitial = [
+  const mixInitial = {
+    sprays: [],
     // {
     //   title: "",
     //   sprayMixId: null,
     //   sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
     // },
-  ];
+  };
 
   const companyIdInit = null;
   const [sprayEvent, setSprayEvent] = useState(initialState);

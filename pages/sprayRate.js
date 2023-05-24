@@ -16,9 +16,10 @@ const SprayRate = () => {
   const { data: session } = useSession();
 
   const unitList = ["Litres", "Kgs", "mls", "grams"];
-
+  console.log("from rate", sprayMix);
   const handleSubmit = () => {
     const newSprayMix = { ...sprayMix };
+
     //makespray creates first object in array so now the length is 1 for first spray
     const index = newSprayMix.sprays.length - 1;
     //copy sprays[index] then add rate and unit to it

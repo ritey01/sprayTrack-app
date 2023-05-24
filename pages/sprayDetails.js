@@ -12,6 +12,7 @@ const SprayDetails = () => {
   const { event, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
   const [sprayMixId, setSprayMixId] = mix;
+  const [sprayMixesList, setSprayMixesList] = useState([]);
   const [emptyFields, setEmptyFields] = useState([]);
   const { data: session } = useSession();
 
@@ -34,7 +35,9 @@ const SprayDetails = () => {
       ...sprayEvent,
       comment: comment,
       createdBy: session.user.name,
-      sprayMixId: sprayMixId,
+      sprayMix: sprayMixId,
+
+      // sprayMixId: sprayMixId,
     };
 
     const result = await fetch(`/api/spray/postSprayEvent`, {
@@ -155,7 +158,7 @@ const SprayDetails = () => {
             </div>
 
             {/* Checks if a spray is entered else returns a message */}
-
+            {/* need to add button here next, then sort adding the sprayMix to the sprayMixesList state array */}
             {sprayMixId.length == 0 ? (
               <p>No spray entered</p>
             ) : (
