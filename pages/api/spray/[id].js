@@ -11,10 +11,17 @@ export default async function handle(req, res) {
       //Checks if sprayMix being used in sprayEvent
       try {
         const count = await prisma.sprayEvent.count({
+          //check id in sprayevent.sprayMix Array
           where: {
-            sprayMixId: sprayId,
+            sprayMix: {
+              some: {
+                id: sprayId,
+              },
+            },
           },
         });
+
+        console.log(count, sprayId);
 
         //If sprayMix is used in sprayEvent, change is_displayed in the sprayMix table to false
         if (count > 0) {

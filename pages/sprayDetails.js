@@ -38,6 +38,12 @@ const SprayDetails = () => {
     });
   };
 
+  const resetMultiMix = () => {
+    setSprayMixMulti({
+      sprays: [],
+    });
+  };
+
   const submitSpray = async (sprayEvent) => {
     //this also needs to add the list of spraymixes from state to the sprayevent
     const body = {
@@ -53,17 +59,14 @@ const SprayDetails = () => {
     });
 
     if (result.status === 201) {
-      setSprayMixMulti({
-        // title: "",
-        // sprayMixId: null,
-        // sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
-      });
+      resetMultiMix();
       return true;
     } else {
       return false;
     }
   };
 
+  //Controls routing with the editing from this page so after edit user can come back here
   const handleEdit = (endpoint) => {
     router.push({
       pathname: endpoint,
@@ -98,13 +101,7 @@ const SprayDetails = () => {
 
       if (submit) {
         setSuccess(true);
-        // Swal.fire({
-        //   text: "Spray event saved",
-        //   icon: "success",
-        //   confirmButtonText: "Ok",
-        //   confirmButtonColor: "rgb(6, 214, 160)",
-        //   confirmButtonAriaLabel: "Ok",
-        // });
+
         //resets sprayEvent after submit
         setSprayEvent({
           paddockId: null,
@@ -137,7 +134,11 @@ const SprayDetails = () => {
       <>
         <div>
           <h1>Spray event saved</h1>
-          <Link href={`/paddock`} className={standard.next}>
+          <Link
+            href={`/paddock`}
+            className={standard.next}
+            onClick={() => resetMultiMix()}
+          >
             Start again
           </Link>
         </div>
