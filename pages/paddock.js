@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import Error from "./_error";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"; // need to change this to Prisma.PrismaClientKnownRequestError tp prevent future errors
 import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
@@ -63,7 +64,12 @@ export async function getServerSideProps(context) {
 }
 
 export default function Paddock({ paddocks, errorCode }) {
-  const { event } = useContext(SprayContext);
+  const router = useRouter();
+  const { event, oneMix, mix } = useContext(SprayContext);
+  //Creates one spray creation with multiple sprays
+  const [sprayMix, setSprayMix] = oneMix;
+  //Creates multiple spray creations with multiple sprays
+  const [multiMix, setMultiMix] = mix;
   const [sprayEvent, setSprayEvent] = event;
   const [locationId, setLocationId] = useState();
   const [name, setName] = useState("");
@@ -71,17 +77,26 @@ export default function Paddock({ paddocks, errorCode }) {
   const [message, setMessage] = useState(false);
   const { data: session } = useSession();
 
-  // if (!session) {
-  //   return {
-  //     redirect: {
-  //       destination: "/register",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
+  //wipe data from the sprayEvent context incase user came from start record link
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
+  }
+
+  function dataSetter() {
+    setSprayEvent({
+      ...sprayEvent,
+      paddockId: locationId,
+      paddock: name,
+    });
+    //if user has come from sprayDetails page then push back to that page else push to crop page
+    const lastLocation = router.query.from;
+    console.log("lastLocation", lastLocation);
+    if (lastLocation) {
+      router.push(lastLocation);
+    } else {
+      router.push("/crop");
+    }
   }
 
   //Deletes a paddock from the Paddock Table if not recorded sprayEvent else changes is_displayed
@@ -128,7 +143,16 @@ export default function Paddock({ paddocks, errorCode }) {
                   Delete
                 </button>
 
-                <Link
+                <button
+                  href={``}
+                  className={standard.next}
+                  onClick={() => {
+                    dataSetter();
+                  }}
+                >
+                  Next
+                </button>
+                {/* <Link
                   onClick={() => {
                     setSprayEvent({
                       ...sprayEvent,
@@ -140,7 +164,7 @@ export default function Paddock({ paddocks, errorCode }) {
                   className={standard.next}
                 >
                   Add
-                </Link>
+                </Link> */}
               </>
             ) : (
               <div className={standard.messageDisplay}>

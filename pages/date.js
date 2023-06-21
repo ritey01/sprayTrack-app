@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import styles from "../styles/Date.module.css";
 import standard from "../styles/Standard.module.css";
@@ -8,6 +9,7 @@ import SprayContext from "../context/sprayEvent";
 import AccessDenied from "../components/accessDenied";
 
 export default function DateTime() {
+  const router = useRouter();
   const [isActive, setIsActive] = useState();
   const [time, setTime] = useState(dateCreate());
   const { event } = useContext(SprayContext);
@@ -17,6 +19,17 @@ export default function DateTime() {
   const handleDateClick = () => {
     setTime(dateCreate());
   };
+
+  function dataSetter() {
+    setSprayEvent({ ...sprayEvent, date: time });
+    //if user has come from sprayDetails page then push back to that page else push to crop page
+    const lastLocation = router.query.from;
+    if (lastLocation == "/sprayDetails") {
+      router.push(lastLocation);
+    } else {
+      router.push("/spray");
+    }
+  }
 
   return (
     <>
@@ -75,15 +88,18 @@ export default function DateTime() {
             <Link href={`/crop`} className={standard.next}>
               Back
             </Link>
-            <Link
-              onClick={() => {
-                setSprayEvent({ ...sprayEvent, date: time });
-              }}
-              href={`/spray`}
-              className={standard.next}
-            >
+            {/* <Link onClick={() => {}} href={`/spray`} className={standard.next}>
               Add
-            </Link>
+            </Link> */}
+            <button
+              href={``}
+              className={standard.next}
+              onClick={() => {
+                dataSetter();
+              }}
+            >
+              Next
+            </button>
           </div>
         </div>
       ) : (

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import Error from "./_error";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
@@ -51,6 +52,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Crops({ crops, errorCode }) {
+  const router = useRouter();
   const [cropId, setCropId] = useState("");
   const [cropList, setCropList] = useState(crops);
   const [name, setName] = useState("");
@@ -79,6 +81,21 @@ export default function Crops({ crops, errorCode }) {
     }
   };
 
+  function dataSetter() {
+    setSprayEvent({
+      ...sprayEvent,
+      cropId: cropId,
+      crop: name,
+    });
+    //if user has come from sprayDetails page then push back to that page else push to crop page
+    const lastLocation = router.query.from;
+    if (lastLocation === "/sprayDetails") {
+      router.push(lastLocation);
+    } else {
+      router.push("/date");
+    }
+  }
+
   return (
     <>
       {session ? (
@@ -106,20 +123,22 @@ export default function Crops({ crops, errorCode }) {
                 >
                   Delete
                 </button>
-
-                <Link
+                <button
+                  href={``}
+                  className={standard.next}
                   onClick={() => {
-                    setSprayEvent({
-                      ...sprayEvent,
-                      cropId: cropId,
-                      crop: name,
-                    });
+                    dataSetter();
                   }}
+                >
+                  Next
+                </button>
+                {/* <Link
+                  onClick={() => {}}
                   href={`/date`}
                   className={standard.next}
                 >
                   Next
-                </Link>
+                </Link> */}
               </>
             ) : (
               <>
