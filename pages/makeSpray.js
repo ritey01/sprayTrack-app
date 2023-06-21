@@ -56,8 +56,8 @@ export default function MakeSpray({ sprayNames, errorCode }) {
   const [isActive, setIsActive] = useState();
   const [sprayName, setSprayName] = useState("");
   const [sprayList, setSprayList] = useState(sprayNames);
-  const { mix } = useContext(SprayContext);
-  const [sprayMix, setSprayMix] = mix;
+  const { oneMix } = useContext(SprayContext);
+  const [sprayMix, setSprayMix] = oneMix;
   const [message, setMessage] = useState(false);
   const { data: session } = useSession();
 
@@ -81,12 +81,11 @@ export default function MakeSpray({ sprayNames, errorCode }) {
       //create a new object within a spray array containing the sprayTypeId and sprayName
       newSprayMix.sprays[0] = {
         sprayId: sprayTypeId,
-        sprayName: sprayName,
+        //set sprays[0].spray.sprayName.name to the sprayName
+        spray: { sprayName: { name: sprayName } },
+
+        // sprayName: { name: sprayName },
       };
-      // newSprayMix.sprays[0] = {
-      //   sprayId: sprayTypeId,
-      //   sprayName: sprayName,
-      // };
     } else {
       const index = newSprayMix.sprays.length;
 
@@ -94,7 +93,7 @@ export default function MakeSpray({ sprayNames, errorCode }) {
       // const index = newSprayMix[newSprayMix.length - 1].sprays.length;
       newSprayMix.sprays[index] = {
         sprayId: sprayTypeId,
-        sprayName: sprayName,
+        spray: { sprayName: { name: sprayName } },
       };
     }
 

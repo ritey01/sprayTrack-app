@@ -6,7 +6,7 @@ export default async function sprayListHandler(req, res) {
   const { title, sprays } = req.body;
   const session = await getServerSession(req, res, authOptions);
   const companyId = session.user.companyId;
-
+  console.log("srpayListHandler", req.body);
   if (session) {
     //Checks if sprayMix exists
     const sprayExists = await prisma.sprayMix.findFirst({
@@ -46,8 +46,8 @@ export default async function sprayListHandler(req, res) {
               create: sprays.map((spray) => ({
                 spray: {
                   create: {
-                    rate: spray.rate,
-                    unit: spray.unit,
+                    rate: spray.spray.rate,
+                    unit: spray.spray.unit,
                     sprayName: {
                       connect: {
                         id: spray.sprayId,

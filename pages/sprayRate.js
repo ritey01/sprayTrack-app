@@ -10,13 +10,13 @@ const SprayRate = () => {
   const [sprayAmount, setSprayAmount] = useState("");
   const [unit, setUnit] = useState("");
   const [isActive, setIsActive] = useState();
-  const { event, mix } = useContext(SprayContext);
-  const [sprayMix, setSprayMix] = mix;
+  const { event, oneMix } = useContext(SprayContext);
+  const [sprayMix, setSprayMix] = oneMix;
   const [sprayEvent, setSprayEvent] = event;
   const { data: session } = useSession();
 
   const unitList = ["Litres", "Kgs", "mls", "grams"];
-  console.log("from rate", sprayMix);
+
   const handleSubmit = () => {
     const newSprayMix = { ...sprayMix };
 
@@ -26,17 +26,22 @@ const SprayRate = () => {
 
     newSprayMix.sprays[index] = {
       ...newSprayMix.sprays[index],
-      rate: sprayAmount,
-      unit: unit,
+      //need to copy what is already in sprays[index].spray and add rate and unit to it
+
+      spray: {
+        ...newSprayMix.sprays[index].spray,
+        rate: sprayAmount,
+        unit: unit,
+      },
     };
 
     setSprayMix(newSprayMix);
   };
-  //Clears the last spray added to the sprayEvent
+  //Clears the last spray added to the sprayMix
   const clearSpray = () => {
-    const newSprayEvent = { ...sprayEvent };
-    newSprayEvent.sprayMix.sprays.pop();
-    setSprayEvent(newSprayEvent);
+    const editSprayMix = { ...sprayMix };
+    editSprayMix.sprays.pop();
+    setSprayMix(editSprayMix);
   };
 
   //Sets the unit value for the spray amount
@@ -64,6 +69,7 @@ const SprayRate = () => {
                   type="number"
                   step="any"
                   required
+                  min="0"
                   value={sprayAmount}
                   onChange={(e) => setSprayAmount(parseFloat(e.target.value))}
                 />
@@ -96,7 +102,7 @@ const SprayRate = () => {
             <Link
               href={`/makeSpray`}
               className={standard.next}
-              // clears last spray added to the sprayEvent
+              // clears last spray added to the sprayMix
               onClick={() => clearSpray()}
             >
               Back

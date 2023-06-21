@@ -11,13 +11,16 @@ const SprayMixDisplay = () => {
     (typeof window !== "undefined" && localStorage.getItem("title")) || ""
   );
   const [name, setName] = useState("");
-  const { event, mix } = useContext(SprayContext);
+  const { event, oneMix, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
-  const [sprayMix, setSprayMix] = mix;
+
+  //Creates one spray creation with multiple sprays
+  const [sprayMix, setSprayMix] = oneMix;
+
+  //Creates multiple spray creations with multiple sprays
+  const [multiMix, setMultiMix] = mix;
   const [error, setError] = useState(false);
   const { data: session } = useSession();
-
-  console.log("😈", sprayMix);
 
   const deleteSpray = (index) => {
     //removes the selected spray from the array
@@ -34,17 +37,18 @@ const SprayMixDisplay = () => {
   const handleSprayMixTitle = () => {
     //saves the spray mix name for display on the card between adding sprays
     setSprayMixName(name);
-    localStorage.setItem("title", sprayMixName);
+    localStorage.setItem("title", name);
   };
 
   const addSprayMix = async () => {
-    const newSprayMix = { ...sprayMix };
-    newSprayMix.title = sprayMixName;
-    const newSprayEvent = { ...sprayEvent };
-    //Add newSprayMix to sprayEvent.sprayMix array
+    //Copy sprayMix and add sprayMixName to sprayMix.sprays array
 
-    newSprayEvent.sprayMix = newSprayMix;
-    setSprayEvent(newSprayEvent);
+    const newSprayMix = {
+      ...sprayMix,
+      title: sprayMixName,
+    };
+
+    //Resets storage for title to empty string
     localStorage.removeItem("title");
 
     //saves the created spraymix for later use
@@ -57,9 +61,18 @@ const SprayMixDisplay = () => {
     const data = await result.json();
 
     // Set spraymix id for sprayevent to be saved
-    newSprayMix.sprayMixId = data.id;
+    newSprayMix.id = data.id;
 
     setSprayMix(newSprayMix);
+    //Add single sprayEvent to the multiMix to allow multiple single sprayMixesto be added
+    const newMultiEvent = { ...multiMix };
+
+    //Add sprayMix to multiMix
+    newMultiEvent.sprays.push(newSprayMix);
+    setMultiMix(newMultiEvent);
+
+    //Reset sprayMix to intial state from context
+    setSprayMix({ title: "", sprays: [], id: null });
   };
 
   const titleReset = () => {
@@ -115,11 +128,11 @@ const SprayMixDisplay = () => {
                 <ul className={styles.sprayList}>
                   {sprayMix.sprays.map((spray, index) => {
                     return (
-                      <li key={spray.sprayId}>
+                      <li key={index}>
                         <div className={styles.sprayDetails}>
-                          <p>{spray.sprayName}</p>
+                          <p>{spray.spray.sprayName.name}</p>
                           <p>
-                            {spray.rate} {spray.unit} per{" "}
+                            {spray.spray.rate} {spray.spray.unit} per{" "}
                             {spray.sprayArea > 1 ? (
                               <span>hectares</span>
                             ) : (

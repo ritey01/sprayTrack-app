@@ -68,14 +68,14 @@ export async function getServerSideProps(context) {
 }
 
 const Spray = ({ sprayMix, errorCode }) => {
-  const { event, mix } = useContext(SprayContext);
-  const [sprayEvent, setSprayEvent] = event;
-  const [sprayMixState, setSprayMixState] = mix;
+  const { mix } = useContext(SprayContext);
+  const [multiMixState, setMultiMixState] = mix;
   const [spray, setSpray] = useState();
   const [sprayMixList, setSprayMixList] = useState(sprayMix);
   const [isActive, setIsActive] = useState();
   const [error, setError] = useState(false);
   const { data: session } = useSession();
+  console.log("sprayMix", sprayMixList);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -106,10 +106,14 @@ const Spray = ({ sprayMix, errorCode }) => {
   const setSprayData = async () => {
     //copy sprayMixState array and add selected sprayMix to the array
 
-    const newSprayState = [...sprayMixState];
-    console.log(newSprayState);
-    newSprayState.push(spray);
-    setSprayMixState(newSprayState);
+    const newSprayState = {
+      ...multiMixState,
+      // sprays: [...multiMixState.sprays, spray],
+    };
+    newSprayState.sprays.push(spray);
+
+    setMultiMixState(newSprayState);
+    console.log("sprayMixState", multiMixState);
   };
 
   return (
@@ -122,7 +126,7 @@ const Spray = ({ sprayMix, errorCode }) => {
               href={`/makeSpray`}
               className={standard.addingButton}
               //resets sprayMix initial state to null so dont get empty fields in array
-              onClick={() => (sprayMixState.sprays.length = 0)}
+              onClick={() => (multiMixState.sprays.length = 0)}
             >
               {" "}
               <FontAwesomeIcon icon={faPlus} />
@@ -141,7 +145,7 @@ const Spray = ({ sprayMix, errorCode }) => {
                 spray.is_displayed && (
                   <li
                     className={styles.sprayCard}
-                    key={spray.id}
+                    key={index}
                     value={spray}
                     style={{
                       background:
