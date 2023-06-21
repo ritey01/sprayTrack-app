@@ -8,6 +8,11 @@ datasource db {
   relationMode = "prisma"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+
 model Paddock {
   id           Int     @id @default(autoincrement())
   name         String  @db.VarChar(255)
@@ -49,7 +54,7 @@ model SprayMix {
   is_displayed Boolean     @default(true)
   sprays     SprayMixSpray[]
   sprayEvent    SprayMixSprayEvent[]
-   company   Company?  @relation(fields: [companyId], references: [id])
+  company   Company?  @relation(fields: [companyId], references: [id])
   companyId  Int?
 
    @@index([companyId])
@@ -99,7 +104,7 @@ model SprayMixSprayEvent {
 }
 
 model SprayEvent {
-   id            Int      @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   date          String
   paddock       Paddock  @relation(fields: [paddockId], references: [id])
   paddockId     Int

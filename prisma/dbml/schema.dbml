@@ -1,0 +1,194 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Paddock {
+  id Int [pk, increment]
+  name String [not null]
+  is_displayed Boolean [not null, default: true]
+  sprayEvent SprayEvent [not null]
+  company Company
+  companyId Int
+}
+
+Table Crops {
+  id Int [pk, increment]
+  name String [not null]
+  is_displayed Boolean [not null, default: true]
+  sprayEvent SprayEvent [not null]
+  company Company
+  companyId Int
+}
+
+Table SprayName {
+  id Int [pk, increment]
+  name String [not null]
+  is_displayed Boolean [not null, default: true]
+  sprays Spray [not null]
+  company Company
+  companyId Int
+}
+
+Table SprayMix {
+  id Int [pk, increment]
+  title String [not null]
+  is_displayed Boolean [not null, default: true]
+  sprays SprayMixSpray [not null]
+  sprayEvent SprayMixSprayEvent [not null]
+  company Company
+  companyId Int
+}
+
+Table Spray {
+  id Int [pk, increment]
+  rate Float [not null]
+  unit Unit [not null]
+  is_displayed Boolean [not null, default: true]
+  sprayMixes SprayMixSpray [not null]
+  sprayName SprayName [not null]
+  sprayNameId Int [not null]
+}
+
+Table SprayMixSpray {
+  id Int [pk, increment]
+  spray Spray [not null]
+  sprayId Int [not null]
+  sprayMix SprayMix [not null]
+  sprayMixId Int [not null]
+}
+
+Table SprayMixSprayEvent {
+  id Int [pk, increment]
+  sprayEvent SprayEvent [not null]
+  sprayEventId Int [not null]
+  sprayMix SprayMix [not null]
+  sprayMixId Int [not null]
+}
+
+Table SprayEvent {
+  id Int [pk, increment]
+  date String [not null]
+  paddock Paddock [not null]
+  paddockId Int [not null]
+  crop Crops [not null]
+  cropId Int [not null]
+  sprayMix SprayMixSprayEvent [not null]
+  createdBy String
+  createdAt DateTime [default: `now()`, not null]
+  company Company
+  companyId Int
+  comment String
+}
+
+Table User {
+  id String [pk]
+  name String
+  email String [unique]
+  emailVerified DateTime
+  image String
+  companyId Int
+  accounts Account [not null]
+  sessions Session [not null]
+}
+
+Table Account {
+  id String [pk]
+  userId String [not null]
+  type String [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  refresh_token String
+  access_token String
+  expires_at Int
+  token_type String
+  scope String
+  id_token String
+  refresh_token_expires_in Int
+  session_state String
+  user User [not null]
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table Session {
+  id String [pk]
+  sessionToken String [unique, not null]
+  userId String [not null]
+  expires DateTime [not null]
+  user User [not null]
+}
+
+Table VerificationToken {
+  identifier String [not null]
+  token String [unique, not null]
+  expires DateTime [not null]
+
+  indexes {
+    (identifier, token) [unique]
+  }
+}
+
+Table Company {
+  id Int [pk, increment]
+  name String [not null]
+  employees Employee [not null]
+  paddocks Paddock [not null]
+  crops Crops [not null]
+  sprayMixes SprayMix [not null]
+  sprayNames SprayName [not null]
+  SprayEvent SprayEvent [not null]
+}
+
+Table Employee {
+  id Int [pk, increment]
+  name String [not null]
+  email String [unique, not null]
+  is_active Boolean [not null, default: true]
+  is_admin Boolean [not null, default: false]
+  company Company [not null]
+  companyId Int [not null]
+}
+
+Table authorisedEmail {
+  id Int [pk, increment]
+  email String [unique, not null]
+}
+
+Enum Unit {
+  Litres
+  mls
+  Kgs
+  grams
+}
+
+Ref: Paddock.companyId > Company.id
+
+Ref: Crops.companyId > Company.id
+
+Ref: SprayName.companyId > Company.id
+
+Ref: SprayMix.companyId > Company.id
+
+Ref: Spray.sprayNameId > SprayName.id
+
+Ref: SprayMixSpray.sprayId > Spray.id
+
+Ref: SprayMixSpray.sprayMixId > SprayMix.id
+
+Ref: SprayMixSprayEvent.sprayEventId > SprayEvent.id
+
+Ref: SprayMixSprayEvent.sprayMixId > SprayMix.id
+
+Ref: SprayEvent.paddockId > Paddock.id
+
+Ref: SprayEvent.cropId > Crops.id
+
+Ref: SprayEvent.companyId > Company.id
+
+Ref: Account.userId > User.id [delete: Cascade]
+
+Ref: Session.userId > User.id [delete: Cascade]
+
+Ref: Employee.companyId > Company.id
