@@ -95,6 +95,15 @@ export default function Paddock({ paddocks, errorCode }) {
     if (lastLocation) {
       router.push(lastLocation);
     } else {
+      //reset sprayMix and multiMix here to cover the case where user has come from sprayDetails page
+      setSprayMix({
+        id: null,
+        title: "",
+        sprays: [],
+      });
+      setMultiMix({
+        sprays: [],
+      });
       router.push("/crop");
     }
   }
