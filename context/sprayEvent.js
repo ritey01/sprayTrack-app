@@ -10,33 +10,58 @@ export function SprayProvider({ children }) {
     crop: "",
     date: "",
     sprayMix: [],
-    // sprayMix: {
-    //   sprayMixId: null,
-    //   title: "",
-    //   sprays: [],
-    // sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
-    //},
   };
 
+  //This is for the sprayMix added to sprayEvent which can contain a list
+  //of spray concoctions instead of a single spray created and entered into database
   const mixInitial = {
     sprays: [],
-    // {
-    //   title: "",
-    //   sprayMixId: null,
-    //   sprays: [{ sprayId: null, sprayName: "", rate: 0.0, unit: "" }],
-    // },
   };
+
+  const singleSprayMix = {
+    id: null,
+    title: "",
+    sprays: [],
+  };
+  //SingleSprayMix example
+  // {
+  //   title: "My single sprayMix",
+  //   companyId:1,
+  //   id:5,
+  //   is_displayed:true,
+  //   sprays:[
+  //       {
+  //       id:1,
+  //       sprayId: 10,
+  //       sprayMixId: 5,
+  //       spray: {
+  //         id: 38
+  //         is_displayed: true
+  //         rate: 2.1
+  //         sprayName: {
+  //           id: 3,
+  //           name: 'Roundup',
+  //           is_displayed: true,
+  //           companyId: 1
+  //         }
+  //         sprayNameId: 3
+  //         unit: "Litres"
+  //       }
+  //     }
+  //   ]
 
   const companyIdInit = null;
   const [sprayEvent, setSprayEvent] = useState(initialState);
   const [sprayMix, setSprayMix] = useState(mixInitial);
   const [companyId, setCompanyId] = useState(companyIdInit);
+  const [oneSprayMix, setOneSprayMix] = useState(singleSprayMix);
   return (
     <SprayContext.Provider
       value={{
         event: [sprayEvent, setSprayEvent],
         mix: [sprayMix, setSprayMix],
         company: [companyId, setCompanyId],
+        oneMix: [oneSprayMix, setOneSprayMix],
       }}
     >
       {children}
