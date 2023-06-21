@@ -14,7 +14,7 @@ export function SprayProvider({ children }) {
 
   //This is for the sprayMix added to sprayEvent which can contain a list
   //of spray concoctions instead of a single spray created and entered into database
-  const mixInitial = {
+  const mixMultiInitial = {
     sprays: [],
   };
 
@@ -52,7 +52,7 @@ export function SprayProvider({ children }) {
 
   const companyIdInit = null;
   const [sprayEvent, setSprayEvent] = useState(initialState);
-  const [sprayMix, setSprayMix] = useState(mixInitial);
+  const [sprayMix, setSprayMix] = useState(mixMultiInitial);
   const [companyId, setCompanyId] = useState(companyIdInit);
   const [oneSprayMix, setOneSprayMix] = useState(singleSprayMix);
   return (
