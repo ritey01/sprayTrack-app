@@ -1,7 +1,8 @@
 ## todo
+
 - remove cypress
--fix delete on spray concoction display
-- Input validation with Joi server and client 
+  -fix delete on spray concoction display
+- Input validation with Joi server and client
 - Parametized query with password and email storage
 - date display
 - clean out the users details in the database where the user has authenicated and then not been authorised
@@ -18,15 +19,8 @@ Use HTTP-only cookies: By using HTTP-only cookies, you can prevent XSS attacks f
 
 Use security headers: You can use security headers like X-XSS-Protection, X-Content-Type-Options, and X-Frame-Options to provide additional protection against XSS attacks.
 
-
-
-  
-
 ## Problems
-- When selecting a "created" spraylist how that is represented in sprayEvent state versus the table. Currently state is sprayList:[] versus table SprayListID
+
 - When creating a spraymix can proceed without selecting a spray
 
-
-
 ## current status
-- not saving correctly into database with sprayEvent-id with sprayMix that is csuing issue I think.  So i added this in the return from the api and then set it on the context for the mix and changed the intitial state.  Now the id is going onto the state object but I cant reset this once it is submitted so now has all of the sprays on it.
