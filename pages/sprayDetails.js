@@ -74,6 +74,16 @@ const SprayDetails = () => {
     });
   };
 
+  const handleDelete = (index) => {
+    console.log("⬅️", sprayMixMulti, index);
+    //delete the sprayMix at the index from the sprayMixMulti array state
+    const updatedSprayMixMulti = {
+      ...sprayMixMulti,
+      sprays: sprayMixMulti.sprays.filter((spray, i) => i !== index),
+    };
+    setSprayMixMulti(updatedSprayMixMulti);
+  };
+
   const handleClick = async (sprayEvent) => {
     //Add sprayMixes to sprayEvent
     sprayEvent.sprayMix = sprayMixMulti;
@@ -198,7 +208,6 @@ const SprayDetails = () => {
             <p className={styles.labels}>Spray</p>
             <div className={styles.sprayMixCard}>
               <div className={styles.sprayTitleDisplay}>
-                {/* <p>{sprayEvent.sprayMix.title}</p> */}
                 <Link href={`/spray`} className={styles.editBtn}>
                   Edit
                 </Link>
@@ -210,16 +219,23 @@ const SprayDetails = () => {
                 <p>No spray entered</p>
               ) : (
                 <ul className={styles.sprayList}>
-                  {sprayMixMulti.sprays.map((mix) => {
-                    console.log("Mix mix mix", mix);
+                  {sprayMixMulti.sprays.map((mix, index1) => {
                     let titleRendered = false;
 
                     return mix.sprays.map((spray, index) => {
-                      console.log("spry spry spry", spray);
-
                       return (
                         <>
-                          {!titleRendered ? <p>{mix.title}</p> : null}
+                          {!titleRendered ? (
+                            <div className={styles.sprayMixTitleCont}>
+                              <p className={styles.mixTitle}>{mix.title}</p>{" "}
+                              <button
+                                className={standard.deleteButton}
+                                onClick={() => handleDelete(index1)}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          ) : null}
                           {(titleRendered = true)}
                           <li className={styles.sprayType} key={index}>
                             <p className={styles.sprayName}>
