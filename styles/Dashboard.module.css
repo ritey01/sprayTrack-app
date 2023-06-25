@@ -39,3 +39,10 @@
   .noBorder tr {
     display: "block",
   }
+
+  .downloadBtn{
+    /* display at end of block */
+    margin-bottom: 1rem;
+
+
+  }

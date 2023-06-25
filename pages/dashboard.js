@@ -134,7 +134,6 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
       html: element,
       startY: 20,
       styles: {
-        // overflow: "linebreak",
         cellWidth: "wrap",
       },
     });
@@ -181,9 +180,11 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
             <p>No spraying events recorded</p>
           ) : (
             <>
+              <button onClick={handleDownload} className={styles.downloadBtn}>
+                Download
+              </button>
               {/* Add a dropdown box with all paddock names */}
               <div className={styles.selectContainer}>
-                <button onClick={handleDownload}>Download</button>
                 <label htmlFor="paddock-select">Select a paddock:</label>
                 <select
                   id="paddock-select"
