@@ -6,15 +6,13 @@
 
 .sprayType {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border: 1px solid black;
-  margin-bottom: 0.5rem;
-  border-radius: 0.5rem;
+  flex-direction: row;
+  justify-content: space-between;
+ 
 }
 
 .sprayName {
-  margin-bottom: 0.3rem;
+  margin-left: 1rem;
 }
 
 .sprayDetails {
@@ -45,6 +43,7 @@
   border-radius: 0.5rem;
   color: #ffff;
   font-size: 0.6rem;
+  border:none;
 }
 .labels {
   padding-top: 1.5rem;
@@ -55,8 +54,7 @@
 
 .sprayTitleDisplay {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: row-reverse;
   justify-content: space-between;
   margin-left: 1rem;
   margin-bottom: 1rem;
@@ -74,6 +72,8 @@
 }
 .sprayList {
   padding: 0;
+  border: 1px solid black;
+  border-radius: 0.5rem;
 }
 
 .commentContainer {
@@ -97,4 +97,19 @@
 .commentInputValue {
   width: 90%;
   margin: 1rem;
+}
+
+.sprayMixTitleCont{
+ 
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height:2rem;
+ align-items: center;
+ margin: 0.5rem 1rem;
+}
+
+.mixTitle{
+ /* make it bold font */
+  font-weight: bold;
 }

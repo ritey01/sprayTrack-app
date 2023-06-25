@@ -1,12 +1,11 @@
 ## todo
+
+- Currently if a user deletes a sprayMix it will then only be avaliable to sprayEvents and that sprayMix will not beable to be reused the user will need to recreate the sprayMix to be able to use it again. If the sprayMix is not tied to a sprayEvent then it will be deleted from the database. Not sure if this can be improved or not.
 - remove cypress
-- edit for sprayMixDisplayTitle
-- back button on add crop with nothing entered
-- Input validation with Joi server and client 
+  -fix delete on spray concoction display
+- Input validation with Joi server and client
 - Parametized query with password and email storage
-- add a delete to sprayMix display
 - date display
-- @@index database
 - clean out the users details in the database where the user has authenicated and then not been authorised
 - -Add admin https://authjs.dev/guides/basics/role-based-access-control
 - Implement server-side validation of user input to prevent XSS attacks, you can follow these steps:
@@ -21,17 +20,11 @@ Use HTTP-only cookies: By using HTTP-only cookies, you can prevent XSS attacks f
 
 Use security headers: You can use security headers like X-XSS-Protection, X-Content-Type-Options, and X-Frame-Options to provide additional protection against XSS attacks.
 
-
-
-  
-
 ## Problems
-- When selecting a "created" spraylist how that is represented in sprayEvent state versus the table. Currently state is sprayList:[] versus table SprayListID
-- When creating a spraymix can proceed without selecting a spray
-- Spray Mix Name not persisting when first entered and then go back to add more spray
 
-- fix no border around sprays on spray page when not active
-- add message display makeSpray.js when nothing selected
+- When creating a spraymix can proceed without selecting a spray
 
 ## current status
 
+You are about to alter the column `rate` on the `Spray` table, which contains 17 non-null values. The data in that column will be cast from `Int` to `Double`.
+• You are about to drop the column `sprayMixId` on the `SprayEvent` table, which still contains 21 non-null values.

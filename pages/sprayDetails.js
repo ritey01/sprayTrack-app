@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import standard from "../styles/Standard.module.css";
 import styles from "../styles/SprayDetails.module.css";
 import Link from "next/link";
@@ -9,10 +10,17 @@ import AccessDenied from "../components/accessDenied";
 
 const SprayDetails = () => {
   const [comment, setComment] = useState("");
-  const { event } = useContext(SprayContext);
+  const { event, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
+  const [sprayMixMulti, setSprayMixMulti] = mix;
   const [emptyFields, setEmptyFields] = useState([]);
   const { data: session } = useSession();
+  const [success, setSuccess] = useState(false);
+
+  const router = useRouter();
+
+  console.log("✅", sprayEvent);
+  console.log("🔥", sprayMixMulti);
 
   //Checks if all fields are filled in
   const validateState = (state) => {
@@ -20,31 +28,65 @@ const SprayDetails = () => {
     const fieldsToCheck = ["date", "paddock", "crop", "sprayMix"];
     fieldsToCheck.forEach((field) => {
       const value = state[field];
-      if (!value || (Array.isArray(value) && !value.length)) {
+      if (
+        !value ||
+        (Array.isArray(value) && !value.length) ||
+        (field === "sprayMix" && value.sprays.length === 0)
+      ) {
         emptyFields.push(field.charAt(0).toUpperCase() + field.slice(1));
       }
     });
   };
 
+  const resetMultiMix = () => {
+    setSprayMixMulti({
+      sprays: [],
+    });
+  };
+
   const submitSpray = async (sprayEvent) => {
+    //this also needs to add the list of spraymixes from state to the sprayevent
     const body = {
       ...sprayEvent,
       comment: comment,
       createdBy: session.user.name,
     };
+
     const result = await fetch(`/api/spray/postSprayEvent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+
     if (result.status === 201) {
+      resetMultiMix();
       return true;
     } else {
       return false;
     }
   };
 
-  const handleClick = (sprayEvent) => {
+  //Controls routing with the editing from this page so after edit user can come back here
+  const handleEdit = (endpoint) => {
+    router.push({
+      pathname: endpoint,
+      query: { from: "/sprayDetails" },
+    });
+  };
+
+  const handleDelete = (index) => {
+    console.log("⬅️", sprayMixMulti, index);
+    //delete the sprayMix at the index from the sprayMixMulti array state
+    const updatedSprayMixMulti = {
+      ...sprayMixMulti,
+      sprays: sprayMixMulti.sprays.filter((spray, i) => i !== index),
+    };
+    setSprayMixMulti(updatedSprayMixMulti);
+  };
+
+  const handleClick = async (sprayEvent) => {
+    //Add sprayMixes to sprayEvent
+    sprayEvent.sprayMix = sprayMixMulti;
     validateState(sprayEvent);
     if (emptyFields.length) {
       let message;
@@ -65,15 +107,11 @@ const SprayDetails = () => {
         confirmButtonAriaLabel: "Ok",
       });
     } else {
-      const submit = submitSpray(sprayEvent);
+      const submit = await submitSpray(sprayEvent);
+
       if (submit) {
-        Swal.fire({
-          text: "Spray event saved",
-          icon: "success",
-          confirmButtonText: "Ok",
-          confirmButtonColor: "rgb(6, 214, 160)",
-          confirmButtonAriaLabel: "Ok",
-        });
+        setSuccess(true);
+
         //resets sprayEvent after submit
         setSprayEvent({
           paddockId: null,
@@ -81,11 +119,12 @@ const SprayDetails = () => {
           cropId: null,
           crop: "",
           date: "",
-          sprayMix: {
-            sprayMixId: null,
-            title: "",
-            sprays: [{ sprayId: null, sprayName: "", rate: 0, unit: "" }],
-          },
+          sprayMix: [],
+          // sprayMix: {
+          //   sprayMixId: null,
+          //   title: "",
+          //   sprays: [{ sprayId: null, sprayName: "", rate: 0, unit: "" }],
+          // },
         });
         setComment("");
       } else {
@@ -100,108 +139,162 @@ const SprayDetails = () => {
     }
   };
 
-  return (
-    <>
-      {session ? (
-        <div className={`${standard.cardBackground} ${styles.detailsCard}`}>
-          <p className={styles.labels}> Date</p>
-
-          <p className={styles.sprayDetails}>
-            {/* Checks if date else returns message */}
-            {sprayEvent.date ? sprayEvent.date : "No date entered"}
-            <Link href={`/date`} className={styles.editBtn}>
-              Edit
-            </Link>
-          </p>
-
-          <p className={styles.labels}> Paddock</p>
-          <p className={styles.sprayDetails}>
-            {/* Checks if a paddock entered else returns a message */}
-            {sprayEvent.paddock ? sprayEvent.paddock : "No paddock entered"}
-            <Link href={`/paddock`} className={styles.editBtn}>
-              Edit
-            </Link>
-          </p>
-
-          <p className={styles.labels}> Crop</p>
-          <p className={styles.sprayDetails}>
-            {/* Checks if a crop entered else returns a message */}
-            {sprayEvent.crop ? sprayEvent.crop : "No crop entered"}
-            <Link href={`/crop`} className={styles.editBtn}>
-              Edit
-            </Link>
-          </p>
-
-          <p className={styles.labels}>Spray</p>
-          <div className={styles.sprayMixCard}>
-            <div className={styles.sprayTitleDisplay}>
-              <p>{sprayEvent.sprayMix.title}</p>
-              <Link href={`/spray`} className={styles.editBtn}>
-                Edit
-              </Link>
-            </div>
-
-            {/* Checks if a spray is entered else returns a message */}
-
-            {sprayEvent.sprayMix.sprays.length == 0 ? (
-              <p>No spray entered</p>
-            ) : (
-              <ul className={styles.sprayList}>
-                {sprayEvent.sprayMix.sprays.map((spray) => {
-                  return (
-                    <li className={styles.sprayType} key={spray.sprayId}>
-                      <p className={styles.sprayName}>{spray.sprayName}</p>
-
-                      <p>
-                        {spray.rate} {spray.unit} per hectares
-                      </p>
-                      <div className={styles.line}></div>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-
-          <form>
-            <div className={styles.commentContainer}>
-              <label htmlFor="comment">Comments:</label>
-              <div className={styles.commentInput}>
-                <input
-                  className={styles.commentInputValue}
-                  id="commentValue"
-                  type="string"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                />
-              </div>
-            </div>
-          </form>
-
-          <div>
-            {emptyFields.length > 0
-              ? console.log("empty fields", emptyFields)
-              : null}
-          </div>
-          <div className={standard.styledNext}>
-            <Link href={`/spray`} className={styles.submitBtn}>
-              Back
-            </Link>
-            <button
-              onClick={() => handleClick(sprayEvent)}
-              className={styles.submitBtn}
-            >
-              Submit
-            </button>
-          </div>
-          <Link href={`/paddock`} className={standard.next}>
+  if (session && success) {
+    return (
+      <>
+        <div>
+          <h1>Spray event saved</h1>
+          <Link
+            href={`/paddock`}
+            className={standard.next}
+            onClick={() => resetMultiMix()}
+          >
             Start again
           </Link>
         </div>
-      ) : (
-        <AccessDenied />
-      )}
-    </>
-  );
+      </>
+    );
+  } else {
+    return (
+      <>
+        {session && !success ? (
+          <div className={`${standard.cardBackground} ${styles.detailsCard}`}>
+            <p className={styles.labels}> Date</p>
+
+            <p className={styles.sprayDetails}>
+              {/* Checks if date else returns message */}
+              {sprayEvent.date ? sprayEvent.date : "No date entered"}
+              {/* <Link href={`/date`} className={styles.editBtn}>
+                Edit
+              </Link> */}
+              <button
+                className={styles.editBtn}
+                onClick={() => handleEdit("/date")}
+              >
+                Edit
+              </button>
+            </p>
+
+            <p className={styles.labels}> Paddock</p>
+            <p className={styles.sprayDetails}>
+              {/* Checks if a paddock entered else returns a message */}
+              {sprayEvent.paddock ? sprayEvent.paddock : "No paddock entered"}
+              {/* <Link href={`/paddock`} className={styles.editBtn}>
+                Edit
+              </Link> */}
+              <button
+                className={styles.editBtn}
+                onClick={() => handleEdit("/paddock")}
+              >
+                Edit
+              </button>
+            </p>
+
+            <p className={styles.labels}> Crop</p>
+            <p className={styles.sprayDetails}>
+              {/* Checks if a crop entered else returns a message */}
+              {sprayEvent.crop ? sprayEvent.crop : "No crop entered"}
+              {/* <Link href={`/crop`} className={styles.editBtn}>
+                Edit
+              </Link> */}
+              <button
+                className={styles.editBtn}
+                onClick={() => handleEdit("/crop")}
+              >
+                Edit
+              </button>
+            </p>
+
+            <p className={styles.labels}>Spray</p>
+            <div className={styles.sprayMixCard}>
+              <div className={styles.sprayTitleDisplay}>
+                <Link href={`/spray`} className={styles.editBtn}>
+                  Edit
+                </Link>
+              </div>
+
+              {/* Checks if a spray is entered else returns a message */}
+              {/* need to add button here next, then sort adding the sprayMix to the sprayMixesList state array */}
+              {sprayMixMulti.sprays.length == 0 ? (
+                <p>No spray entered</p>
+              ) : (
+                <ul className={styles.sprayList}>
+                  {sprayMixMulti.sprays.map((mix, index1) => {
+                    let titleRendered = false;
+
+                    return mix.sprays.map((spray, index) => {
+                      return (
+                        <>
+                          {!titleRendered ? (
+                            <div className={styles.sprayMixTitleCont}>
+                              <p className={styles.mixTitle}>{mix.title}</p>{" "}
+                              <button
+                                className={standard.deleteButton}
+                                onClick={() => handleDelete(index1)}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          ) : null}
+                          {(titleRendered = true)}
+                          <li className={styles.sprayType} key={index}>
+                            <p className={styles.sprayName}>
+                              {spray.spray.sprayName.name}
+                            </p>
+                            <p>
+                              {spray.spray.rate} {spray.spray.unit} /ha
+                            </p>
+                            <div className={styles.line}></div>
+                          </li>
+                        </>
+                      );
+                    });
+                  })}
+                </ul>
+              )}
+            </div>
+
+            <form>
+              <div className={styles.commentContainer}>
+                <label htmlFor="comment">Comments:</label>
+                <div className={styles.commentInput}>
+                  <input
+                    className={styles.commentInputValue}
+                    id="commentValue"
+                    type="string"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  />
+                </div>
+              </div>
+            </form>
+
+            <div>
+              {emptyFields.length > 0
+                ? console.log("empty fields", emptyFields)
+                : null}
+            </div>
+
+            <div className={standard.styledNext}>
+              <Link href={`/spray`} className={styles.submitBtn}>
+                Back
+              </Link>
+              <button
+                onClick={() => handleClick(sprayEvent)}
+                className={styles.submitBtn}
+              >
+                Submit
+              </button>
+            </div>
+            <Link href={`/paddock`} className={standard.next}>
+              Start again
+            </Link>
+          </div>
+        ) : (
+          <AccessDenied />
+        )}
+      </>
+    );
+  }
 };
 export default SprayDetails;

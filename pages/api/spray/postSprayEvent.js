@@ -5,6 +5,17 @@ import prisma from "../../../lib/prisma";
 export default async function sprayEventHandler(req, res) {
   const sprayEvent = req.body;
 
+  // body body body {
+  //   paddockId: 3,
+  //   paddock: 'Maybe',
+  //   cropId: 1,
+  //   crop: 'Weeds',
+  //   date: '20/06/23',
+  //   sprayMix: { sprays: [ [Object] ] },
+  //   comment: '',
+  //   createdBy: 'Sally Wright'
+  // }
+
   const session = await getServerSession(req, res, authOptions);
   const companyId = session.user.companyId;
 
@@ -25,17 +36,35 @@ export default async function sprayEventHandler(req, res) {
             crop: {
               connect: { id: sprayEvent.cropId },
             },
-            sprayMix: {
-              connect: {
-                id: sprayEvent.sprayMix.sprayMixId,
-              },
-            },
+          },
+          select: {
+            id: true,
           },
         });
+        const sprayEventId = result.id;
+
+        for (const spray of sprayEvent.sprayMix.sprays) {
+          const sprayMixSprayEventCreate =
+            await prisma.sprayMixSprayEvent.create({
+              data: {
+                sprayEvent: {
+                  connect: { id: sprayEventId },
+                },
+                sprayMix: {
+                  connect: { id: spray.id },
+                },
+              },
+              select: {
+                id: true,
+              },
+            });
+        }
+
         if (result) {
           res.status(201).json(result);
         }
       } catch (err) {
+        console.log(err);
         res.status(500).json({ error: "Failed to change save data" });
       }
     } else {

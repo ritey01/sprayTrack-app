@@ -11,9 +11,14 @@ const SprayMixDisplay = () => {
     (typeof window !== "undefined" && localStorage.getItem("title")) || ""
   );
   const [name, setName] = useState("");
-  const { event, mix } = useContext(SprayContext);
+  const { event, oneMix, mix } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
-  const [sprayMix, setSprayMix] = mix;
+
+  //Creates one spray creation with multiple sprays
+  const [sprayMix, setSprayMix] = oneMix;
+
+  //Creates multiple spray creations with multiple sprays
+  const [multiMix, setMultiMix] = mix;
   const [error, setError] = useState(false);
   const { data: session } = useSession();
 
@@ -32,15 +37,18 @@ const SprayMixDisplay = () => {
   const handleSprayMixTitle = () => {
     //saves the spray mix name for display on the card between adding sprays
     setSprayMixName(name);
-    localStorage.setItem("title", sprayMixName);
+    localStorage.setItem("title", name);
   };
 
   const addSprayMix = async () => {
-    const newSprayMix = { ...sprayMix };
-    newSprayMix.title = sprayMixName;
-    const newSprayEvent = { ...sprayEvent };
-    newSprayEvent.sprayMix = newSprayMix;
-    setSprayEvent(newSprayEvent);
+    //Copy sprayMix and add sprayMixName to sprayMix.sprays array
+
+    const newSprayMix = {
+      ...sprayMix,
+      title: sprayMixName,
+    };
+
+    //Resets storage for title to empty string
     localStorage.removeItem("title");
 
     //saves the created spraymix for later use
@@ -50,6 +58,21 @@ const SprayMixDisplay = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+    const data = await result.json();
+
+    // Set spraymix id for sprayevent to be saved
+    newSprayMix.id = data.id;
+
+    setSprayMix(newSprayMix);
+    //Add single sprayEvent to the multiMix to allow multiple single sprayMixesto be added
+    const newMultiEvent = { ...multiMix };
+
+    //Add sprayMix to multiMix
+    newMultiEvent.sprays.push(newSprayMix);
+    setMultiMix(newMultiEvent);
+
+    //Reset sprayMix to intial state from context
+    setSprayMix({ title: "", sprays: [], id: null });
   };
 
   const titleReset = () => {
@@ -70,7 +93,7 @@ const SprayMixDisplay = () => {
           <div
             className={`${standard.cardBackground} ${styles.sprayMixDisplay}`}
           >
-            {sprayMix.sprays[0].sprayName !== "" && (
+            {sprayMix.sprays.length !== 0 && (
               <form className={styles.formDisplay}>
                 {" "}
                 <label htmlFor="sprayMixName" className={styles.formLabel}>
@@ -86,7 +109,12 @@ const SprayMixDisplay = () => {
                       value={capitalizeFirstLetter(name)}
                       onChange={(e) => setName(e.target.value)}
                     />
-                    <button onClick={handleSprayMixTitle}>Add</button>
+                    <button
+                      onClick={handleSprayMixTitle}
+                      className={styles.addBtn}
+                    >
+                      Add
+                    </button>
                   </>
                 ) : (
                   <div className={styles.sprayMixTitle}>
@@ -99,17 +127,17 @@ const SprayMixDisplay = () => {
               </form>
             )}
 
-            {/* checks if the spray in the spray list is the intial from context/sprayEvent */}
-            {sprayMix.sprays[0].sprayId !== null ? (
+            {/* checks if the spray in the spray list  */}
+            {sprayMix.sprays.length !== 0 ? (
               <>
                 <ul className={styles.sprayList}>
                   {sprayMix.sprays.map((spray, index) => {
                     return (
-                      <li key={spray.sprayId}>
+                      <li key={index}>
                         <div className={styles.sprayDetails}>
-                          <p>{spray.sprayName}</p>
+                          <p>{spray.spray.sprayName.name}</p>
                           <p>
-                            {spray.rate} {spray.unit} per{" "}
+                            {spray.spray.rate} {spray.spray.unit} per{" "}
                             {spray.sprayArea > 1 ? (
                               <span>hectares</span>
                             ) : (

@@ -68,14 +68,15 @@ export async function getServerSideProps(context) {
 }
 
 const Spray = ({ sprayMix, errorCode }) => {
-  const { event, mix } = useContext(SprayContext);
+  const { mix, event } = useContext(SprayContext);
+  const [multiMixState, setMultiMixState] = mix;
   const [sprayEvent, setSprayEvent] = event;
-  const [sprayMixState, setSprayMixState] = mix;
   const [spray, setSpray] = useState();
   const [sprayMixList, setSprayMixList] = useState(sprayMix);
   const [isActive, setIsActive] = useState();
   const [error, setError] = useState(false);
   const { data: session } = useSession();
+  console.log("sprayMix", sprayMixList);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -103,6 +104,19 @@ const Spray = ({ sprayMix, errorCode }) => {
     setIsActive(index);
   };
 
+  const setSprayData = async () => {
+    //copy sprayMixState array and add selected sprayMix to the array
+
+    const newSprayState = {
+      ...multiMixState,
+      // sprays: [...multiMixState.sprays, spray],
+    };
+    newSprayState.sprays.push(spray);
+
+    setMultiMixState(newSprayState);
+    console.log("sprayMixState", multiMixState);
+  };
+
   return (
     <>
       {session ? (
@@ -113,7 +127,7 @@ const Spray = ({ sprayMix, errorCode }) => {
               href={`/makeSpray`}
               className={standard.addingButton}
               //resets sprayMix initial state to null so dont get empty fields in array
-              onClick={() => (sprayMixState.sprays.length = 0)}
+              // onClick={() => (multiMixState.sprays.length = 0)}
             >
               {" "}
               <FontAwesomeIcon icon={faPlus} />
@@ -132,7 +146,7 @@ const Spray = ({ sprayMix, errorCode }) => {
                 spray.is_displayed && (
                   <li
                     className={styles.sprayCard}
-                    key={spray.id}
+                    key={index}
                     value={spray}
                     style={{
                       background:
@@ -195,21 +209,17 @@ const Spray = ({ sprayMix, errorCode }) => {
             )}
             {isActive >= 0 ? (
               <Link
-                onClick={() => {
-                  setSprayEvent({
-                    ...sprayEvent,
-                    sprayMix: {
-                      title: spray.title,
-                      sprayMixId: spray.id,
-                      sprays: spray.sprays.map((spray) => ({
-                        sprayId: spray.id,
-                        sprayName: spray.spray.sprayName.name,
-                        rate: spray.spray.rate,
-                        unit: spray.spray.unit,
-                      })),
-                    },
-                  });
-                }}
+                onClick={
+                  () => {
+                    setSprayData();
+                  }
+                  // setSprayData()
+                  // setSprayEvent((sprayEvent) => {
+                  //   const newSprayMix = [...sprayEvent.sprayMix];
+                  //   newSprayMix.push(spray.id);
+                  //   return { ...sprayEvent, sprayMix: newSprayMix };
+                  // });
+                }
                 href={`/sprayDetails`}
                 className={standard.next}
               >

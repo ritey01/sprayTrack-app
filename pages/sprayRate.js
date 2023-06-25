@@ -10,8 +10,8 @@ const SprayRate = () => {
   const [sprayAmount, setSprayAmount] = useState("");
   const [unit, setUnit] = useState("");
   const [isActive, setIsActive] = useState();
-  const { event, mix } = useContext(SprayContext);
-  const [sprayMix, setSprayMix] = mix;
+  const { event, oneMix } = useContext(SprayContext);
+  const [sprayMix, setSprayMix] = oneMix;
   const [sprayEvent, setSprayEvent] = event;
   const { data: session } = useSession();
 
@@ -19,23 +19,29 @@ const SprayRate = () => {
 
   const handleSubmit = () => {
     const newSprayMix = { ...sprayMix };
+
     //makespray creates first object in array so now the length is 1 for first spray
     const index = newSprayMix.sprays.length - 1;
     //copy sprays[index] then add rate and unit to it
 
     newSprayMix.sprays[index] = {
       ...newSprayMix.sprays[index],
-      rate: parseInt(sprayAmount),
-      unit: unit,
+      //need to copy what is already in sprays[index].spray and add rate and unit to it
+
+      spray: {
+        ...newSprayMix.sprays[index].spray,
+        rate: sprayAmount,
+        unit: unit,
+      },
     };
 
     setSprayMix(newSprayMix);
   };
-  //Clears the last spray added to the sprayEvent
+  //Clears the last spray added to the sprayMix
   const clearSpray = () => {
-    const newSprayEvent = { ...sprayEvent };
-    newSprayEvent.sprayMix.sprays.pop();
-    setSprayEvent(newSprayEvent);
+    const editSprayMix = { ...sprayMix };
+    editSprayMix.sprays.pop();
+    setSprayMix(editSprayMix);
   };
 
   //Sets the unit value for the spray amount
@@ -61,9 +67,11 @@ const SprayRate = () => {
                   aria-label="Amount"
                   id="sprayAmount"
                   type="number"
+                  step="any"
                   required
+                  min="0"
                   value={sprayAmount}
-                  onChange={(e) => setSprayAmount(parseInt(e.target.value))}
+                  onChange={(e) => setSprayAmount(parseFloat(e.target.value))}
                 />
               </div>
             </form>
@@ -94,7 +102,7 @@ const SprayRate = () => {
             <Link
               href={`/makeSpray`}
               className={standard.next}
-              // clears last spray added to the sprayEvent
+              // clears last spray added to the sprayMix
               onClick={() => clearSpray()}
             >
               Back

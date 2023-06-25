@@ -8,6 +8,11 @@ datasource db {
   relationMode = "prisma"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+
 model Paddock {
   id           Int     @id @default(autoincrement())
   name         String  @db.VarChar(255)
@@ -48,8 +53,8 @@ model SprayMix {
   title        String
   is_displayed Boolean     @default(true)
   sprays     SprayMixSpray[]
-  sprayEvent   SprayEvent[]
-   company   Company?  @relation(fields: [companyId], references: [id])
+  sprayEvent    SprayMixSprayEvent[]
+  company   Company?  @relation(fields: [companyId], references: [id])
   companyId  Int?
 
    @@index([companyId])
@@ -64,7 +69,7 @@ enum Unit{
 
 model Spray {
   id           Int         @id @default(autoincrement())
-  rate         Int
+  rate         Float
   unit         Unit
   is_displayed Boolean   @default(true)
   sprayMixes SprayMixSpray[] 
@@ -74,6 +79,7 @@ model Spray {
  
   @@index([sprayNameId])
 }
+
 
 
 model SprayMixSpray {
@@ -87,26 +93,37 @@ model SprayMixSpray {
   @@index([sprayMixId])
 }
 
+model SprayMixSprayEvent {
+  id           Int         @id @default(autoincrement())
+  sprayEvent          SprayEvent         @relation(fields: [sprayEventId], references: [id])
+  sprayEventId      Int
+  sprayMix       SprayMix      @relation(fields: [sprayMixId], references: [id])
+  sprayMixId   Int
+
+  @@index([sprayEventId])
+  @@index([sprayMixId])
+}
+
 model SprayEvent {
-   id            Int      @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   date          String
   paddock       Paddock  @relation(fields: [paddockId], references: [id])
   paddockId     Int
   crop          Crops     @relation(fields: [cropId], references: [id])
   cropId        Int
-  sprayMix     SprayMix @relation(fields: [sprayMixId], references: [id])
-  sprayMixId   Int
+  sprayMix      SprayMixSprayEvent[]
+ sprayMixId     Int?
   createdBy     String?
   createdAt     DateTime  @default(now())
   company   Company?  @relation(fields: [companyId], references: [id])
   companyId  Int?
-  comment     String
+  comment     String?
   
   
  @@index([companyId])
   @@index([paddockId])
   @@index([cropId])
-  @@index([sprayMixId])
+  
 }
 
 model User {
