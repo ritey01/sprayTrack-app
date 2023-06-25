@@ -21,16 +21,21 @@
     "bcrypt": "^5.1.0",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
+    "install": "^0.13.0",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.29",
     "next": "13.1.1",
     "next-auth": "^4.22.0",
     "next-auth-client": "^1.5.0",
     "node-mocks-http": "^1.12.2",
+    "npm": "^9.7.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-spinners": "^0.13.7",
     "supertest": "^6.3.3",
     "sweetalert2": "^11.7.3",
-    "tsconfig-paths-jest": "^0.0.1"
+    "tsconfig-paths-jest": "^0.0.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
