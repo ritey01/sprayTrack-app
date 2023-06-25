@@ -12,30 +12,40 @@ export default async function registerHandler(req, res) {
       });
 
       if (!employeeExists) {
-        const createdCompany = await prisma.company.create({
-          data: {
-            name: company.companyName,
-          },
+        //Check if company already exists
+        const companyExists = await prisma.company.findFirst({
+          where: { name: company.companyName },
         });
 
-        // Create a new employee associated with the company
-        const createdEmployee = await prisma.employee.create({
-          data: {
-            name: company.adminName,
-            email: company.adminEmail,
-            company: {
-              connect: { id: createdCompany.id },
+        if (!companyExists) {
+          const createdCompany = await prisma.company.create({
+            data: {
+              name: company.companyName,
             },
-            is_admin: true,
-            is_active: true,
-          },
-        });
+          });
 
-        res.status(201).json({
-          company: createdCompany,
-          employee: createdEmployee,
-        });
-        return;
+          // Create a new employee associated with the company
+          const createdEmployee = await prisma.employee.create({
+            data: {
+              name: company.adminName,
+              email: company.adminEmail,
+              company: {
+                connect: { id: createdCompany.id },
+              },
+              is_admin: true,
+              is_active: true,
+            },
+          });
+
+          res.status(201).json({
+            company: createdCompany,
+            employee: createdEmployee,
+          });
+          return;
+        } else {
+          res.status(400).json({ error: "Company already exists" });
+          return;
+        }
       }
 
       res.status(400).json({ error: "Employee already exists" });
