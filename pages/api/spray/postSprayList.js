@@ -6,34 +6,36 @@ export default async function sprayListHandler(req, res) {
   const { title, sprays } = req.body;
   const session = await getServerSession(req, res, authOptions);
   const companyId = session.user.companyId;
-  console.log("srpayListHandler", req.body);
+
   if (session) {
     //Checks if sprayMix exists
-    const sprayExists = await prisma.sprayMix.findFirst({
-      where: { title: title, companyId: companyId },
-    });
+    // const sprayExists = await prisma.sprayMix.findFirst({
+    //   where: { title: title, companyId: companyId },
+    // });
 
-    if (sprayExists) {
-      //If exists and has is_displayed set to false, update to true
-      if (!sprayExists.is_displayed) {
-        await prisma.sprayMix.update({
-          where: { id: sprayExists.id },
-          data: { is_displayed: true },
-        });
-        res
-          .status(200)
-          .json({ message: "SprayMix found and updated to be displayed" });
-        return;
-      }
-      //If exists and has is_displayed set to true, return error
-      res
-        .status(400)
-        .json({ message: "SprayMix already exists and is displayed" });
-      return;
-    }
+    // if (sprayExists) {
+    //   //If exists and has is_displayed set to false, update to true
+    //   if (!sprayExists.is_displayed) {
+    //     await prisma.sprayMix.update({
+    //       where: { id: sprayExists.id },
+    //       data: { is_displayed: true },
+    //     });
+    //     res
+    //       .status(200)
+    //       .json({ message: "SprayMix found and updated to be displayed" });
+    //     return;
+    //   }
+    //   //If exists and has is_displayed set to true, return error
+    //   res
+    //     .status(400)
+    //     .json({ message: "SprayMix already exists and is displayed" });
+    //   return;
+    //}
 
-    //If it doesnt exist create new spray mix
-    if (!sprayExists && req.method === "POST") {
+    //Create new spray mix NOTE when a user deletes the spray mix it only changes the is_displayed
+    //to false so that it doesnt effect sprayEvents that have already been created if the user
+    //then creates another sprayMix with same title it will be a new sprayMix and title will be duplicated
+    if (req.method === "POST") {
       try {
         const result = await prisma.sprayMix.create({
           data: {
