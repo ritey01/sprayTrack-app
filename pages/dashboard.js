@@ -1,10 +1,12 @@
-import prisma from "../lib/prisma";
+import { useState } from "react";
 import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import Error from "./_error";
 import AccessDenied from "../components/accessDenied";
 import { authOptions } from "./api/auth/[...nextauth]";
+import styles from "../styles/Dashboard.module.css";
+import prisma from "../lib/prisma";
 
 export async function getServerSideProps(context) {
   let errorCode;
@@ -28,11 +30,15 @@ export async function getServerSideProps(context) {
         crop: true,
         sprayMix: {
           include: {
-            sprays: {
+            sprayMix: {
               include: {
-                spray: {
+                sprays: {
                   include: {
-                    sprayName: true,
+                    spray: {
+                      include: {
+                        sprayName: true,
+                      },
+                    },
                   },
                 },
               },
@@ -73,7 +79,8 @@ export async function getServerSideProps(context) {
 
 export default function SprayEventDashboard({ sprayEvents, errorCode }) {
   const { data: session } = useSession();
-
+  const [selectedRow, setSelectedRow] = useState(null);
+  console.log(sprayEvents);
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
@@ -87,25 +94,44 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
           ) : (
             <>
               {/* This would be for mobile only */}
-              <table>
+              <table className={styles.tableDisplay}>
                 <thead>
-                  <tr>
+                  <tr className={styles.borderDisplay}>
+                    <th>Select</th>
                     <th>Date</th>
                     <th>Paddock</th>
                     <th>Crop</th>
-                    <th>Spray Mix</th>
                     <th>Created By</th>
+                    <th>Spray Mix</th>
                   </tr>
                 </thead>
                 <tbody>
                   {sprayEvents.map((sprayEvent) => (
-                    <tr key={sprayEvent.id}>
+                    <tr key={sprayEvent.id} className={styles.borderDisplay}>
+                      <td>
+                        <input
+                          type="radio"
+                          name="selectedRow"
+                          value={sprayEvent.id}
+                          checked={selectedRow === sprayEvent.id}
+                          onChange={() => setSelectedRow(sprayEvent.id)}
+                        />
+                      </td>
                       <td>{sprayEvent.date}</td>
                       <td>{sprayEvent.paddock.name}</td>
                       <td>{sprayEvent.crop.name}</td>
-                      <td>{sprayEvent.sprayMix.title}</td>
-
                       <td>{sprayEvent.createdBy}</td>
+                      <td>
+                        <table>
+                          <tbody>
+                            {sprayEvent.sprayMix.map((mix, index) => (
+                              <tr key={index} class="noBorder">
+                                <td>{mix.sprayMix.title}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
