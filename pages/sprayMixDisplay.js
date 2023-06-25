@@ -109,7 +109,12 @@ const SprayMixDisplay = () => {
                       value={capitalizeFirstLetter(name)}
                       onChange={(e) => setName(e.target.value)}
                     />
-                    <button onClick={handleSprayMixTitle}>Add</button>
+                    <button
+                      onClick={handleSprayMixTitle}
+                      className={styles.addBtn}
+                    >
+                      Add
+                    </button>
                   </>
                 ) : (
                   <div className={styles.sprayMixTitle}>
