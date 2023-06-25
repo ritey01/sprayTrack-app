@@ -7,15 +7,35 @@
     border-collapse: collapse;
     width: 100%;
     line-height: 2rem;
+    /* align at top of cell */
+    vertical-align: top;
   }
 
   .borderDisplay {
     border: 1px solid black;
     margin: 1rem;
+    text-align: center;
   }
   
 
 
   .noBorder  {
     border: none;
+  }
+
+  .selectContainer{
+    margin-bottom: 1rem;
+  }
+  .desktopContainer{
+    min-width:800px;
+    margin: 0 auto;
+  }
+  .tableContainer{
+    text-align: center;
+  }
+  .mixTitle{
+    font-weight: bold;
+  }
+  .noBorder tr {
+    display: "block",
   }
