@@ -73,6 +73,7 @@ Table SprayEvent {
   crop Crops [not null]
   cropId Int [not null]
   sprayMix SprayMixSprayEvent [not null]
+  sprayMixId Int
   createdBy String
   createdAt DateTime [default: `now()`, not null]
   company Company

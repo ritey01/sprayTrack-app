@@ -81,6 +81,7 @@ model Spray {
 }
 
 
+
 model SprayMixSpray {
   id           Int         @id @default(autoincrement())
   spray          Spray         @relation(fields: [sprayId], references: [id])
@@ -111,7 +112,7 @@ model SprayEvent {
   crop          Crops     @relation(fields: [cropId], references: [id])
   cropId        Int
   sprayMix      SprayMixSprayEvent[]
- 
+ sprayMixId     Int?
   createdBy     String?
   createdAt     DateTime  @default(now())
   company   Company?  @relation(fields: [companyId], references: [id])
