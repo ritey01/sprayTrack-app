@@ -18,14 +18,16 @@ export async function getServerSideProps(context) {
   let paddocks;
   let errorCode = false;
   const session = await getServerSession(context.req, context.res, authOptions);
-  // if (!session) {
-  //   return {
-  //     redirect: {
-  //       destination: "/registerCompany",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
+
+  //If user is not logged in then redirect to home page
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   const companyId = session.user.companyId;
 
