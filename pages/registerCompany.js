@@ -34,7 +34,7 @@ const RegisterCompany = () => {
       setRecorded(true);
     } else {
       if (result.status === 400) {
-        alert("Company already registered with this email");
+        alert("Company already registered with this email or Company name");
       } else {
         alert("Error registering company");
       }
