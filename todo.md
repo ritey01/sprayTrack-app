@@ -2,7 +2,7 @@
 
 - Currently if a user deletes a sprayMix it will then only be avaliable to sprayEvents and that sprayMix will not beable to be reused the user will need to recreate the sprayMix to be able to use it again. If the sprayMix is not tied to a sprayEvent then it will be deleted from the database. Not sure if this can be improved or not.
 - remove cypress
-  -fix delete on spray concoction display
+
 - Input validation with Joi server and client
 - Parametized query with password and email storage
 - date display
@@ -28,3 +28,10 @@ Use security headers: You can use security headers like X-XSS-Protection, X-Cont
 
 You are about to alter the column `rate` on the `Spray` table, which contains 17 non-null values. The data in that column will be cast from `Int` to `Double`.
 • You are about to drop the column `sprayMixId` on the `SprayEvent` table, which still contains 21 non-null values.
+
+## functionality to add
+
+1. Admin can add 3 users
+2. Search paddock on dash board
+3. Download pdf format of spray event
+4. General admin auth
