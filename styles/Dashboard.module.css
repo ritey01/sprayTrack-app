@@ -1,0 +1,21 @@
+.sprayMixDisplay {
+  display: flex;
+  flex-direction: column;
+}
+
+.tableDisplay {
+    border-collapse: collapse;
+    width: 100%;
+    line-height: 2rem;
+  }
+
+  .borderDisplay {
+    border: 1px solid black;
+    margin: 1rem;
+  }
+  
+
+
+  .noBorder  {
+    border: none;
+  }

@@ -103,7 +103,7 @@
   border: none;
 }
 
-.doneButton {
+.doneButton, .addBtn {
   background-color: #26bbac;
   text-decoration: none;
   border-radius: 0.5rem;
@@ -113,3 +113,5 @@
   padding: 0.5rem 0.8rem;
   border: none;
 }
+
+
