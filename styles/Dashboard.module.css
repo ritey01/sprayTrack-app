@@ -43,6 +43,7 @@
   .downloadBtn{
     /* display at end of block */
     margin-bottom: 1rem;
+    cursor: pointer;
 
 
   }

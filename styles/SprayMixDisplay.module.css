@@ -30,6 +30,7 @@
   width: 18%;
   padding: 0.5rem;
   border: none;
+  cursor: pointer;
 }
 
 .noSprayMessage {
@@ -72,6 +73,7 @@
   padding: 0.5rem 0.8rem;
   font-size: 0.6rem;
   border: none;
+  cursor: pointer;
 }
 
 .buttonGroup {
@@ -101,6 +103,7 @@
   width: 30%;
   padding: 0.5rem 0.8rem;
   border: none;
+  cursor: pointer;
 }
 
 .doneButton, .addBtn {
@@ -112,6 +115,7 @@
 
   padding: 0.5rem 0.8rem;
   border: none;
+  cursor: pointer;
 }
 
 

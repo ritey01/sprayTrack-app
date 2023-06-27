@@ -44,6 +44,7 @@
   color: #ffff;
   font-size: 0.6rem;
   border:none;
+  cursor: pointer;
 }
 .labels {
   padding-top: 1.5rem;
@@ -69,6 +70,7 @@
   margin: 0.5rem auto;
   border: none;
   padding: 0.7rem 1rem;
+  cursor: pointer;
 }
 .sprayList {
   padding: 0;
@@ -110,6 +112,5 @@
 }
 
 .mixTitle{
- /* make it bold font */
   font-weight: bold;
 }
