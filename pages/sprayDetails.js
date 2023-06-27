@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { BeatLoader } from "react-spinners";
 import standard from "../styles/Standard.module.css";
 import styles from "../styles/SprayDetails.module.css";
 import Link from "next/link";
@@ -16,6 +17,7 @@ const SprayDetails = () => {
   const [emptyFields, setEmptyFields] = useState([]);
   const { data: session } = useSession();
   const [success, setSuccess] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const router = useRouter();
 
@@ -107,7 +109,11 @@ const SprayDetails = () => {
         confirmButtonAriaLabel: "Ok",
       });
     } else {
+      setSubmitting(true);
+      //show spinner
+
       const submit = await submitSpray(sprayEvent);
+      setSubmitting(false); //hide spinner
 
       if (submit) {
         setSuccess(true);
@@ -282,8 +288,13 @@ const SprayDetails = () => {
               <button
                 onClick={() => handleClick(sprayEvent)}
                 className={styles.submitBtn}
+                disabled={submitting}
               >
-                Submit
+                {submitting ? (
+                  <BeatLoader size={8} color={"#ffffff"} />
+                ) : (
+                  "Submit"
+                )}
               </button>
             </div>
             <Link href={`/paddock`} className={standard.next}>
