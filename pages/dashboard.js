@@ -99,11 +99,12 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
   console.log(sprayEvents);
 
   useEffect(() => {
-    // Extract all paddock names from sprayEvents and add them to paddockList
+    // Extract all unique paddock names from sprayEvents and add them to paddockList
     const paddockNames = sprayEvents.map(
       (sprayEvent) => sprayEvent.paddock.name
     );
-    setPaddockList(paddockNames);
+    const uniquePaddockNames = [...new Set(paddockNames)];
+    setPaddockList(uniquePaddockNames);
   }, [sprayEvents]);
 
   if (errorCode) {
