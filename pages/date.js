@@ -11,10 +11,13 @@ import AccessDenied from "../components/accessDenied";
 export default function DateTime() {
   const router = useRouter();
   const [isActive, setIsActive] = useState();
-  const [time, setTime] = useState(dateCreate());
+  const [time, setTime] = useState("");
   const { event } = useContext(SprayContext);
   const [sprayEvent, setSprayEvent] = event;
+  const [message, setMessage] = useState(false);
   const { data: session } = useSession();
+
+  console.log("date", time);
 
   const handleDateClick = (e) => {
     if (e) {
@@ -88,22 +91,35 @@ export default function DateTime() {
               </div>
             </form>
           </div>
+          {message && <p className={standard.error}>Please select a date</p>}
           <div className={standard.styledNext}>
             <Link href={`/crop`} className={standard.next}>
               Back
             </Link>
-            {/* <Link onClick={() => {}} href={`/spray`} className={standard.next}>
-              Add
-            </Link> */}
-            <button
-              href={``}
-              className={standard.next}
-              onClick={() => {
-                dataSetter();
-              }}
-            >
-              Next
-            </button>
+
+            {time ? (
+              <button
+                href={``}
+                className={standard.next}
+                onClick={() => {
+                  dataSetter();
+                }}
+              >
+                Next
+              </button>
+            ) : (
+              <div className={standard.messageDisplay}>
+                <button
+                  href={``}
+                  className={standard.disabledNext}
+                  onClick={() => {
+                    setMessage(true);
+                  }}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       ) : (
