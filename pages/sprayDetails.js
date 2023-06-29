@@ -77,7 +77,6 @@ const SprayDetails = () => {
   };
 
   const handleDelete = (index) => {
-    console.log("⬅️", sprayMixMulti, index);
     //delete the sprayMix at the index from the sprayMixMulti array state
     const updatedSprayMixMulti = {
       ...sprayMixMulti,
@@ -206,7 +205,7 @@ const SprayDetails = () => {
             <div className={styles.sprayMixCard}>
               <div className={styles.sprayTitleDisplay}>
                 <Link href={`/spray`} className={styles.editBtn}>
-                  Edit
+                  Add
                 </Link>
               </div>
 

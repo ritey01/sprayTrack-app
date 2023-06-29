@@ -1,13 +1,16 @@
 ## todo
 
 - Currently if a user deletes a sprayMix it will then only be avaliable to sprayEvents and that sprayMix will not beable to be reused the user will need to recreate the sprayMix to be able to use it again. If the sprayMix is not tied to a sprayEvent then it will be deleted from the database. Not sure if this can be improved or not.
+
 - remove cypress
 
 - Input validation with Joi server and client
 - Parametized query with password and email storage
-- date display
+
 - clean out the users details in the database where the user has authenicated and then not been authorised
-- -Add admin https://authjs.dev/guides/basics/role-based-access-control
+
+- Add admin https://authjs.dev/guides/basics/role-based-access-control
+
 - Implement server-side validation of user input to prevent XSS attacks, you can follow these steps:
 
 Sanitize user input: Before accepting user input, you should sanitize it by removing any HTML, JavaScript, or other potentially malicious content. You can use libraries like DOMPurify or sanitize-html to sanitize user input on the server-side.
@@ -22,16 +25,13 @@ Use security headers: You can use security headers like X-XSS-Protection, X-Cont
 
 ## Problems
 
-- When creating a spraymix can proceed without selecting a spray
-
 ## current status
-
-You are about to alter the column `rate` on the `Spray` table, which contains 17 non-null values. The data in that column will be cast from `Int` to `Double`.
-• You are about to drop the column `sprayMixId` on the `SprayEvent` table, which still contains 21 non-null values.
 
 ## functionality to add
 
 1. Admin can add 3 users
-2. Search paddock on dash board
-3. Download pdf format of spray event
+2. Style dashoboard page
+3. Add date filter for dashboard 3,6,9,12 months
 4. General admin auth
+5. Change to a pop up for paddock filter in mobile view dashboard
+6. Change single sprayEvent view to a page where can delete and edit sprayEvent

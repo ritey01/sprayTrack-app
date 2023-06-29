@@ -131,9 +131,7 @@ const Spray = ({ sprayMix, errorCode }) => {
     const selectedSprayIndex = sprayMixList.findIndex(
       (spray) => spray.id === id
     );
-    console.log("selectedSprayIndex", selectedSprayIndex);
-    console.log("sprayMixList", sprayMixList);
-    setSpray(sprayMixList[index]);
+    setSpray(sprayMixList[selectedSprayIndex]);
     setError(false);
     setIsActive(index);
   };
@@ -148,7 +146,6 @@ const Spray = ({ sprayMix, errorCode }) => {
     newSprayState.sprays.push(spray);
 
     setMultiMixState(newSprayState);
-    console.log("sprayMixState", multiMixState);
   };
 
   return (
@@ -176,6 +173,7 @@ const Spray = ({ sprayMix, errorCode }) => {
               value={selectedSprayName}
               onChange={(e) => {
                 setSelectedSprayName(e.target.value);
+                setIsActive(null);
               }}
             >
               <option value="">Filter by spray name</option>
@@ -261,17 +259,9 @@ const Spray = ({ sprayMix, errorCode }) => {
             )}
             {isActive >= 0 ? (
               <Link
-                onClick={
-                  () => {
-                    setSprayData();
-                  }
-                  // setSprayData()
-                  // setSprayEvent((sprayEvent) => {
-                  //   const newSprayMix = [...sprayEvent.sprayMix];
-                  //   newSprayMix.push(spray.id);
-                  //   return { ...sprayEvent, sprayMix: newSprayMix };
-                  // });
-                }
+                onClick={() => {
+                  setSprayData();
+                }}
                 href={`/sprayDetails`}
                 className={standard.next}
               >
