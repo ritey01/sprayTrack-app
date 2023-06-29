@@ -16,8 +16,12 @@ export default function DateTime() {
   const [sprayEvent, setSprayEvent] = event;
   const { data: session } = useSession();
 
-  const handleDateClick = () => {
-    setTime(dateCreate());
+  const handleDateClick = (e) => {
+    if (e) {
+      setTime(dateCreate(e));
+    } else {
+      setTime(dateCreate());
+    }
   };
 
   function dataSetter() {
@@ -78,7 +82,7 @@ export default function DateTime() {
                   required
                   value={time}
                   onChange={(e) => {
-                    setTime(e.target.value);
+                    handleDateClick(e.target.value);
                   }}
                 />
               </div>

@@ -10,6 +10,7 @@
   /* align at top of cell */
   vertical-align: top;
   background-color: #ffff;
+  margin-bottom: 2rem;
 }
 .innerTable{
   border-collapse: collapse;
