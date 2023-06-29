@@ -13,29 +13,36 @@ const SprayRate = () => {
   const { event, oneMix } = useContext(SprayContext);
   const [sprayMix, setSprayMix] = oneMix;
   const [sprayEvent, setSprayEvent] = event;
+  const [error, setError] = useState(false);
   const { data: session } = useSession();
 
   const unitList = ["Litres", "Kgs", "mls", "grams"];
 
   const handleSubmit = () => {
-    const newSprayMix = { ...sprayMix };
+    if (sprayAmount === "" || unit === "") {
+      setError("Please enter a spray amount and unit");
+    } else {
+      setError("");
 
-    //makespray creates first object in array so now the length is 1 for first spray
-    const index = newSprayMix.sprays.length - 1;
-    //copy sprays[index] then add rate and unit to it
+      const newSprayMix = { ...sprayMix };
 
-    newSprayMix.sprays[index] = {
-      ...newSprayMix.sprays[index],
-      //need to copy what is already in sprays[index].spray and add rate and unit to it
+      //makespray creates first object in array so now the length is 1 for first spray
+      const index = newSprayMix.sprays.length - 1;
+      //copy sprays[index] then add rate and unit to it
 
-      spray: {
-        ...newSprayMix.sprays[index].spray,
-        rate: sprayAmount,
-        unit: unit,
-      },
-    };
+      newSprayMix.sprays[index] = {
+        ...newSprayMix.sprays[index],
+        //need to copy what is already in sprays[index].spray and add rate and unit to it
 
-    setSprayMix(newSprayMix);
+        spray: {
+          ...newSprayMix.sprays[index].spray,
+          rate: sprayAmount,
+          unit: unit,
+        },
+      };
+
+      setSprayMix(newSprayMix);
+    }
   };
   //Clears the last spray added to the sprayMix
   const clearSpray = () => {
@@ -97,7 +104,9 @@ const SprayRate = () => {
               ))}
             </ul>
           </div>
-
+          {error && (
+            <p className={standard.error}>Please enter a rate and unit</p>
+          )}
           <div className={standard.styledNext}>
             <Link
               href={`/makeSpray`}
@@ -107,13 +116,28 @@ const SprayRate = () => {
             >
               Back
             </Link>
-            <Link
-              href={`/sprayMixDisplay`}
-              className={standard.next}
-              onClick={() => handleSubmit()}
-            >
-              Next
-            </Link>
+
+            {sprayAmount && unit ? (
+              <Link
+                href={`/sprayMixDisplay`}
+                className={standard.next}
+                onClick={() => handleSubmit()}
+              >
+                Next
+              </Link>
+            ) : (
+              <div className={standard.messageDisplay}>
+                <button
+                  href={``}
+                  className={standard.disabledNext}
+                  onClick={() => {
+                    setError(true);
+                  }}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       ) : (

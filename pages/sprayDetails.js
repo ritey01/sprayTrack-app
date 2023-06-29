@@ -170,9 +170,6 @@ const SprayDetails = () => {
             <p className={styles.sprayDetails}>
               {/* Checks if date else returns message */}
               {sprayEvent.date ? sprayEvent.date : "No date entered"}
-              {/* <Link href={`/date`} className={styles.editBtn}>
-                Edit
-              </Link> */}
               <button
                 className={styles.editBtn}
                 onClick={() => handleEdit("/date")}
@@ -185,9 +182,6 @@ const SprayDetails = () => {
             <p className={styles.sprayDetails}>
               {/* Checks if a paddock entered else returns a message */}
               {sprayEvent.paddock ? sprayEvent.paddock : "No paddock entered"}
-              {/* <Link href={`/paddock`} className={styles.editBtn}>
-                Edit
-              </Link> */}
               <button
                 className={styles.editBtn}
                 onClick={() => handleEdit("/paddock")}
@@ -200,9 +194,6 @@ const SprayDetails = () => {
             <p className={styles.sprayDetails}>
               {/* Checks if a crop entered else returns a message */}
               {sprayEvent.crop ? sprayEvent.crop : "No crop entered"}
-              {/* <Link href={`/crop`} className={styles.editBtn}>
-                Edit
-              </Link> */}
               <button
                 className={styles.editBtn}
                 onClick={() => handleEdit("/crop")}
@@ -232,7 +223,10 @@ const SprayDetails = () => {
                       return (
                         <>
                           {!titleRendered ? (
-                            <div className={styles.sprayMixTitleCont}>
+                            <div
+                              className={styles.sprayMixTitleCont}
+                              key={index}
+                            >
                               <p className={styles.mixTitle}>{mix.title}</p>{" "}
                               <button
                                 className={standard.deleteButton}
@@ -243,7 +237,7 @@ const SprayDetails = () => {
                             </div>
                           ) : null}
                           {(titleRendered = true)}
-                          <li className={styles.sprayType} key={index}>
+                          <li className={styles.sprayType}>
                             <p className={styles.sprayName}>
                               {spray.spray.sprayName.name}
                             </p>
