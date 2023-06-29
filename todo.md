@@ -25,6 +25,8 @@ Use security headers: You can use security headers like X-XSS-Protection, X-Cont
 
 ## Problems
 
+-When filtering by spraynames from /spray it doesnt show all the sprayNames once filtered only the filtered spray names
+
 ## current status
 
 ## functionality to add

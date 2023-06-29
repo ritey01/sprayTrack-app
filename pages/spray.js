@@ -167,6 +167,7 @@ const Spray = ({ sprayMix, errorCode }) => {
           </div>
           {/* create a dropdown for filtering the sprayMixList by spray name */}
           <div className={styles.dropdown}>
+            <label htmlFor="spray-select">Filter by:</label>
             <select
               className={styles.dropdownContent}
               id="sprayName-select"
@@ -176,7 +177,7 @@ const Spray = ({ sprayMix, errorCode }) => {
                 setIsActive(null);
               }}
             >
-              <option value="">Filter by spray name</option>
+              <option value="">All spray names</option>
               {sprayNames.map((sprayName, index) => (
                 <option key={index} value={sprayName}>
                   {sprayName}
