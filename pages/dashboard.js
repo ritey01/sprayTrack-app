@@ -141,6 +141,20 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
     doc.save("table.pdf");
   };
 
+  if (typeof window !== "undefined") {
+    window.onload = function () {
+      const tableDisplay = document.querySelector(".tableDisplay");
+      if (tableDisplay) {
+        const innerTable = tableDisplay.querySelector(".innerTable");
+        if (innerTable) {
+          tableDisplay.style.backgroundColor === "rgb(255, 255, 255)"
+            ? (innerTable.style.backgroundColor = "#e6f7ff")
+            : (innerTable.style.backgroundColor = "#ffff");
+        }
+      }
+    };
+  }
+
   const handleRowClick = (rowId) => {
     const selectedSprayEvent = sprayEvents.find(
       (sprayEvent) => sprayEvent.id === rowId
@@ -238,7 +252,7 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
                           <td>{sprayEvent.crop.name}</td>
                           <td>{sprayEvent.createdBy}</td>
                           <td>
-                            <table>
+                            <table className={styles.innerTable}>
                               <tbody>
                                 {sprayEvent.sprayMix.map((mix) => (
                                   <tr key={uuidv4()} className="noBorder">
@@ -289,8 +303,8 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
                           <td>{sprayEvent.crop.name}</td>
                           <td>{sprayEvent.createdBy}</td>
                           <td>
-                            <table>
-                              <tbody>
+                            <table className={styles.innerTable}>
+                              <tbody style={{}}>
                                 {sprayEvent.sprayMix.map((mix) =>
                                   mix.sprayMix.sprays.map((spray, index) => (
                                     <>
@@ -303,7 +317,7 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
                                         )}
                                       </tr>
 
-                                      <tr key={uuidv4()} className="noBorder">
+                                      <tr key={uuidv4()}>
                                         <td>{spray.spray.sprayName.name} </td>
 
                                         <td>{spray.spray.rate}</td>
