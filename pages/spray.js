@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
 import styles from "../styles/Spray.module.css";
 import SprayContext from "../context/sprayEvent";
@@ -23,6 +23,7 @@ export async function getServerSideProps(context) {
     const sprayMixes = await prisma.SprayMix.findMany({
       where: {
         companyId: companyId,
+        is_displayed: true,
       },
       include: {
         sprays: {
@@ -75,12 +76,40 @@ const Spray = ({ sprayMix, errorCode }) => {
   const [sprayMixList, setSprayMixList] = useState(sprayMix);
   const [isActive, setIsActive] = useState();
   const [error, setError] = useState(false);
+  const [sprayNames, setSprayNames] = useState([]);
+  const [selectedSprayName, setSelectedSprayName] = useState("");
   const { data: session } = useSession();
-  console.log("sprayMix", sprayMixList);
+
+  useEffect(() => {
+    const sortedSprayMixList = sprayMixList.sort((a, b) =>
+      a.title.localeCompare(b.title)
+    );
+    setSprayMixList(sortedSprayMixList);
+
+    const uniqueSprayNames = [
+      ...new Set(
+        sprayMixList.flatMap((sprayMix) =>
+          sprayMix.sprays.map((spray) => spray.spray.sprayName.name)
+        )
+      ),
+    ];
+
+    setSprayNames(uniqueSprayNames);
+  }, [sprayMixList]);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
+
+  const filteredSprays = selectedSprayName
+    ? sprayMixList.filter(
+        (sprayMix) =>
+          sprayMix.sprays[0].spray.sprayName.name == selectedSprayName
+      )
+    : sprayMixList;
+
+  //
+
   //Deletes a sprayMix from the sprayMix Table if not recorded in sprayEvent else changes is_displayed
   const deletePost = async (id) => {
     try {
@@ -98,8 +127,13 @@ const Spray = ({ sprayMix, errorCode }) => {
     }
   };
 
-  const handleSprayMixClick = (index) => {
-    setSpray(sprayMix[index]);
+  const handleSprayMixClick = (index, id) => {
+    const selectedSprayIndex = sprayMixList.findIndex(
+      (spray) => spray.id === id
+    );
+    console.log("selectedSprayIndex", selectedSprayIndex);
+    console.log("sprayMixList", sprayMixList);
+    setSpray(sprayMixList[index]);
     setError(false);
     setIsActive(index);
   };
@@ -134,14 +168,32 @@ const Spray = ({ sprayMix, errorCode }) => {
               Spray
             </Link>
           </div>
+          {/* create a dropdown for filtering the sprayMixList by spray name */}
+          <div className={styles.dropdown}>
+            <select
+              className={styles.dropdownContent}
+              id="sprayName-select"
+              value={selectedSprayName}
+              onChange={(e) => {
+                setSelectedSprayName(e.target.value);
+              }}
+            >
+              <option value="">Filter by spray name</option>
+              {sprayNames.map((sprayName, index) => (
+                <option key={index} value={sprayName}>
+                  {sprayName}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <ul className={`${styles.card} ${standard.cardBackground}`}>
-            {/* Checks if there are any sprays in the sprayMix array fetched from the database */}
+            {/* Checks if there are any sprays in the sprayMixList array where sprays fetched from the database */}
 
             {sprayMixList.length === 0 && <p>No sprays created yet</p>}
             {/* Displays sprays fetched from sprayMix database */}
 
-            {sprayMixList.map(
+            {filteredSprays.map(
               (spray, index) =>
                 spray.is_displayed && (
                   <li
@@ -157,7 +209,7 @@ const Spray = ({ sprayMix, errorCode }) => {
                       border: isActive == index ? null : "1px solid #26bbac",
                     }}
                     onClick={() => {
-                      handleSprayMixClick(index);
+                      handleSprayMixClick(index, spray.id);
                     }}
                   >
                     {spray.title}
