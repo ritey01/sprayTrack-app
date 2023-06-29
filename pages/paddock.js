@@ -93,7 +93,7 @@ export default function Paddock({ paddocks, errorCode }) {
     });
     //if user has come from sprayDetails page then push back to that page else push to crop page
     const lastLocation = router.query.from;
-    console.log("lastLocation", lastLocation);
+
     if (lastLocation) {
       router.push(lastLocation);
     } else {
@@ -163,19 +163,6 @@ export default function Paddock({ paddocks, errorCode }) {
                 >
                   Next
                 </button>
-                {/* <Link
-                  onClick={() => {
-                    setSprayEvent({
-                      ...sprayEvent,
-                      paddockId: locationId,
-                      paddock: name,
-                    });
-                  }}
-                  href={`/crop`}
-                  className={standard.next}
-                >
-                  Add
-                </Link> */}
               </>
             ) : (
               <div className={standard.messageDisplay}>
