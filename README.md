@@ -12,11 +12,20 @@ npm run dev
 yarn dev
 ```
 
-Connect the database 
+Login/auth in planetscale
 
-```bash 
-pscale connect sprayapp initial-setup --port 3309 
+- install planetscale cli
+
+```bash
+pscale auth login
 ```
+
+Connect the database
+
+```bash
+pscale connect sprayapp dev-branch --port 3309
+```
+
 ## User stories
 
 As a cropping farmer I want a way to record the details of any crop spraying I do so that I meet the legal requirements of recording spray events and I have a record for future review.
@@ -29,9 +38,9 @@ As a cropping farmer I want to be able to see previous spraying events so that I
 
 ---
 
-NOTE:  This application is currently being built so full features have not been implemented and the UI is not finished.  Next steps:
+NOTE: This application is currently being built so full features have not been implemented and the UI is not finished. Next steps:
 
-1) Implement Authorisation so a user can login and only get their spray information.
-2) Create dashboard to view spraying activites
-3) Put it out for user testing and feedback to make user focused and ensure it meets their needs
-4) Port it across to React Native
+1. Implement Authorisation so a user can login and only get their spray information.
+2. Create dashboard to view spraying activites
+3. Put it out for user testing and feedback to make user focused and ensure it meets their needs
+4. Port it across to React Native

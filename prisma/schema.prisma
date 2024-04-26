@@ -2,11 +2,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
+        
 
 generator dbml {
   provider = "prisma-dbml-generator"
@@ -26,7 +28,7 @@ model Paddock {
 }
 
 model Crops {
-  id           Int     @id @default(autoincrement()) @db.UnsignedInt
+  id           Int     @id @default(autoincrement())
   name         String  @db.VarChar(50)
   is_displayed Boolean   @default(true)
   sprayEvent   SprayEvent[]
