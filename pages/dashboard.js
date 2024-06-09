@@ -88,18 +88,17 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
   const [paddockList, setPaddockList] = useState([]);
   const [selectedPaddock, setSelectedPaddock] = useState("");
   const [screenWidth, setScreenWidth] = useState(0);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setScreenWidth(window.innerWidth);
     const handleResize = () => setScreenWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
+    setIsClient(true);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log(sprayEvents);
-
   useEffect(() => {
-    // Extract all unique paddock names from sprayEvents and add them to paddockList
     const paddockNames = sprayEvents.map(
       (sprayEvent) => sprayEvent.paddock.name
     );
@@ -107,59 +106,60 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
     setPaddockList(uniquePaddockNames);
   }, [sprayEvents]);
 
-  if (errorCode) {
-    return <Error statusCode={errorCode} />;
-  }
-
-  // Filter the sprayEvents array to only include events with the selected paddock
-  const filteredSprayEvents = selectedPaddock
-    ? sprayEvents.filter(
-        (sprayEvent) => sprayEvent.paddock.name === selectedPaddock
-      )
-    : sprayEvents;
-
-  // Filter the sprayEvents array to only include events with the selected row
-  const selectedSprayEvent = sprayEvents.find(
-    (sprayEvent) => sprayEvent.id === selectedRow
-  );
-
   const handleDownload = () => {
     const doc = new jsPDF();
-    const element = document.querySelector("table");
-    const options = {
-      margin: { top: 20 },
-      html2canvas: { scale: 0.5 },
-      useCORS: true,
-    };
-    doc.autoTable({
-      html: element,
-      startY: 20,
-      styles: {
-        cellWidth: "wrap",
-      },
-    });
-    doc.save("table.pdf");
-  };
 
-  if (typeof window !== "undefined") {
-    window.onload = function () {
-      const tableDisplay = document.querySelector(".tableDisplay");
-      if (tableDisplay) {
-        const innerTable = tableDisplay.querySelector(".innerTable");
-        if (innerTable) {
-          tableDisplay.style.backgroundColor === "rgb(255, 255, 255)"
-            ? (innerTable.style.backgroundColor = "#e6f7ff")
-            : (innerTable.style.backgroundColor = "#ffff");
-        }
-      }
-    };
-  }
+    const filteredSprayEvents = selectedPaddock
+      ? sprayEvents.filter(
+          (sprayEvent) => sprayEvent.paddock.name === selectedPaddock
+        )
+      : sprayEvents;
+
+    // Add a title to the document
+    doc.text("Spray Events Report", 14, 16);
+
+    // Initialize Y position for the first table
+    let startY = 20;
+
+    // Loop through each spray event and add the relevant data to the PDF
+    filteredSprayEvents.forEach((event, eventIndex) => {
+      const rows = [];
+
+      // Collect data for each spray in the spray mix
+      event.sprayMix.forEach((mix) => {
+        mix.sprayMix.sprays.forEach((spray) => {
+          rows.push([
+            spray.spray.sprayName.name,
+            spray.spray.rate,
+            spray.spray.unit,
+          ]);
+        });
+      });
+
+      // Add the table for the current spray event
+      doc.autoTable({
+        head: [["Date", "Paddock", "Crop", "Sprays"]],
+        body: [
+          [
+            event.date,
+            event.paddock.name,
+            event.crop.name,
+            rows.map((row) => row.join(" ")).join("\n"),
+          ],
+        ],
+        startY: eventIndex === 0 ? startY : doc.lastAutoTable.finalY + 10,
+        styles: { cellWidth: "wrap" },
+      });
+    });
+
+    doc.save("spray_events_report.pdf");
+  };
 
   const handleRowClick = (rowId) => {
     const selectedSprayEvent = sprayEvents.find(
       (sprayEvent) => sprayEvent.id === rowId
     );
-    const text = renderToString(
+    const text = (
       <>
         <p>Date: {selectedSprayEvent.date}</p>
         <p>Paddock: {selectedSprayEvent.paddock.name}</p>
@@ -167,15 +167,15 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
         <p>Created By: {selectedSprayEvent.createdBy}</p>
         <p>Spray Mix:</p>
         {selectedSprayEvent.sprayMix.map((mix) => (
-          <p key={mix.sprayMix.title}>
-            {mix.sprayMix.title}:{" "}
-            {mix.sprayMix.sprays
-              .map(
-                (spray) =>
-                  `${spray.spray.sprayName.name} (${spray.spray.rate} ${spray.spray.unit})`
-              )
-              .join(", ")}
-          </p>
+          <div key={mix.id}>
+            <p>{mix.sprayMix.title}</p>
+            {mix.sprayMix.sprays.map((spray) => (
+              <p key={spray.id}>
+                {spray.spray.sprayName.name} ({spray.spray.rate}{" "}
+                {spray.spray.unit})
+              </p>
+            ))}
+          </div>
         ))}
       </>
     );
@@ -186,19 +186,32 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
     });
   };
 
+  if (errorCode) {
+    return <Error statusCode={errorCode} />;
+  }
+
+  if (!isClient) {
+    return null; // Return null or a loading spinner until the component is rendered on the client
+  }
+
+  const filteredSprayEvents = selectedPaddock
+    ? sprayEvents.filter(
+        (sprayEvent) => sprayEvent.paddock.name === selectedPaddock
+      )
+    : sprayEvents;
+
   return (
     <>
       {session ? (
         <div>
           <h1>Spray Events</h1>
-          {sprayEvents.length == 0 ? (
+          {sprayEvents.length === 0 ? (
             <p>No spraying events recorded</p>
           ) : (
             <>
               <button onClick={handleDownload} className={styles.downloadBtn}>
                 Download
               </button>
-              {/* Add a dropdown box with all paddock names */}
               <div className={styles.selectContainer}>
                 <label htmlFor="paddock-select">Select a paddock:</label>
                 <select
@@ -218,8 +231,7 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
                 </select>
               </div>
 
-              {/* This would be for mobile only */}
-              {screenWidth < 1000 && (
+              {screenWidth < 1000 ? (
                 <div>
                   <table className={styles.tableDisplay}>
                     <thead>
@@ -257,6 +269,13 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
                                 {sprayEvent.sprayMix.map((mix) => (
                                   <tr key={uuidv4()} className="noBorder">
                                     <td>{mix.sprayMix.title}</td>
+                                    {mix.sprayMix.sprays.map((spray) => (
+                                      <tr key={uuidv4()}>
+                                        <td>{spray.spray.sprayName.name}</td>
+                                        <td>{spray.spray.rate}</td>
+                                        <td>{spray.spray.unit}</td>
+                                      </tr>
+                                    ))}
                                   </tr>
                                 ))}
                               </tbody>
@@ -267,10 +286,7 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
                     </tbody>
                   </table>
                 </div>
-              )}
-
-              {/* This would be for desktop only so only render if screen width is > 1000px*/}
-              {screenWidth >= 1000 && (
+              ) : (
                 <div className={styles.desktopContainer}>
                   <table className={styles.tableDisplay}>
                     <thead>
@@ -304,29 +320,24 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
                           <td>{sprayEvent.createdBy}</td>
                           <td>
                             <table className={styles.innerTable}>
-                              <tbody style={{}}>
+                              <tbody>
                                 {sprayEvent.sprayMix.map((mix) =>
                                   mix.sprayMix.sprays.map((spray, index) => (
-                                    <>
-                                      <tr key={uuidv4()} className="noBorder">
-                                        {index === 0 && (
+                                    // eslint-disable-next-line react/jsx-no-undef
+                                    <React.Fragment key={uuidv4()}>
+                                      {index === 0 && (
+                                        <tr className="noBorder">
                                           <td className={styles.mixTitle}>
                                             {mix.sprayMix.title}
-                                            <br />
                                           </td>
-                                        )}
-                                      </tr>
-
-                                      <tr key={uuidv4()}>
-                                        <td>{spray.spray.sprayName.name} </td>
-
+                                        </tr>
+                                      )}
+                                      <tr>
+                                        <td>{spray.spray.sprayName.name}</td>
                                         <td>{spray.spray.rate}</td>
-                                        <td>
-                                          {spray.spray.unit}
-                                          <br />
-                                        </td>
+                                        <td>{spray.spray.unit}</td>
                                       </tr>
-                                    </>
+                                    </React.Fragment>
                                   ))
                                 )}
                               </tbody>

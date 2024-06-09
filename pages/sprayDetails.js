@@ -21,9 +21,6 @@ const SprayDetails = () => {
 
   const router = useRouter();
 
-  console.log("✅", sprayEvent);
-  console.log("🔥", sprayMixMulti);
-
   //Checks if all fields are filled in
   const validateState = (state) => {
     setEmptyFields([]);

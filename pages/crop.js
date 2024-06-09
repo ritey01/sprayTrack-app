@@ -77,7 +77,7 @@ export default function Crops({ crops, errorCode }) {
 
       setCropList(updatedCrops);
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
 

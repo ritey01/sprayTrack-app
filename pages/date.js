@@ -17,8 +17,6 @@ export default function DateTime() {
   const [message, setMessage] = useState(false);
   const { data: session } = useSession();
 
-  console.log("date", time);
-
   const handleDateClick = (e) => {
     if (e) {
       setTime(dateCreate(e));

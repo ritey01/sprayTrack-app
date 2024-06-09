@@ -64,7 +64,7 @@ export default async function sprayListHandler(req, res) {
 
         return res.status(201).json(result);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     } else {
       throw new Error(

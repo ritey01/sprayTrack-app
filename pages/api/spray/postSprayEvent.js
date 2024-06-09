@@ -44,28 +44,27 @@ export default async function sprayEventHandler(req, res) {
         const sprayEventId = result.id;
 
         for (const spray of sprayEvent.sprayMix.sprays) {
-          const sprayMixSprayEventCreate =
-            await prisma.sprayMixSprayEvent.create({
-              data: {
-                sprayEvent: {
-                  connect: { id: sprayEventId },
-                },
-                sprayMix: {
-                  connect: { id: spray.id },
-                },
+          await prisma.sprayMixSprayEvent.create({
+            data: {
+              sprayEvent: {
+                connect: { id: sprayEventId },
               },
-              select: {
-                id: true,
+              sprayMix: {
+                connect: { id: spray.id },
               },
-            });
+            },
+            select: {
+              id: true,
+            },
+          });
         }
 
         if (result) {
           res.status(201).json(result);
         }
       } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: "Failed to change save data" });
+        console.error("Error creating SprayMixSprayEvent:", err);
+        res.status(500).json({ error: "Failed to save data" });
       }
     } else {
       throw new Error(

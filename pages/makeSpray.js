@@ -115,7 +115,7 @@ export default function MakeSpray({ sprayNames, errorCode }) {
       setSprayList(updatedSprayNames);
       setSprayTypeId(null);
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
 

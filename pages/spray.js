@@ -123,7 +123,7 @@ const Spray = ({ sprayMix, errorCode }) => {
 
       setSprayMixList(updatedSprayMix);
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
 

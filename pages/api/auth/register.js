@@ -51,7 +51,7 @@ export default async function registerHandler(req, res) {
       res.status(400).json({ error: "Employee already exists" });
       return;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       res.status(500).json({ error: "Failed to create company and employee" });
     }
   } else {

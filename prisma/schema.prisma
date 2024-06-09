@@ -2,130 +2,111 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
-        
-
-generator dbml {
-  provider = "prisma-dbml-generator"
-}
-
 
 model Paddock {
-  id           Int     @id @default(autoincrement())
-  name         String  @db.VarChar(255)
-  is_displayed Boolean   @default(true)
+  id           Int          @id @default(autoincrement())
+  name         String       @db.VarChar(255)
+  is_displayed Boolean      @default(true)
+  companyId    Int?
+  company      Company?     @relation(fields: [companyId], references: [id])
   sprayEvent   SprayEvent[]
-  company   Company?  @relation(fields: [companyId], references: [id])
-  companyId  Int?
 
-   @@index([companyId])
-  
+  @@index([companyId])
 }
 
 model Crops {
-  id           Int     @id @default(autoincrement())
-  name         String  @db.VarChar(50)
-  is_displayed Boolean   @default(true)
+  id           Int          @id @default(autoincrement())
+  name         String       @db.VarChar(50)
+  is_displayed Boolean      @default(true)
+  companyId    Int?
+  company      Company?     @relation(fields: [companyId], references: [id])
   sprayEvent   SprayEvent[]
-  company   Company?  @relation(fields: [companyId], references: [id])
-  companyId  Int?
 
-   @@index([companyId])
+  @@index([companyId])
 }
 
 model SprayName {
-  id           Int     @id @default(autoincrement()) 
-  name         String  @db.VarChar(50)
-  is_displayed Boolean   @default(true)
-  sprays Spray[] 
-  company   Company?  @relation(fields: [companyId], references: [id])
-  companyId  Int?
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(50)
+  is_displayed Boolean  @default(true)
+  companyId    Int?
+  sprays       Spray[]
+  company      Company? @relation(fields: [companyId], references: [id])
 
   @@index([companyId])
-  
 }
 
 model SprayMix {
-  id           Int         @id @default(autoincrement())
+  id           Int                  @id @default(autoincrement())
   title        String
-  is_displayed Boolean     @default(true)
-  sprays     SprayMixSpray[]
-  sprayEvent    SprayMixSprayEvent[]
-  company   Company?  @relation(fields: [companyId], references: [id])
-  companyId  Int?
+  is_displayed Boolean              @default(true)
+  companyId    Int?
+  company      Company?             @relation(fields: [companyId], references: [id])
+  sprays       SprayMixSpray[]
+  sprayEvent   SprayMixSprayEvent[]
 
-   @@index([companyId])
-}
-
-enum Unit{
-  Litres
-  mls
-  Kgs
-  grams
+  @@index([companyId])
 }
 
 model Spray {
-  id           Int         @id @default(autoincrement())
+  id           Int             @id @default(autoincrement())
   rate         Float
   unit         Unit
-  is_displayed Boolean   @default(true)
-  sprayMixes SprayMixSpray[] 
-  sprayName    SprayName  @relation(fields: [sprayNameId], references: [id])
+  is_displayed Boolean         @default(true)
   sprayNameId  Int
-  
- 
+  sprayName    SprayName       @relation(fields: [sprayNameId], references: [id])
+  sprayMixes   SprayMixSpray[]
+
   @@index([sprayNameId])
 }
 
-
-
 model SprayMixSpray {
-  id           Int         @id @default(autoincrement())
-  spray          Spray         @relation(fields: [sprayId], references: [id])
-  sprayId      Int
-  sprayMix       SprayMix      @relation(fields: [sprayMixId], references: [id])
-  sprayMixId   Int
+  id         Int      @id @default(autoincrement())
+  sprayId    Int
+  sprayMixId Int
+  spray      Spray    @relation(fields: [sprayId], references: [id])
+  sprayMix   SprayMix @relation(fields: [sprayMixId], references: [id])
 
   @@index([sprayId])
   @@index([sprayMixId])
 }
 
 model SprayMixSprayEvent {
-  id           Int         @id @default(autoincrement())
-  sprayEvent          SprayEvent         @relation(fields: [sprayEventId], references: [id])
-  sprayEventId      Int
-  sprayMix       SprayMix      @relation(fields: [sprayMixId], references: [id])
+  id           Int        @id @default(autoincrement())
+  sprayEventId Int
   sprayMixId   Int
+  sprayEvent   SprayEvent @relation(fields: [sprayEventId], references: [id])
+  sprayMix     SprayMix   @relation(fields: [sprayMixId], references: [id])
 
   @@index([sprayEventId])
   @@index([sprayMixId])
 }
 
 model SprayEvent {
-  id            Int      @id @default(autoincrement())
-  date          String
-  paddock       Paddock  @relation(fields: [paddockId], references: [id])
-  paddockId     Int
-  crop          Crops     @relation(fields: [cropId], references: [id])
-  cropId        Int
-  sprayMix      SprayMixSprayEvent[]
- sprayMixId     Int?
-  createdBy     String?
-  createdAt     DateTime  @default(now())
-  company   Company?  @relation(fields: [companyId], references: [id])
-  companyId  Int?
-  comment     String?
+  id        Int                  @id @default(autoincrement())
+  date      String
+  paddockId Int
+  cropId    Int
+  createdBy String?
+  createdAt DateTime             @default(now())
+  companyId Int?
+  comment   String?
+  company   Company?             @relation(fields: [companyId], references: [id])
+  crop      Crops                @relation(fields: [cropId], references: [id])
+  paddock   Paddock              @relation(fields: [paddockId], references: [id])
+  sprayMix  SprayMixSprayEvent[]
+  sprayMixId     Int?
   
-  
- @@index([companyId])
+
+  @@index([companyId])
   @@index([paddockId])
   @@index([cropId])
-  
+  @@index([sprayMixId])
 }
 
 model User {
@@ -137,24 +118,23 @@ model User {
   companyId     Int?
   accounts      Account[]
   sessions      Session[]
-  
 }
-model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  refresh_token_expires_in Int?
-  session_state      String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String?
+  access_token             String?
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String?
+  refresh_token_expires_in Int?
+  session_state            String?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -167,7 +147,6 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-
 model VerificationToken {
   identifier String
   token      String   @unique
@@ -177,31 +156,36 @@ model VerificationToken {
 }
 
 model Company {
-  id           Int     @id @default(autoincrement())
-  name         String  @db.VarChar(255)
-  employees   Employee[]
-  paddocks      Paddock[]
-  crops         Crops[]
-  sprayMixes    SprayMix[]
-  sprayNames    SprayName[]
-  SprayEvent    SprayEvent[]
+  id         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(255)
+  crops      Crops[]
+  employees  Employee[]
+  paddocks   Paddock[]
+  SprayEvent SprayEvent[]
+  sprayMixes SprayMix[]
+  sprayNames SprayName[]
 }
 
- 
 model Employee {
-  id           Int         @id @default(autoincrement())
-  name String  @db.VarChar(100)
-  email  String   @unique
-  is_active Boolean     @default(true)
-  is_admin  Boolean     @default(false)
-  company   Company  @relation(fields: [companyId], references: [id])
-  companyId  Int
-  
+  id        Int     @id @default(autoincrement())
+  name      String  @db.VarChar(100)
+  email     String  @unique
+  is_active Boolean @default(true)
+  is_admin  Boolean @default(false)
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id])
 
   @@index([companyId])
 }
 
 model authorisedEmail {
-  id   Int    @id @default(autoincrement())
-  email   String   @unique
+  id    Int    @id @default(autoincrement())
+  email String @unique
+}
+
+enum Unit {
+  Litres
+  mls
+  Kgs
+  grams
 }

@@ -23,12 +23,6 @@ export const authOptions = {
       });
 
       if (employee1) {
-        // session.employeeId = employee1.companyId;
-        // console.log("🚀 id", employeeId);
-        // const updatedUser = await prisma.user.update({
-        //   where: { id: user.id },
-        //   data: { companyId: employee1.companyId },
-        // });
         return true;
       } else {
         const registered = await prisma.authorisedEmail.findUnique({

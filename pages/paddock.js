@@ -125,7 +125,7 @@ export default function Paddock({ paddocks, errorCode }) {
       setPaddockList(updatedPaddocks);
       setLocationId(null);
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
 

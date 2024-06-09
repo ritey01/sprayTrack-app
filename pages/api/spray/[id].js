@@ -21,8 +21,6 @@ export default async function handle(req, res) {
           },
         });
 
-        console.log(count, sprayId);
-
         //If sprayMix is used in sprayEvent, change is_displayed in the sprayMix table to false
         if (count > 0) {
           try {
