@@ -21,7 +21,7 @@ export const authOptions = {
       const employee1 = await prisma.employee.findUnique({
         where: { email: user.email },
       });
-
+      console.log("employee1", employee1);
       if (employee1) {
         return true;
       } else {

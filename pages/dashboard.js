@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import React from "react";
 import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
 import Swal from "sweetalert2";
@@ -89,6 +90,8 @@ export default function SprayEventDashboard({ sprayEvents, errorCode }) {
   const [selectedPaddock, setSelectedPaddock] = useState("");
   const [screenWidth, setScreenWidth] = useState(0);
   const [isClient, setIsClient] = useState(false);
+
+  console.log(sprayEvents);
 
   useEffect(() => {
     setScreenWidth(window.innerWidth);

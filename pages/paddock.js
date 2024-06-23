@@ -19,6 +19,8 @@ export async function getServerSideProps(context) {
   let errorCode = false;
   const session = await getServerSession(context.req, context.res, authOptions);
 
+  console.log("session", session);
+
   //If user is not logged in then redirect to home page
   if (!session) {
     return {

@@ -41,8 +41,9 @@ export default async function sprayEventHandler(req, res) {
             id: true,
           },
         });
+        console.log("result", result);
         const sprayEventId = result.id;
-
+        console.log("sprayEventId", sprayEventId);
         for (const spray of sprayEvent.sprayMix.sprays) {
           await prisma.sprayMixSprayEvent.create({
             data: {

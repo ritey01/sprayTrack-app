@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   const { name } = req.body;
   const session = await getServerSession(req, res, authOptions);
   const companyId = session.user.companyId;
-
+  console.log("name", companyId);
   if (session) {
     //checks if crop exists
     const cropExists = await prisma.crops.findFirst({
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
           },
         },
       });
-
+      console.log("result", result);
       res.status(201).json(result);
     } else {
       throw new Error(

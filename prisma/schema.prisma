@@ -100,13 +100,13 @@ model SprayEvent {
   crop      Crops                @relation(fields: [cropId], references: [id])
   paddock   Paddock              @relation(fields: [paddockId], references: [id])
   sprayMix  SprayMixSprayEvent[]
+  //SprayMixId Can be null but it is linked up the above
   sprayMixId     Int?
   
 
   @@index([companyId])
   @@index([paddockId])
   @@index([cropId])
-  @@index([sprayMixId])
 }
 
 model User {

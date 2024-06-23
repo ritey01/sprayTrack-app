@@ -72,10 +72,6 @@ export default function MakeSpray({ sprayNames, errorCode }) {
 
   const dataSetter = () => {
     const newSprayMix = { ...sprayMix };
-    //need to cover
-    //1)coming from sprays page where sprayMix is empty
-    //2)coming from sprayMixDisplay to add another spray to the mix
-    // check if newSprayMix is empty
 
     if (newSprayMix.sprays.length == 0) {
       //create a new object within a spray array containing the sprayTypeId and sprayName
@@ -83,14 +79,12 @@ export default function MakeSpray({ sprayNames, errorCode }) {
         sprayId: sprayTypeId,
         //set sprays[0].spray.sprayName.name to the sprayName
         spray: { sprayName: { name: sprayName } },
-
-        // sprayName: { name: sprayName },
       };
     } else {
       const index = newSprayMix.sprays.length;
 
       //Covers the user adding another spray to the mix
-      // const index = newSprayMix[newSprayMix.length - 1].sprays.length;
+
       newSprayMix.sprays[index] = {
         sprayId: sprayTypeId,
         spray: { sprayName: { name: sprayName } },
@@ -118,6 +112,8 @@ export default function MakeSpray({ sprayNames, errorCode }) {
       console.error("error", error);
     }
   };
+  //sort alphabetically
+  sprayList.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <>
